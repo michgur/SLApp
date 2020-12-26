@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SLApp</string>
+    <string name="shopping_bag_desc">Shopping List Item</string>
+    <string name="itemview_user_placeholder">Michael</string>
+    <string name="itemview_text_placeholder">Item name\nup to 2 lines</string>
+    <string name="itemview_time_placeholder">16:15</string>
 </resources>
