@@ -42,7 +42,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/ic_clear"
-        android:backgroundTint="@android:color/secondary_text_material_light"
+        android:backgroundTint="@android:color/secondary_text_light_nodisable"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
