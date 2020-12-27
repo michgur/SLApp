@@ -16,7 +16,7 @@ class SlappItemViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     fun update(item: SlappItem) = with(binding) {
         textName.text = item.name
         textUser.text = item.user
-        textTime.text = Date(item.timestamp).toString()
+        textTime.text = Date(item.timestamp).toString().take(8)
     }
 }
 

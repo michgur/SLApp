@@ -1,12 +1,16 @@
 package com.klmn.slapp
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.*
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionManager
+import com.google.android.material.transition.MaterialContainerTransform
 import com.klmn.slapp.databinding.FragmentListBinding
 
 class ListFragment : Fragment() {
@@ -30,7 +34,29 @@ class ListFragment : Fragment() {
             adapter = SlappListAdapter()
             layoutManager = LinearLayoutManager(requireContext())
         }
+
+        binding.addFab.useCompatPadding = false
+        binding.addFab.setOnClickListener { toggleAddFab() }
+        binding.newItemView.sendFab.setOnClickListener { toggleAddFab() }
+
         return binding.root
+    }
+
+    private fun toggleAddFab() {
+        val views =
+            if (binding.addFab.visibility == VISIBLE)
+                binding.addFab to binding.newItemView.root
+            else binding.newItemView.root to binding.addFab
+        val anim = MaterialContainerTransform().apply {
+            startView = views.first
+            endView = views.second
+            addTarget(views.second)
+            scrimColor = Color.TRANSPARENT
+            duration = 500
+        }
+        TransitionManager.beginDelayedTransition(binding.root, anim)
+        views.first.visibility = INVISIBLE
+        views.second.visibility = VISIBLE
     }
 
     override fun onDestroyView() {
