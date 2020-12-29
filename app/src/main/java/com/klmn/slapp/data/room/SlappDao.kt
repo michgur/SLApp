@@ -46,8 +46,9 @@ interface SlappDao {
     fun addUser(listId: Long, user: String)
 
     @Query("SELECT * FROM items WHERE listId = :listId")
-    fun getItemEntities(listId: Long): List<SlappDatabase.Item>
-    fun getItems(listId: Long) = getItemEntities(listId).map(::toModelItem)
+    fun getItemEntities(listId: Long): LiveData<List<SlappDatabase.Item>>
+    fun getItems(listId: Long): LiveData<List<SlappItem>> =
+        Transformations.map(getItemEntities(listId), ::toModelItemList)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addItemEntity(item: SlappDatabase.Item)
@@ -68,6 +69,7 @@ interface SlappDao {
         item.user,
         item.timestamp
     )
+    private fun toModelItemList(items: List<SlappDatabase.Item>) = items.map(::toModelItem)
     private fun toItemEntity(listId: Long, item: SlappItem) = SlappDatabase.Item(
         listId,
         item.name,

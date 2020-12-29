@@ -9,7 +9,8 @@ class Task<T>(
     private var onSuccess: ((T) -> Unit)? = null
     private var onException: ((Exception) -> Unit)? = null
 
-//    fun doOnSuccess((T) -> Unit)
+    fun doOnSuccess(action: (T) -> Unit) = apply { onSuccess = action }
+    fun doOnException(action: (Exception) -> Unit) = apply { onException = action }
 
     fun execute() {
         executor.execute {
@@ -22,3 +23,5 @@ class Task<T>(
         }
     }
 }
+
+fun <T> Executor.task(task: () -> T) = Task(this, task)

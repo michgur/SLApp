@@ -27,8 +27,8 @@ class ListFragment : Fragment() {
         _binding = FragmentListBinding.inflate(inflater, container, false)
 
         binding.itemsRecyclerView.apply {
-            viewModel.list.observe(viewLifecycleOwner) {
-                (adapter as SlappListAdapter).submitList(it.items)
+            viewModel.items.observe(viewLifecycleOwner) {
+                (adapter as SlappListAdapter).submitList(it)
             }
 
             adapter = SlappListAdapter()
@@ -50,6 +50,11 @@ class ListFragment : Fragment() {
         }
 
         binding.root.viewTreeObserver.addOnGlobalLayoutListener { scrollToBottom() }
+
+        viewModel.addList("family")
+        viewModel.addItem("cucumber")
+        viewModel.addItem("tomato")
+        viewModel.addItem("onion")
 
         return binding.root
     }
