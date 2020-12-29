@@ -9,6 +9,7 @@ import com.klmn.slapp.domain.SlappList
 class ListViewModel : ViewModel() {
     var list: LiveData<SlappList> = MutableLiveData(
         SlappList(
+            0,
         "family",
         "michael",
         0,

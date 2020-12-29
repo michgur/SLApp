@@ -7,6 +7,7 @@ data class SlappItem(
 )
 
 data class SlappList(
+    val id: Int = 0,
     val name: String,
     val user: String,
     val timestamp: Long,

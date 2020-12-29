@@ -4,7 +4,11 @@ import androidx.room.*
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappList
 
-object RoomEntities {
+@Database(entities = [SlappDatabase.ListInfo::class, SlappDatabase.Item::class, SlappDatabase.User::class], version = 1)
+@TypeConverters(SlappDatabase.Converters::class)
+abstract class SlappDatabase : RoomDatabase() {
+    abstract fun slappDao(): SlappDao
+
     @Entity(tableName = "lists")
     data class ListInfo(
         @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -22,7 +26,7 @@ object RoomEntities {
         val listId: Int,
         val name: String,
         val user: String,
-        val timestamp: Long
+        @PrimaryKey val timestamp: Long
     )
 
     @Entity(tableName = "users", foreignKeys = [ForeignKey(
@@ -53,6 +57,7 @@ object RoomEntities {
 
         @TypeConverter
         fun toModelList(list: SList) = SlappList(
+            list.info.id,
             list.info.name,
             list.info.user,
             list.info.timestamp,
@@ -63,7 +68,7 @@ object RoomEntities {
         @TypeConverter
         fun toListEntity(list: SlappList) = SList(
             ListInfo(
-                0,
+                list.id,
                 list.name,
                 list.user,
                 list.timestamp
