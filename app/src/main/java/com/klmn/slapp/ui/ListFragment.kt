@@ -63,13 +63,7 @@ class ListFragment : Fragment() {
     private fun addNewItem() {
         if (binding.newItemView.itemText.text.isNullOrEmpty()) return
 
-        viewModel.list.value?.items?.add(
-            SlappItem(
-                binding.newItemView.itemText.text.toString(),
-                "Michael",
-                System.currentTimeMillis() / 1000L
-            )
-        )
+        viewModel.addItem(binding.newItemView.itemText.text.toString())
 
         binding.itemsRecyclerView.apply {
             (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
