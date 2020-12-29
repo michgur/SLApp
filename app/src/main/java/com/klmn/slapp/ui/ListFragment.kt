@@ -52,10 +52,6 @@ class ListFragment : Fragment() {
         binding.root.viewTreeObserver.addOnGlobalLayoutListener { scrollToBottom() }
 
         viewModel.addList("family")
-        viewModel.addItem("cucumber")
-        viewModel.addItem("tomato")
-        viewModel.addItem("onion")
-
         return binding.root
     }
 

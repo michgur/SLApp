@@ -1,16 +1,24 @@
 package com.klmn.slapp.ui
 
+import android.content.Context
+import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.klmn.slapp.SLApp
 import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappList
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 class ListViewModel @ViewModelInject constructor(
+    @ApplicationContext private val appContext: Context,
+    @ActivityContext private val context: Context,
     private val repository: SlappRepository,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -18,7 +26,8 @@ class ListViewModel @ViewModelInject constructor(
     private val _listId = MutableLiveData<Long>()
     val listId: LiveData<Long> get() = _listId
 
-    lateinit var items: LiveData<List<SlappItem>> private set
+    private val _items = MutableLiveData<List<SlappItem>>()
+    val items: LiveData<List<SlappItem>> get() = _items
 
     private val _user = MutableLiveData("Michael")
     val user: LiveData<String> get() = _user
@@ -31,14 +40,18 @@ class ListViewModel @ViewModelInject constructor(
         mutableListOf(),
         listOf(user.value ?: "")
     )).doOnSuccess(::viewList)
-        .doOnException { TODO() }
+        .doOnException { Log.e("addList", it.toString()) }
         .execute()
 
     fun viewList(listId: Long) {
-        _listId.value = listId
+        _listId.postValue(listId)
         repository.getItems(listId)
-            .doOnSuccess { items = it }
-            .doOnException { TODO("implement error messages") }
+            .doOnSuccess { ld ->
+                (appContext as SLApp).mainThread.execute {
+                    ld.observe(context as LifecycleOwner) { _items.value = it }
+                }
+            }
+            .doOnException { Log.e("viewList", it.toString()) }
             .execute()
     }
 

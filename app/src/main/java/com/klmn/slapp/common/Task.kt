@@ -12,15 +12,12 @@ class Task<T>(
     fun doOnSuccess(action: (T) -> Unit) = apply { onSuccess = action }
     fun doOnException(action: (Exception) -> Unit) = apply { onException = action }
 
-    fun execute() {
-        executor.execute {
-            try {
-                val result = task()
-                onSuccess?.invoke(result)
-            } catch (exception: Exception) {
-                onException?.invoke(exception)
-            }
-        }
+    fun execute() = executor.execute {
+        var result: T? = null
+        try { result = task() }
+        catch (exception: Exception) { onException?.invoke(exception) }
+        // this line is outside of the try block in case onSuccess raises an Exception
+        result?.let { onSuccess?.invoke(it) }
     }
 }
 
