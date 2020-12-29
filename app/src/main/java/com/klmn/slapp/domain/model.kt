@@ -10,6 +10,6 @@ data class SlappList(
     val name: String,
     val user: String,
     val timestamp: Long,
-    val items: List<SlappItem>,
+    val items: MutableList<SlappItem>,
     val users: List<String>
 )

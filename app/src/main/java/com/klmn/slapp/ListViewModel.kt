@@ -10,7 +10,7 @@ class ListViewModel : ViewModel() {
         "family",
         "michael",
         0,
-        listOf(
+        mutableListOf(
             SlappItem("cucumber", "michael", 1),
             SlappItem("tomato", "michael", 2),
             SlappItem("onion", "michael", 3),

@@ -1,6 +1,7 @@
 package com.klmn.slapp
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,10 +14,11 @@ class SlappItemViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 ) {
     private var binding = ViewItemBinding.bind(itemView)
 
-    fun update(item: SlappItem) = with(binding) {
+    fun update(item: SlappItem, hideUser: Boolean = false) = with(binding) {
         textName.text = item.name
         textUser.text = item.user
         textTime.text = Date(item.timestamp).toString().take(8)
+        if (hideUser) textUser.visibility = View.GONE
     }
 }
 
@@ -32,6 +34,8 @@ class SlappListAdapter : ListAdapter<SlappItem, SlappItemViewHolder>(SlappItemDi
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         SlappItemViewHolder(parent)
 
-    override fun onBindViewHolder(holder: SlappItemViewHolder, position: Int) =
-        holder.update(getItem(position))
+    override fun onBindViewHolder(holder: SlappItemViewHolder, position: Int) {
+        val item = getItem(position)
+        holder.update(item, position > 0 && item.user == getItem(position - 1).user)
+    }
 }

@@ -1,17 +1,16 @@
 package com.klmn.slapp
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.TransitionManager
-import com.google.android.material.transition.MaterialContainerTransform
 import com.klmn.slapp.databinding.FragmentListBinding
+
 
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
@@ -35,29 +34,48 @@ class ListFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        binding.addFab.useCompatPadding = false
-        binding.addFab.setOnClickListener { toggleAddFab() }
-        binding.newItemView.sendFab.setOnClickListener { toggleAddFab() }
+        binding.newItemView.apply {
+            itemText.apply{
+                doAfterTextChanged {
+                    addButton.isEnabled = !it.isNullOrEmpty()
+                    scrollToBottom()
+                }
+                setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == IME_ACTION_DONE) addNewItem()
+                    true
+                }
+            }
+            addButton.setOnClickListener { addNewItem() }
+        }
+
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener { scrollToBottom() }
 
         return binding.root
     }
 
-    private fun toggleAddFab() {
-        val views =
-            if (binding.addFab.visibility == VISIBLE)
-                binding.addFab to binding.newItemView.root
-            else binding.newItemView.root to binding.addFab
-        val anim = MaterialContainerTransform().apply {
-            startView = views.first
-            endView = views.second
-            addTarget(views.second)
-            scrimColor = Color.TRANSPARENT
-            duration = 500
+    // ui plan:
+    //      'add item' button at the bottom that expands to a search view (bottom sheet?)
+    //      (animates the recyclerView app) that has existing items to speed up adding items
+    //      can return to view the list by swiping down
+    //      upon choosing an item it is removed from search view, added to list, and search bar clears
+    //      maybe have the bar at the top
+    private fun addNewItem() {
+        if (binding.newItemView.itemText.text.isNullOrEmpty()) return
+
+        viewModel.list.value?.items?.add(SlappItem(
+            binding.newItemView.itemText.text.toString(),
+            "Michael",
+            System.currentTimeMillis() / 1000L
+        ))
+
+        binding.itemsRecyclerView.apply {
+            (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
+                adapter?.itemCount?.minus(1) ?: 0, 0)
         }
-        TransitionManager.beginDelayedTransition(binding.root, anim)
-        views.first.visibility = INVISIBLE
-        views.second.visibility = VISIBLE
+        binding.newItemView.itemText.text.clear()
     }
+
+    private fun scrollToBottom() = binding.root.scrollTo(0, binding.container.height)
 
     override fun onDestroyView() {
         super.onDestroyView()
