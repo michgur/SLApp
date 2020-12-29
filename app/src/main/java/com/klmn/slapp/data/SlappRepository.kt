@@ -3,8 +3,11 @@ package com.klmn.slapp.data
 import com.klmn.slapp.data.room.SlappDao
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappList
+import javax.inject.Inject
 
-class SlappRepository(private val dao: SlappDao) {
+class SlappRepository @Inject constructor(
+    private val dao: SlappDao
+) {
     fun getLists() = dao.getLists()
     fun getList(id: Long) = dao.getList(id)
     fun addList(list: SlappList) = dao.addList(list)

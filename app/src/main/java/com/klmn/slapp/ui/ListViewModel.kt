@@ -1,14 +1,19 @@
 package com.klmn.slapp.ui
 
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.klmn.slapp.SLApp
+import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappList
 
-class ListViewModel(application: SLApp) : ViewModel() {
-    private val repository = application.repository
-
+class ListViewModel @ViewModelInject constructor(
+    private val repository: SlappRepository,
+    @Assisted private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
     val list = MutableLiveData(SlappList(
             0,
         "family",
