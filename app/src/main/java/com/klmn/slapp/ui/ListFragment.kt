@@ -1,4 +1,4 @@
-package com.klmn.slapp
+package com.klmn.slapp.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.klmn.slapp.SlappItem
 import com.klmn.slapp.databinding.FragmentListBinding
 
 
@@ -62,11 +63,13 @@ class ListFragment : Fragment() {
     private fun addNewItem() {
         if (binding.newItemView.itemText.text.isNullOrEmpty()) return
 
-        viewModel.list.value?.items?.add(SlappItem(
+        viewModel.list.value?.items?.add(
+            SlappItem(
             binding.newItemView.itemText.text.toString(),
             "Michael",
             System.currentTimeMillis() / 1000L
-        ))
+        )
+        )
 
         binding.itemsRecyclerView.apply {
             (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(

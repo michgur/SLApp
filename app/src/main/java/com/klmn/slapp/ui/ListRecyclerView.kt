@@ -1,11 +1,13 @@
-package com.klmn.slapp
+package com.klmn.slapp.ui
 
 import android.view.LayoutInflater
-import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.klmn.slapp.R
+import com.klmn.slapp.SlappItem
 import com.klmn.slapp.databinding.ViewItemBinding
 import java.util.*
 
@@ -18,7 +20,7 @@ class SlappItemViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         textName.text = item.name
         textUser.text = item.user
         textTime.text = Date(item.timestamp).toString().take(8)
-        if (hideUser) textUser.visibility = View.GONE
+        if (hideUser) textUser.visibility = GONE
     }
 }
 

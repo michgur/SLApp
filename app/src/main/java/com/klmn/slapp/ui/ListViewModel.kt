@@ -1,8 +1,10 @@
-package com.klmn.slapp
+package com.klmn.slapp.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.klmn.slapp.SlappItem
+import com.klmn.slapp.SlappList
 
 class ListViewModel : ViewModel() {
     var list: LiveData<SlappList> = MutableLiveData(
@@ -16,5 +18,6 @@ class ListViewModel : ViewModel() {
             SlappItem("onion", "michael", 3),
         ),
         listOf("michael")
-    ))
+    )
+    )
 }

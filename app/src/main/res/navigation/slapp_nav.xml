@@ -5,6 +5,6 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.klmn.slapp.ListFragment"
+        android:name="com.klmn.slapp.ui.ListFragment"
         android:label="ListFragment" />
 </navigation>
