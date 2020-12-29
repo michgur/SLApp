@@ -11,7 +11,7 @@ abstract class SlappDatabase : RoomDatabase() {
 
     @Entity(tableName = "lists")
     data class ListInfo(
-        @PrimaryKey(autoGenerate = true) val id: Int = 0,
+        @PrimaryKey(autoGenerate = true) val id: Long = 0,
         val name: String,
         val user: String,
         val timestamp: Long
@@ -23,7 +23,7 @@ abstract class SlappDatabase : RoomDatabase() {
         childColumns = ["listId"],
         onUpdate = ForeignKey.CASCADE)])
     data class Item(
-        val listId: Int,
+        val listId: Long,
         val name: String,
         val user: String,
         @PrimaryKey val timestamp: Long
@@ -35,7 +35,7 @@ abstract class SlappDatabase : RoomDatabase() {
         childColumns = ["listId"],
         onUpdate = ForeignKey.CASCADE)])
     data class User(
-        val listId: Int,
+        val listId: Long,
         val userId: String
     )
 

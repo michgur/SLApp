@@ -65,10 +65,10 @@ class ListFragment : Fragment() {
 
         viewModel.list.value?.items?.add(
             SlappItem(
-            binding.newItemView.itemText.text.toString(),
-            "Michael",
-            System.currentTimeMillis() / 1000L
-        )
+                binding.newItemView.itemText.text.toString(),
+                "Michael",
+                System.currentTimeMillis() / 1000L
+            )
         )
 
         binding.itemsRecyclerView.apply {
