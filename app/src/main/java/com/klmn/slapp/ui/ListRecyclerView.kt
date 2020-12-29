@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.klmn.slapp.R
-import com.klmn.slapp.SlappItem
+import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.databinding.ViewItemBinding
 import java.util.*
 

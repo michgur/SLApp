@@ -3,8 +3,8 @@ package com.klmn.slapp.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.klmn.slapp.SlappItem
-import com.klmn.slapp.SlappList
+import com.klmn.slapp.domain.SlappItem
+import com.klmn.slapp.domain.SlappList
 
 class ListViewModel : ViewModel() {
     var list: LiveData<SlappList> = MutableLiveData(

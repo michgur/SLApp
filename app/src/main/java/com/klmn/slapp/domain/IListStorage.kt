@@ -1,8 +1,6 @@
 package com.klmn.slapp.domain
 
 import com.google.android.gms.tasks.Task
-import com.klmn.slapp.SlappItem
-import com.klmn.slapp.SlappList
 
 interface IListStorage {
     fun getList() : Task<SlappList>

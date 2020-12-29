@@ -1,4 +1,4 @@
-package com.klmn.slapp
+package com.klmn.slapp.domain
 
 data class SlappItem(
     val name: String,
