@@ -22,9 +22,6 @@ object RepoModule {
         (context as SLApp).background
 
     @Provides @Singleton
-    fun provideRepository(executor: Executor, dao: SlappDao) = SlappRepository(executor, dao)
-
-    @Provides @Singleton
     fun provideDao(database: SlappDatabase) = database.slappDao()
 
     @Provides @Singleton

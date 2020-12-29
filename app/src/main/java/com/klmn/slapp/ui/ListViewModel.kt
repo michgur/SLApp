@@ -39,17 +39,15 @@ class ListViewModel @ViewModelInject constructor(
             .doOnException { Log.e("addList", it.toString()) }
             .execute()
 
-    fun viewList(listId: Long) {
-        _listId.postValue(listId)
-        repository.getItems(listId)
-            .doOnSuccess { items ->
-                (appContext as SLApp).mainThread.execute {
-                    items.observe(context as LifecycleOwner) { _items.value = it }
-                }
+    fun viewList(listId: Long) = repository.getItems(listId)
+        .doOnSuccess { items ->
+            (appContext as SLApp).mainThread.execute {
+                _listId.value = listId
+                items.observe(context as LifecycleOwner, _items::setValue)
             }
-            .doOnException { Log.e("viewList", it.toString()) }
-            .execute()
-    }
+        }
+        .doOnException { Log.e("viewList", it.toString()) }
+        .execute()
 
     fun addItem(name: String) = repository.addItem(
         listId.value ?: 0,
