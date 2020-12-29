@@ -26,29 +26,25 @@ class ListViewModel @ViewModelInject constructor(
     private val _listId = MutableLiveData<Long>()
     val listId: LiveData<Long> get() = _listId
 
+    // figure out how people bind room liveData to viewModel liveData
     private val _items = MutableLiveData<List<SlappItem>>()
     val items: LiveData<List<SlappItem>> get() = _items
 
     private val _user = MutableLiveData("Michael")
     val user: LiveData<String> get() = _user
 
-    fun addList(name: String) = repository.addList(SlappList(
-        0,
-        name,
-        user.value ?: "",
-        System.currentTimeMillis() / 1000L,
-        mutableListOf(),
-        listOf(user.value ?: "")
-    )).doOnSuccess(::viewList)
-        .doOnException { Log.e("addList", it.toString()) }
-        .execute()
+    fun addList(name: String) =
+        repository.addList(SlappList(name = name, user = user.value ?: ""))
+            .doOnSuccess(::viewList)
+            .doOnException { Log.e("addList", it.toString()) }
+            .execute()
 
     fun viewList(listId: Long) {
         _listId.postValue(listId)
         repository.getItems(listId)
-            .doOnSuccess { ld ->
+            .doOnSuccess { items ->
                 (appContext as SLApp).mainThread.execute {
-                    ld.observe(context as LifecycleOwner) { _items.value = it }
+                    items.observe(context as LifecycleOwner) { _items.value = it }
                 }
             }
             .doOnException { Log.e("viewList", it.toString()) }
@@ -57,10 +53,6 @@ class ListViewModel @ViewModelInject constructor(
 
     fun addItem(name: String) = repository.addItem(
         listId.value ?: 0,
-        SlappItem(
-            name,
-            user.value ?: "",
-            System.currentTimeMillis() / 1000L
-        )
+        SlappItem(name, user.value ?: "")
     ).execute()
 }
