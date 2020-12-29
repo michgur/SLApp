@@ -9,6 +9,6 @@ class SlappRepository(private val dao: SlappDao) {
     fun getList(id: Long) = dao.getList(id)
     fun addList(list: SlappList) = dao.addList(list)
     fun addItem(listId: Long, item: SlappItem) = dao.addItem(listId, item)
-    fun updateItem(item: SlappItem) = dao.updateItem(item)
-    fun deleteItem(item: SlappItem) = dao.deleteItem(item)
+//    fun updateItem(item: SlappItem) = dao.updateItem(item)
+//    fun deleteItem(item: SlappItem) = dao.deleteItem(item)
 }
