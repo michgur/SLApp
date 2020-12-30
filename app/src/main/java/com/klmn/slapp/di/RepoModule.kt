@@ -3,8 +3,6 @@ package com.klmn.slapp.di
 import android.content.Context
 import androidx.room.Room
 import com.klmn.slapp.SLApp
-import com.klmn.slapp.data.SlappRepository
-import com.klmn.slapp.data.room.SlappDao
 import com.klmn.slapp.data.room.SlappDatabase
 import dagger.Module
 import dagger.Provides

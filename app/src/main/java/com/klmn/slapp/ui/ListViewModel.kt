@@ -53,4 +53,6 @@ class ListViewModel @ViewModelInject constructor(
         listId.value ?: 0,
         SlappItem(name, user.value ?: "")
     ).execute()
+
+    fun deleteItem(item: SlappItem) = repository.deleteItem(listId.value ?: 0, item).execute()
 }

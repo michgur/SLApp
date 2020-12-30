@@ -8,10 +8,19 @@ import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.klmn.slapp.databinding.FragmentListBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+// next on the agenda:
+//      properly implement item editing & removal
+//      implement the rest of the UI-
+//          HomeFragment that contains lists & list operations
+//          item & user operations in listView
+//          check possibility of linking to some existing product dataSet on the web
 @AndroidEntryPoint
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
@@ -31,16 +40,17 @@ class ListFragment : Fragment() {
                 (adapter as SlappListAdapter).submitList(it)
             }
 
-            adapter = SlappListAdapter()
+            val slAdpater = SlappListAdapter()
+            ItemTouchHelper(SwipeToDelete(slAdpater)).attachToRecyclerView(this)
+            slAdpater.doOnDelete(viewModel::deleteItem)
+
+            adapter = slAdpater
             layoutManager = LinearLayoutManager(requireContext())
         }
 
         binding.newItemView.apply {
             itemText.apply{
-                doAfterTextChanged {
-                    addButton.isEnabled = !it.isNullOrEmpty()
-                    scrollToBottom()
-                }
+                doAfterTextChanged { addButton.isEnabled = !it.isNullOrEmpty() }
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == IME_ACTION_DONE) addNewItem()
                     true
@@ -49,9 +59,9 @@ class ListFragment : Fragment() {
             addButton.setOnClickListener { addNewItem() }
         }
 
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener { scrollToBottom() }
-
         viewModel.addList("family")
+
+        binding.toolbar.setupWithNavController(findNavController())
         return binding.root
     }
 
@@ -72,8 +82,6 @@ class ListFragment : Fragment() {
         }
         binding.newItemView.itemText.text.clear()
     }
-
-    private fun scrollToBottom() = binding.root.scrollTo(0, binding.container.height)
 
     override fun onDestroyView() {
         super.onDestroyView()

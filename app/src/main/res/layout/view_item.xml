@@ -4,6 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="72dp">
 
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="88dp"
+        android:background="@android:color/tertiary_text_light"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="56dp"

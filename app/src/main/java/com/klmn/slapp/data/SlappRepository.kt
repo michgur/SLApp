@@ -17,5 +17,5 @@ class SlappRepository @Inject constructor(
     fun addItem(listId: Long, item: SlappItem) = executor.task { dao.addItem(listId, item) }
     fun getItems(listId: Long) = executor.task { dao.getItems(listId) }
 //    fun updateItem(item: SlappItem) = dao.updateItem(item)
-//    fun deleteItem(item: SlappItem) = dao.deleteItem(item)
+    fun deleteItem(listId: Long, item: SlappItem) = executor.task { dao.deleteItem(listId, item) }
 }
