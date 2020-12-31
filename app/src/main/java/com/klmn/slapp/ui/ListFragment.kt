@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.klmn.slapp.databinding.FragmentListBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,11 +39,9 @@ class ListFragment : Fragment() {
                 (adapter as SlappListAdapter).submitList(it)
             }
 
-            val slAdpater = SlappListAdapter()
-            ItemTouchHelper(SwipeToDelete(slAdpater)).attachToRecyclerView(this)
-            slAdpater.doOnDelete(viewModel::deleteItem)
-
-            adapter = slAdpater
+            val slAdapter = SlappListAdapter()
+            adapter = slAdapter
+            slAdapter.loadSelection(savedInstanceState)
             layoutManager = LinearLayoutManager(requireContext())
         }
 
@@ -81,6 +78,11 @@ class ListFragment : Fragment() {
                 adapter?.itemCount?.minus(1) ?: 0, 0)
         }
         binding.newItemView.itemText.text.clear()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        (binding.itemsRecyclerView.adapter as SlappListAdapter).saveSelection(outState)
     }
 
     override fun onDestroyView() {

@@ -9,7 +9,7 @@ import java.util.concurrent.Executors
 
 @HiltAndroidApp
 class SLApp : Application() {
-    private val mainThreadHandler = Handler(Looper.getMainLooper())
+    val mainThreadHandler = Handler(Looper.getMainLooper())
 
     val mainThread = Executor(mainThreadHandler::post)
     val background: Executor = Executors.newSingleThreadExecutor()

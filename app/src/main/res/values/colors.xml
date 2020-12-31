@@ -14,4 +14,7 @@
     <color name="secondaryTextColor">#ffffff</color>
 
     <color name="secondaryBackgroundColor">#ffdfd5</color>
+    <color name="complementaryColor">#34d0ff</color>
+    <color name="selectionColor">#8834d0ff</color>
+    <color name="darkRed">#7f0000</color>
 </resources>
