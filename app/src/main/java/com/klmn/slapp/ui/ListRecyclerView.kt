@@ -8,9 +8,9 @@ import com.klmn.slapp.R
 import com.klmn.slapp.common.SelectableItemDiff
 import com.klmn.slapp.common.SelectableListAdapter
 import com.klmn.slapp.common.SelectableViewHolder
+import com.klmn.slapp.common.formatTimeStamp
 import com.klmn.slapp.databinding.ViewItemBinding
 import com.klmn.slapp.domain.SlappItem
-import java.util.*
 
 class SlappItemViewHolder(parent: ViewGroup) : SelectableViewHolder<SlappItem>(
     LayoutInflater.from(parent.context).inflate(R.layout.view_item, parent, false)
@@ -22,7 +22,7 @@ class SlappItemViewHolder(parent: ViewGroup) : SelectableViewHolder<SlappItem>(
 
         textName.text = item.name
         textUser.text = item.user
-        textTime.text = Date(item.timestamp).toString().take(8)
+        textTime.text = formatTimeStamp(item.timestamp)
     }
 }
 
