@@ -1,6 +1,8 @@
 package com.klmn.slapp.ui
 
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.klmn.slapp.R
 import com.klmn.slapp.common.SelectableItemDiff
@@ -21,17 +23,22 @@ class SlappItemViewHolder(parent: ViewGroup) : SelectableViewHolder<SlappItem>(
         textName.text = item.name
         textUser.text = item.user
         textTime.text = Date(item.timestamp).toString().take(8)
-
-//        if (adapterPosition > 0) {
-//            if (get) textUser.visibility = GONE fixme
-//            else separator.visibility = VISIBLE
-//        }
     }
 }
 
 class SlappListAdapter :
     SelectableListAdapter<SlappItem, SlappItemViewHolder>("items", SlappItemDiff) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SlappItemViewHolder(parent)
+
+    override fun onBindViewHolder(holder: SlappItemViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+
+        if (position > 0) holder.binding.apply {
+            if (getItem(position).user == getItem(position - 1).user)
+                textUser.visibility = GONE  // hide the user label if the above item is by the same user
+            else divider.visibility = VISIBLE // otherwise show the divider
+        }
+    }
 
     private object SlappItemDiff : SelectableItemDiff<SlappItem>() {
         override fun getId(item: SlappItem) = item.timestamp
