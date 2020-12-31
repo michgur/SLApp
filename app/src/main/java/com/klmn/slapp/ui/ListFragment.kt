@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentListBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +27,11 @@ class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ListViewModel by viewModels()
+    // not using viewModels delegate since for a weird reason on self navigation
+    // a new viewModel would be created
+    private val viewModel: ListViewModel by activityViewModels()
+
+    private lateinit var adapter: SlappListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,17 +40,30 @@ class ListFragment : Fragment() {
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
 
+        if (arguments?.getString("mode") == "selection")
+            binding.toolbar.inflateMenu(R.menu.selection_menu)
+
+        println(savedInstanceState)
+        adapter = SlappListAdapter(savedInstanceState)
+        adapter.doOnSelectionStart {
+            findNavController().navigate(
+                R.id.action_listFragment_self,
+                bundleOf("mode" to "selection")
+            )
+        }
+        adapter.doOnSelectionEnd {
+            findNavController().navigate(
+                R.id.action_listFragment_self,
+                bundleOf("mode" to "view")
+            )
+        }
+
         binding.itemsRecyclerView.apply {
             viewModel.items.observe(viewLifecycleOwner) {
                 (adapter as SlappListAdapter).submitList(it)
             }
 
-            val slAdapter = SlappListAdapter()
-            adapter = slAdapter
-            slAdapter.loadSelection(savedInstanceState)
-            slAdapter.doOnSelectionStart { println("selection start!") }
-            slAdapter.doOnSelectionEnd { println("selection end!") }
-            slAdapter.doOnItemSelection { item, selected -> println("item ${item.name} was ${if(selected) "" else "de"}selected!") }
+            adapter = this@ListFragment.adapter
             layoutManager = LinearLayoutManager(requireContext())
         }
 
@@ -59,7 +78,8 @@ class ListFragment : Fragment() {
             addButton.setOnClickListener { addNewItem() }
         }
 
-        viewModel.addList("family")
+        if (viewModel.listId.value == null)
+            viewModel.addList("family")
 
         binding.toolbar.setupWithNavController(findNavController())
         return binding.root

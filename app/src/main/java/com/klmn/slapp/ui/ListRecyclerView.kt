@@ -1,5 +1,6 @@
 package com.klmn.slapp.ui
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -26,8 +27,8 @@ class SlappItemViewHolder(parent: ViewGroup) : SelectableViewHolder<SlappItem>(
     }
 }
 
-class SlappListAdapter :
-    SelectableListAdapter<SlappItem, SlappItemViewHolder>("items", SlappItemDiff) {
+class SlappListAdapter(savedInstanceState: Bundle? = null) :
+    SelectableListAdapter<SlappItem, SlappItemViewHolder>("items", SlappItemDiff, savedInstanceState) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SlappItemViewHolder(parent)
 
     override fun onBindViewHolder(holder: SlappItemViewHolder, position: Int) {

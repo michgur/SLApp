@@ -6,5 +6,12 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.klmn.slapp.ui.ListFragment"
-        android:label="ListFragment" />
+        android:label="ListFragment" >
+        <action
+            android:id="@+id/action_listFragment_self"
+            app:destination="@id/listFragment">
+            <argument android:name="mode"
+                app:argType="string"/>
+        </action>
+    </fragment>
 </navigation>
