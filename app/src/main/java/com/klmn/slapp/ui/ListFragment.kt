@@ -42,6 +42,9 @@ class ListFragment : Fragment() {
             val slAdapter = SlappListAdapter()
             adapter = slAdapter
             slAdapter.loadSelection(savedInstanceState)
+            slAdapter.doOnSelectionStart { println("selection start!") }
+            slAdapter.doOnSelectionEnd { println("selection end!") }
+            slAdapter.doOnItemSelection { item, selected -> println("item ${item.name} was ${if(selected) "" else "de"}selected!") }
             layoutManager = LinearLayoutManager(requireContext())
         }
 
