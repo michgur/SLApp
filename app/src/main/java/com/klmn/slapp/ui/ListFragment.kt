@@ -9,8 +9,6 @@ import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.klmn.slapp.databinding.FragmentListBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,8 +42,8 @@ class ListFragment : Fragment() {
         viewModel.mode.observe(viewLifecycleOwner) {
             when (it) {
                 MODE_VIEW -> selectionMode?.finish()
-                MODE_SELECTION ->
-                    selectionMode = requireActivity().startActionMode(SelectionMode(adapter))
+                MODE_SELECTION -> selectionMode =
+                    requireActivity().startActionMode(SelectionModeCallback(viewModel, adapter))
             }
         }
 
@@ -79,12 +77,6 @@ class ListFragment : Fragment() {
         return binding.root
     }
 
-    // ui plan:
-    //      'add item' button at the bottom that expands to a search view (bottom sheet?)
-    //      (animates the recyclerView app) that has existing items to speed up adding items
-    //      can return to view the list by swiping down
-    //      upon choosing an item it is removed from search view, added to list, and search bar clears
-    //      maybe have the bar at the top
     private fun addNewItem() {
         if (binding.newItemView.itemText.text.isNullOrEmpty()) return
 

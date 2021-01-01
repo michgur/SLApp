@@ -85,11 +85,21 @@ abstract class SelectableListAdapter<T, VH : SelectableViewHolder<T>>(
     }
 
     fun clearSelection() = doOnAttached { tracker.clearSelection() }
+    fun selectAll() = doOnAttached {
+        for (i in 0 until itemCount)
+            keyProvider.getKey(i)?.let { tracker.select(it) }
+    }
 
     fun selectionSize(): Int {
         if (!::tracker.isInitialized)
             throw IllegalStateException("adapter is not attached to a recyclerview!")
         return tracker.selection.size()
+    }
+
+    fun selection(): List<T> {
+        if (!::tracker.isInitialized)
+            throw IllegalStateException("adapter is not attached to a recyclerview!")
+        return tracker.selection.map { getItem(keyProvider.getPosition(it)) }
     }
 
     private fun doOnAttached(action: () -> Unit) {

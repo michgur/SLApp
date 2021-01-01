@@ -5,8 +5,12 @@ import android.view.Menu
 import android.view.MenuItem
 import com.klmn.slapp.R
 import com.klmn.slapp.common.SelectableListAdapter
+import com.klmn.slapp.domain.SlappItem
 
-class SelectionMode(private val adapter: SelectableListAdapter<*, *>) : ActionMode.Callback {
+class SelectionModeCallback(
+    private val viewModel: ListViewModel,
+    private val adapter: SelectableListAdapter<SlappItem, *>
+) : ActionMode.Callback {
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
         mode?.menuInflater?.inflate(R.menu.selection_menu, menu)
         return true
@@ -17,9 +21,10 @@ class SelectionMode(private val adapter: SelectableListAdapter<*, *>) : ActionMo
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_delete -> {
-                println("deleted items")
+                adapter.selection().forEach(viewModel::deleteItem)
                 mode?.finish()
             }
+            R.id.action_select_all -> adapter.selectAll()
         }
         return true
     }
