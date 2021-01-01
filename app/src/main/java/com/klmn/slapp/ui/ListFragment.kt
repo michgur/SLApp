@@ -1,18 +1,17 @@
 package com.klmn.slapp.ui
 
 import android.os.Bundle
+import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
-import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentListBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,14 +23,16 @@ import dagger.hilt.android.AndroidEntryPoint
 //          check possibility of linking to some existing product dataSet on the web
 @AndroidEntryPoint
 class ListFragment : Fragment() {
+    private val MODE_VIEW = 0
+    private val MODE_SELECTION = 1
+
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
 
-    // not using viewModels delegate since for a weird reason on self navigation
-    // a new viewModel would be created
-    private val viewModel: ListViewModel by activityViewModels()
+    private val viewModel: ListViewModel by viewModels()
 
     private lateinit var adapter: SlappListAdapter
+    private var selectionMode: ActionMode? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,23 +41,17 @@ class ListFragment : Fragment() {
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
 
-        if (arguments?.getString("mode") == "selection")
-            binding.toolbar.inflateMenu(R.menu.selection_menu)
+        viewModel.mode.observe(viewLifecycleOwner) {
+            when (it) {
+                MODE_VIEW -> selectionMode?.finish()
+                MODE_SELECTION ->
+                    selectionMode = requireActivity().startActionMode(SelectionMode(adapter))
+            }
+        }
 
-        println(savedInstanceState)
         adapter = SlappListAdapter(savedInstanceState)
-        adapter.doOnSelectionStart {
-            findNavController().navigate(
-                R.id.action_listFragment_self,
-                bundleOf("mode" to "selection")
-            )
-        }
-        adapter.doOnSelectionEnd {
-            findNavController().navigate(
-                R.id.action_listFragment_self,
-                bundleOf("mode" to "view")
-            )
-        }
+        adapter.doOnSelectionStart { viewModel.mode.value = MODE_SELECTION }
+        adapter.doOnSelectionEnd { viewModel.mode.value = MODE_VIEW }
 
         binding.itemsRecyclerView.apply {
             viewModel.items.observe(viewLifecycleOwner) {
@@ -68,7 +63,7 @@ class ListFragment : Fragment() {
         }
 
         binding.newItemView.apply {
-            itemText.apply{
+            itemText.apply {
                 doAfterTextChanged { addButton.isEnabled = !it.isNullOrEmpty() }
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == IME_ACTION_DONE) addNewItem()
@@ -81,7 +76,6 @@ class ListFragment : Fragment() {
         if (viewModel.listId.value == null)
             viewModel.addList("family")
 
-        binding.toolbar.setupWithNavController(findNavController())
         return binding.root
     }
 
@@ -105,7 +99,7 @@ class ListFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        (binding.itemsRecyclerView.adapter as SlappListAdapter).saveSelection(outState)
+        adapter.saveSelection(outState)
     }
 
     override fun onDestroyView() {

@@ -33,6 +33,8 @@ class ListViewModel @ViewModelInject constructor(
     private val _user = MutableLiveData("Michael")
     val user: LiveData<String> get() = _user
 
+    val mode = MutableLiveData(0)
+
     fun addList(name: String) =
         repository.addList(SlappList(name = name, user = user.value ?: ""))
             .doOnSuccess(::viewList)

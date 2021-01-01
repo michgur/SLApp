@@ -84,6 +84,8 @@ abstract class SelectableListAdapter<T, VH : SelectableViewHolder<T>>(
         tracker.onRestoreInstanceState(savedInstanceState)
     }
 
+    fun clearSelection() = doOnAttached { tracker.clearSelection() }
+
     fun selectionSize(): Int {
         if (!::tracker.isInitialized)
             throw IllegalStateException("adapter is not attached to a recyclerview!")
