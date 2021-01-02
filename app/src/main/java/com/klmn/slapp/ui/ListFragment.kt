@@ -51,6 +51,9 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
 
+//        if (viewModel.listId.value == null)
+////////            viewModel.addList("family")
+
         viewModel.mode.observe(viewLifecycleOwner) {
             when (it) {
                 MODE_VIEW -> selectionMode?.finish()
@@ -87,9 +90,6 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             }
             addButton.setOnClickListener { addNewItem() }
         }
-
-        if (viewModel.listId.value == null)
-            viewModel.addList("family")
 
         return binding.root
     }

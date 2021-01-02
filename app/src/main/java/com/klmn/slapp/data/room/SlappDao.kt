@@ -5,9 +5,9 @@ import androidx.lifecycle.Transformations
 import androidx.room.*
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappList
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-// honestly ROOM is not a good solution here. I should use some NoSQL solution
-// (would also match the firestore data better)
 @Dao
 interface SlappDao {
     @Query("SELECT * FROM lists")
@@ -46,9 +46,9 @@ interface SlappDao {
     fun addUser(listId: Long, user: String)
 
     @Query("SELECT * FROM items WHERE listId = :listId")
-    fun getItemEntities(listId: Long): LiveData<List<SlappDatabase.Item>>
-    fun getItems(listId: Long): LiveData<List<SlappItem>> =
-        Transformations.map(getItemEntities(listId), ::toModelItemList)
+    fun getItemEntities(listId: Long): Flow<List<SlappDatabase.Item>>
+    fun getItems(listId: Long): Flow<List<SlappItem>> =
+        getItemEntities(listId).map(::toModelItemList)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addItemEntity(item: SlappDatabase.Item)

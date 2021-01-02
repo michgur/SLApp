@@ -29,14 +29,14 @@ class SlappListAdapter(selection: Iterable<SlappItem>? = null) :
     ) {
         var binding = ViewItemBinding.bind(itemView)
 
-        fun bind(item: SlappItem, selected: Boolean) {
-            binding.root.dispatchSetActivated(selected)
+        fun bind(item: SlappItem, selected: Boolean) = binding.apply {
+            root.isActivated = selected
 
-            if (adapterPosition > 0) binding.apply {
-                textName.text = item.name
-                textUser.text = item.user
-                textTime.text = formatTimeStamp(item.timestamp)
+            textName.text = item.name
+            textUser.text = item.user
+            textTime.text = formatTimeStamp(item.timestamp)
 
+            if (adapterPosition > 0)  {
                 if (item.user == getItem(adapterPosition - 1).user)
                     textUser.visibility = GONE  // hide the user label if the above item is by the same user
                 else divider.visibility = VISIBLE // otherwise show the divider

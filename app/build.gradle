@@ -49,13 +49,16 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.android.gms:play-services-base:17.5.0'
 
+    def lifecycle_version = "2.2.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-core-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
     def navigation_version = "2.3.2"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
-
-    def recyclerview_version = "1.0.0"
-    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
-    implementation "androidx.recyclerview:recyclerview-selection:$recyclerview_version"
 
     def room_version = "2.2.6"
     implementation "androidx.room:room-runtime:$room_version"
