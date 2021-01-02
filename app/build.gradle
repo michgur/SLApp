@@ -44,21 +44,26 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.2.1'
-    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc03"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.android.gms:play-services-base:17.5.0'
 
-    def room_version = "2.2.6"
-    implementation 'androidx.room:room-runtime:' + room_version
-    kapt 'androidx.room:room-compiler:' + room_version
-    implementation 'androidx.room:room-ktx:' + room_version
+    def navigation_version = "2.3.2"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
-    implementation 'com.google.dagger:hilt-android:' + hilt_version
-    kapt 'com.google.dagger:hilt-android-compiler:' + hilt_version
+    def recyclerview_version = "1.0.0"
+    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+    implementation "androidx.recyclerview:recyclerview-selection:$recyclerview_version"
+
+    def room_version = "2.2.6"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     def hilt_lifecycle_version = "1.0.0-alpha02"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_lifecycle_version"

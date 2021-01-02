@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.LifecycleObserver
-import androidx.recyclerview.selection.*
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.ItemKeyProvider
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import java.lang.IllegalStateException
 
 abstract class SelectableViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(item: T, selected: Boolean)
@@ -44,8 +46,13 @@ abstract class SelectableListAdapter<T, VH : SelectableViewHolder<T>>(
     private val diff: SelectableItemDiff<T>,
     savedInstanceState: Bundle? = null
 ) : ListAdapter<T, VH>(diff), LifecycleObserver {
-    private lateinit var keyProvider: ItemKeyProvider<Long>
     private lateinit var tracker: SelectionTracker<Long>
+
+    private lateinit var positions: Map<Long, Int>
+    private val keyProvider = object : ItemKeyProvider<Long>(SCOPE_MAPPED) {
+        override fun getKey(position: Int) = getItemId(position)
+        override fun getPosition(key: Long) = positions[key] ?: RecyclerView.NO_POSITION
+    }
 
     private val onAttachedCallbacks = mutableListOf<() -> Unit>()
 
@@ -54,13 +61,18 @@ abstract class SelectableListAdapter<T, VH : SelectableViewHolder<T>>(
         loadSelection(savedInstanceState)
     }
 
+    override fun onCurrentListChanged(previousList: MutableList<T>, currentList: MutableList<T>) {
+        positions = currentList.withIndex().associate { diff.getId(it.value) to it.index }
+        tracker.selection.retainAll(positions::contains)
+    }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         @Suppress("UNCHECKED_CAST")
         val itemDetailsLookup = object : ItemDetailsLookup<Long>() {
             override fun getItemDetails(e: MotionEvent) = recyclerView.findChildViewUnder(e.x, e.y)
                 ?.let { (recyclerView.getChildViewHolder(it) as VH).itemDetails }
         }
-        keyProvider = StableIdKeyProvider(recyclerView)
+
         tracker = SelectionTracker.Builder(
             "$name-selection",
             recyclerView,
@@ -72,22 +84,23 @@ abstract class SelectableListAdapter<T, VH : SelectableViewHolder<T>>(
         onAttachedCallbacks.forEach { it() }
     }
 
-    override fun onBindViewHolder(holder: VH, position: Int) =
-        getItem(position).let { holder.bind(it, tracker.isSelected(diff.getId(it))) }
+    override fun onBindViewHolder(holder: VH, position: Int) = getItem(position).let {
+        holder.bind(it, tracker.isSelected(diff.getId(it)))
+    }
 
     override fun getItemId(position: Int) = diff.getId(getItem(position))
 
     fun saveSelection(outState: Bundle) = doOnAttached {
         tracker.onSaveInstanceState(outState)
     }
+
     fun loadSelection(savedInstanceState: Bundle?) = doOnAttached {
         tracker.onRestoreInstanceState(savedInstanceState)
     }
 
     fun clearSelection() = doOnAttached { tracker.clearSelection() }
     fun selectAll() = doOnAttached {
-        for (i in 0 until itemCount)
-            keyProvider.getKey(i)?.let { tracker.select(it) }
+        tracker.setItemsSelected(currentList.map(diff::getId), true)
     }
 
     fun selectionSize(): Int {
@@ -110,13 +123,12 @@ abstract class SelectableListAdapter<T, VH : SelectableViewHolder<T>>(
     fun doOnItemSelection(action: (item: T, selected: Boolean) -> Unit) = doOnAttached {
         tracker.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
             override fun onItemStateChanged(key: Long, selected: Boolean) =
-                action(getItem(keyProvider.getPosition(key)), selected)
+                    action(getItem(keyProvider.getPosition(key)), selected)
         })
     }
 
     fun doOnSelectionEnd(action: () -> Unit) = doOnAttached {
         tracker.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
-            override fun onSelectionCleared() = action()
             override fun onSelectionChanged() {
                 if (selectionSize() == 0) action()
             }

@@ -1,18 +1,21 @@
 package com.klmn.slapp.ui
 
+import android.content.Context
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.klmn.slapp.R
-import com.klmn.slapp.common.SelectableListAdapter
 import com.klmn.slapp.domain.SlappItem
 
 class SelectionModeCallback(
+    private val context: Context,
     private val viewModel: ListViewModel,
-    private val adapter: SelectableListAdapter<SlappItem, *>
+    private val adapter: MultiSelectListAdapter<SlappItem, *>
 ) : ActionMode.Callback {
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
         mode?.menuInflater?.inflate(R.menu.selection_menu, menu)
+        mode?.title = "1"
         return true
     }
 
@@ -20,9 +23,15 @@ class SelectionModeCallback(
 
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.action_delete -> {
-                adapter.selection().forEach(viewModel::deleteItem)
-                mode?.finish()
+            R.id.action_delete -> viewModel.selection.value?.apply {
+                // should probably happen in a single callback since any change to th
+                forEach(viewModel::deleteItem)
+                Toast.makeText(
+                    context,
+                    context.resources.getString(R.string.toast_deleted, size),
+                    Toast.LENGTH_SHORT
+                ).show()
+                clear()
             }
             R.id.action_select_all -> adapter.selectAll()
         }

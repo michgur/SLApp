@@ -22,7 +22,6 @@ class ListViewModel @ViewModelInject constructor(
     private val repository: SlappRepository,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
     private val _listId = MutableLiveData<Long>()
     val listId: LiveData<Long> get() = _listId
 
@@ -34,6 +33,8 @@ class ListViewModel @ViewModelInject constructor(
     val user: LiveData<String> get() = _user
 
     val mode = MutableLiveData(0)
+
+    val selection: LiveData<MutableSet<SlappItem>> = MutableLiveData(mutableSetOf())
 
     fun addList(name: String) =
         repository.addList(SlappList(name = name, user = user.value ?: ""))

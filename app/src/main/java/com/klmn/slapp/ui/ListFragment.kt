@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.klmn.slapp.databinding.FragmentListBinding
+import com.klmn.slapp.domain.SlappItem
 import dagger.hilt.android.AndroidEntryPoint
 
 // next on the agenda:
@@ -20,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 //          item & user operations in listView
 //          check possibility of linking to some existing product dataSet on the web
 @AndroidEntryPoint
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     private val MODE_VIEW = 0
     private val MODE_SELECTION = 1
 
@@ -31,6 +32,17 @@ class ListFragment : Fragment() {
 
     private lateinit var adapter: SlappListAdapter
     private var selectionMode: ActionMode? = null
+
+    private var addedItem = false
+
+    override fun onSelectionStart() { viewModel.mode.value = MODE_SELECTION }
+    override fun onSelectionEnd() { viewModel.mode.value = MODE_VIEW }
+    override fun onItemStateChanged(item: SlappItem, selected: Boolean) {
+        viewModel.selection.value?.apply {
+            if (selected) add(item) else remove(item)
+            selectionMode?.title = size.toString()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,17 +55,22 @@ class ListFragment : Fragment() {
             when (it) {
                 MODE_VIEW -> selectionMode?.finish()
                 MODE_SELECTION -> selectionMode =
-                    requireActivity().startActionMode(SelectionModeCallback(viewModel, adapter))
+                    requireActivity().startActionMode(SelectionModeCallback(requireContext(), viewModel, adapter))
             }
         }
 
-        adapter = SlappListAdapter(savedInstanceState)
-        adapter.doOnSelectionStart { viewModel.mode.value = MODE_SELECTION }
-        adapter.doOnSelectionEnd { viewModel.mode.value = MODE_VIEW }
+        adapter = SlappListAdapter(viewModel.selection.value)
+        adapter.addSelectionListener(this)
 
         binding.itemsRecyclerView.apply {
             viewModel.items.observe(viewLifecycleOwner) {
-                (adapter as SlappListAdapter).submitList(it)
+                (adapter as SlappListAdapter).submitList(it) {
+                    if (addedItem) {
+                        addedItem = false
+                        (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
+                            adapter?.itemCount?.minus(1) ?: 0, 0)
+                    }
+                }
             }
 
             adapter = this@ListFragment.adapter
@@ -81,17 +98,8 @@ class ListFragment : Fragment() {
         if (binding.newItemView.itemText.text.isNullOrEmpty()) return
 
         viewModel.addItem(binding.newItemView.itemText.text.toString())
-
-        binding.itemsRecyclerView.apply {
-            (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                adapter?.itemCount?.minus(1) ?: 0, 0)
-        }
         binding.newItemView.itemText.text.clear()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        adapter.saveSelection(outState)
+        addedItem = true
     }
 
     override fun onDestroyView() {
