@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui
+package com.klmn.slapp.ui.list
 
 import android.content.Context
 import android.view.ActionMode
@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.klmn.slapp.R
 import com.klmn.slapp.domain.SlappItem
+import com.klmn.slapp.common.MultiSelectListAdapter
 
 class SelectionModeCallback(
     private val context: Context,

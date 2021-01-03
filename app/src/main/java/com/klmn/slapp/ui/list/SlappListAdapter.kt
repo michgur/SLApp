@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui
+package com.klmn.slapp.ui.list
 
 import android.view.LayoutInflater
 import android.view.View.GONE
@@ -10,6 +10,7 @@ import com.klmn.slapp.R
 import com.klmn.slapp.common.formatTimeStamp
 import com.klmn.slapp.databinding.ViewItemBinding
 import com.klmn.slapp.domain.SlappItem
+import com.klmn.slapp.common.MultiSelectListAdapter
 
 class SlappListAdapter(selection: Iterable<SlappItem>? = null) :
     MultiSelectListAdapter<SlappItem, SlappListAdapter.ViewHolder>(SlappItemDiff, selection) {

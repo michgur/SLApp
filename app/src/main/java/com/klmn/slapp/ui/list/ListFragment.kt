@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui
+package com.klmn.slapp.ui.list
 
 import android.os.Bundle
 import android.view.ActionMode
@@ -12,14 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.klmn.slapp.databinding.FragmentListBinding
 import com.klmn.slapp.domain.SlappItem
+import com.klmn.slapp.common.MultiSelectListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
-// next on the agenda:
-//      properly implement item editing & removal
-//      implement the rest of the UI-
-//          HomeFragment that contains lists & list operations
-//          item & user operations in listView
-//          check possibility of linking to some existing product dataSet on the web
+// next on the agenda- implement the rest of the UI:
+//      HomeFragment that contains lists & list operations (requires fixing the db)
+//      item & user operations in listView
+//      check possibility of linking to some existing product dataSet on the web
 @AndroidEntryPoint
 class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     private val MODE_VIEW = 0
@@ -35,24 +34,12 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
 
     private var addedItem = false
 
-    override fun onSelectionStart() { viewModel.mode.value = MODE_SELECTION }
-    override fun onSelectionEnd() { viewModel.mode.value = MODE_VIEW }
-    override fun onItemStateChanged(item: SlappItem, selected: Boolean) {
-        viewModel.selection.value?.apply {
-            if (selected) add(item) else remove(item)
-            selectionMode?.title = size.toString()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
-
-//        if (viewModel.listId.value == null)
-////////            viewModel.addList("family")
 
         viewModel.mode.observe(viewLifecycleOwner) {
             when (it) {
@@ -100,6 +87,15 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         viewModel.addItem(binding.newItemView.itemText.text.toString())
         binding.newItemView.itemText.text.clear()
         addedItem = true
+    }
+
+    override fun onSelectionStart() { viewModel.mode.value = MODE_SELECTION }
+    override fun onSelectionEnd() { viewModel.mode.value = MODE_VIEW }
+    override fun onItemStateChanged(item: SlappItem, selected: Boolean) {
+        viewModel.selection.value?.apply {
+            if (selected) add(item) else remove(item)
+            selectionMode?.title = size.toString()
+        }
     }
 
     override fun onDestroyView() {

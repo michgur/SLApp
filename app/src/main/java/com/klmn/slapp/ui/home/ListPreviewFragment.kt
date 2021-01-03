@@ -1,0 +1,65 @@
+package com.klmn.slapp.ui.home
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.View.INVISIBLE
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.klmn.slapp.databinding.ViewItemSmallBinding
+import com.klmn.slapp.databinding.ViewListSmallBinding
+import com.klmn.slapp.domain.SlappItem
+import com.klmn.slapp.domain.SlappList
+
+class ListPreviewFragment(private val list: SlappList) : Fragment() {
+    private var _binding: ViewListSmallBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ViewListSmallBinding.inflate(inflater, container, false)
+
+        binding.itemsRecyclerView.apply {
+            val a = SmallItemAdapter()
+            val lm = LinearLayoutManager(requireContext())
+            adapter = a
+            layoutManager = lm
+            a.submitList(list.items) {
+                lm.scrollToPositionWithOffset(a.itemCount - 1, 0)
+            }
+        }
+        return binding.root
+    }
+
+    class SmallItemAdapter : ListAdapter<SlappItem, SmallItemAdapter.ViewHolder>(SlappItemDiff) {
+        class ViewHolder(val binding: ViewItemSmallBinding) : RecyclerView.ViewHolder(binding.root)
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+            ViewItemSmallBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent, false)
+        )
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) = with(holder.binding) {
+            button.visibility = INVISIBLE
+            textView4.text = getItem(position).name
+        }
+
+        private object SlappItemDiff : DiffUtil.ItemCallback<SlappItem>() {
+            override fun areContentsTheSame(oldItem: SlappItem, newItem: SlappItem) = oldItem == newItem
+            override fun areItemsTheSame(oldItem: SlappItem, newItem: SlappItem) = oldItem.timestamp == newItem.timestamp
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+}

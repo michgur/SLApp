@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui
+package com.klmn.slapp.ui.list
 
 import android.content.Context
 import androidx.hilt.Assisted
