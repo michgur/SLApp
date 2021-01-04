@@ -6,13 +6,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.DimenRes
+import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.adapter.FragmentViewHolder
 import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentHomeBinding
 import com.klmn.slapp.domain.SlappItem
@@ -64,10 +68,15 @@ class HomeFragment : Fragment() {
         binding.listViewPager.apply {
             adapter = this@HomeFragment.adapter
             offscreenPageLimit = 1
+            (get(0) as ViewGroup).clipChildren = false
+
             val peek = resources.getDimension(R.dimen.viewpager_peek)
             val hPadding = resources.getDimension(R.dimen.viewpager_hpadding)
             val translationX = -(peek + hPadding)
             setPageTransformer { page, position ->
+                page as FrameLayout
+                val card = page[0] as CardView
+                card.cardElevation = 4 + (12 * (1 - abs(position)))
                 page.translationX = translationX * position
                 page.scaleY = 1 - (.025f * abs(position))
             }
