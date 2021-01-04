@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.klmn.slapp.databinding.ViewItemSmallBinding
 import com.klmn.slapp.databinding.ViewListSmallBinding
-import com.klmn.slapp.domain.SlappItem
-import com.klmn.slapp.domain.SlappList
 
 class ListPreviewFragment : Fragment() {
     private var _binding: ViewListSmallBinding? = null

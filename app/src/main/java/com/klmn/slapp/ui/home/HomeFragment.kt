@@ -1,20 +1,27 @@
 package com.klmn.slapp.ui.home
 
+import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DimenRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentHomeBinding
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappList
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collect
+import kotlin.math.abs
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -34,7 +41,38 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         adapter = ListsAdapter(this)
-        binding.listViewPager.adapter = adapter
+        adapter.addList(
+            SlappList(1, "michael", "", 0L, mutableListOf(
+                SlappItem("poop"),
+                SlappItem("item"),
+                SlappItem("hello"),
+            )))
+        adapter.addList(
+            SlappList(2, "friends", "", 0L, mutableListOf(
+                SlappItem("tomato"),
+                SlappItem("cucumber"),
+                SlappItem("gamba"),
+                SlappItem("onion"),
+            )))
+        adapter.addList(
+            SlappList(3, "party", "", 0L, mutableListOf(
+                SlappItem("plates"),
+                SlappItem("cake"),
+                SlappItem("whatever"),
+            )))
+
+        binding.listViewPager.apply {
+            adapter = this@HomeFragment.adapter
+            offscreenPageLimit = 1
+            val peek = resources.getDimension(R.dimen.viewpager_peek)
+            val hPadding = resources.getDimension(R.dimen.viewpager_hpadding)
+            val translationX = -(peek + hPadding)
+            setPageTransformer { page, position ->
+                page.translationX = translationX * position
+                page.scaleY = 1 - (.025f * abs(position))
+            }
+            addItemDecoration(HorizontalMarginItemDecoration(context, R.dimen.viewpager_hpadding))
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.listsFlow.collect {
@@ -51,7 +89,6 @@ class HomeFragment : Fragment() {
         private val lists = mutableListOf<SlappList>()
 
         fun addList(list: SlappList) {
-            println("added $list")
             if (lists.add(list))
                 notifyItemInserted(lists.size - 1)
         }
@@ -60,11 +97,27 @@ class HomeFragment : Fragment() {
         override fun getItemId(position: Int) = lists[position].id
         override fun containsItem(itemId: Long) = lists.find { it.id == itemId } != null
         override fun createFragment(position: Int) = ListPreviewFragment().also {
-            println("creating a fragment")
+            // next: format the lists to a smaller size & add peeking
+            // should transform to a ListFragment on click
+            // should also be highlighted somehow when changed by other users
             it.arguments = bundleOf(
                 "listName" to lists[position].name,
                 "items" to lists[position].items.map(SlappItem::name)
             )
+        }
+    }
+
+    private class HorizontalMarginItemDecoration(context: Context, @DimenRes marginInDp: Int)
+        : RecyclerView.ItemDecoration() {
+        private val margin = context.resources.getDimension(marginInDp).toInt()
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            outRect.right = margin
+            outRect.left = margin
         }
     }
 
