@@ -51,10 +51,14 @@ class ListPreviewAdapter(private val home: Fragment) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.binding.run {
-        toolbar.title = lists[position].name
+        val list = lists[position]
+        holder.id = list.id
+        // for some reason, when adding multiple items, the preview only shows a single new item
+        // until reentering a listFragment
         (itemsRecyclerView.adapter as MiniItemAdapter).submitList(
-            lists[position].items.map(SlappItem::name)
+            list.items.map(SlappItem::name)
         )
+        toolbar.title = list.name
     }
 
     override fun getItemCount() = lists.size

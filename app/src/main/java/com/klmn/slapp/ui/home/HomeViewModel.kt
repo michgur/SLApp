@@ -15,20 +15,5 @@ class HomeViewModel @ViewModelInject constructor(
     private val repository: SlappRepository,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    init {
-        repository.getLists()
-                .doOnSuccess { lists -> lists.forEach {
-                    _listsFlow.value = ListState.GotList(it)
-                }}
-                .doOnException {}
-                .execute()
-    }
-
-    private val _listsFlow = MutableStateFlow<ListState>(ListState.NoList)
-    val listsFlow: StateFlow<ListState> get() = _listsFlow
-
-    sealed class ListState {
-        class GotList(val list: SlappList) : ListState()
-        object NoList : ListState()
-    }
+    val listsFlow = repository.getLists()
 }

@@ -1,22 +1,34 @@
 package com.klmn.slapp.data
 
-import com.klmn.slapp.common.task
 import com.klmn.slapp.data.room.SlappDao
+import com.klmn.slapp.data.room.entities.ItemEntityMapper
+import com.klmn.slapp.data.room.entities.ListEntityMapper
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappList
-import java.util.concurrent.Executor
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SlappRepository @Inject constructor(
-    private val executor: Executor,
     private val dao: SlappDao
 ) {
-    fun getLists() = executor.task { dao.getLists() }
-    fun getList(id: Long) = executor.task { dao.getList(id) }
-    fun getListName(id: Long) = executor.task { dao.getListName(id) }
-    fun addList(list: SlappList) = executor.task { dao.addList(list) }
-    fun addItem(listId: Long, item: SlappItem) = executor.task { dao.addItem(listId, item) }
-    fun getItems(listId: Long) = executor.task { dao.getItems(listId) }
-//    fun updateItem(item: SlappItem) = dao.updateItem(item)
-    fun deleteItem(listId: Long, item: SlappItem) = executor.task { dao.deleteItem(listId, item) }
+    fun getLists() = ListEntityMapper.toModelListFlow(dao.getLists())
+
+    fun getList(id: Long) = ListEntityMapper.toModelFlow(dao.getList(id))
+
+    fun getListName(id: Long) = dao.getListName(id)
+
+    suspend fun addList(list: SlappList) = dao.addList(ListEntityMapper.toEntity(list).info)
+
+    suspend fun addItem(listId: Long, item: SlappItem) =
+        dao.addItem(ItemEntityMapper.toEntity(listId to item))
+
+    fun getItems(listId: Long) = dao.getItems(listId).map { items ->
+        ItemEntityMapper.toModelList(items).map { it.second }
+    }
+
+    suspend fun updateItem(listId: Long, item: SlappItem) = 
+        dao.updateItem(ItemEntityMapper.toEntity(listId to item))
+
+    suspend fun deleteItem(listId: Long, item: SlappItem) = 
+        dao.deleteItem(ItemEntityMapper.toEntity(listId to item))
 }

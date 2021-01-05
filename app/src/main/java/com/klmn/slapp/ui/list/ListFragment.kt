@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
@@ -19,11 +21,14 @@ import com.klmn.slapp.common.MultiSelectListAdapter
 import com.klmn.slapp.databinding.FragmentListBinding
 import com.klmn.slapp.domain.SlappItem
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 
 // next on the agenda- implement the rest of the UI:
 //      HomeFragment that contains lists & list operations (requires fixing the db)
 //      item & user operations in listView
 //      check possibility of linking to some existing product dataSet on the web
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     private val MODE_VIEW = 0
@@ -47,13 +52,13 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
 
-        viewModel.listId = args.listId
+        viewModel.listId.value = args.listId
 
         enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).setDuration(500L)
         returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).setDuration(500L)
 
         binding.toolbar.apply {
-            viewModel.listName.observe(viewLifecycleOwner, ::setTitle)
+            viewModel.listName.asLiveData().observe(viewLifecycleOwner, ::setTitle)
             setupWithNavController(findNavController())
             (requireActivity() as AppCompatActivity).setSupportActionBar(this)
         }
@@ -70,12 +75,14 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         adapter.addSelectionListener(this)
 
         binding.itemsRecyclerView.apply {
-            viewModel.items.observe(viewLifecycleOwner) {
-                (adapter as SlappListAdapter).submitList(it) {
-                    if (addedItem) {
-                        addedItem = false
-                        (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                            adapter?.itemCount?.minus(1) ?: 0, 0)
+            lifecycleScope.launchWhenStarted {
+                viewModel.items.collect {
+                    (adapter as SlappListAdapter).submitList(it) {
+                        if (addedItem) {
+                            addedItem = false
+                            (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
+                                adapter?.itemCount?.minus(1) ?: 0, 0)
+                        }
                     }
                 }
             }

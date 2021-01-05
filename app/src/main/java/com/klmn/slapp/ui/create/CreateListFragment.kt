@@ -47,24 +47,15 @@ class CreateListFragment : Fragment() {
 
         binding.createListBtn.setOnClickListener {
             binding.textInputLayout.editText?.let {
-                viewModel.createList(it.text.toString())
-                    .doOnSuccess { id ->
-                        (requireActivity().application as SLApp).mainThread.execute {
-                            // todo: pop this from backstack
-                            findNavController().navigate(
-                                CreateListFragmentDirections
-                                    .actionCreateListFragmentToListFragment(id)
-                            )
-                        }
+                viewModel.createList(it.text.toString()) {
+                    (requireActivity().application as SLApp).mainThread.execute {
+                        // todo: pop this from backstack
+                        findNavController().navigate(
+                            CreateListFragmentDirections
+                                .actionCreateListFragmentToListFragment(it)
+                        )
                     }
-                    .doOnException {
-                        Toast.makeText(
-                            requireContext(),
-                            "Failed To Create List",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    .execute()
+                }
             }
         }
 

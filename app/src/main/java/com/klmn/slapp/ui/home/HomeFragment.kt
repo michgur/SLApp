@@ -6,30 +6,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.annotation.DimenRes
 import androidx.cardview.widget.CardView
-import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionInflater
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.adapter.FragmentViewHolder
-import com.google.android.material.transition.MaterialElevationScale
 import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentHomeBinding
-import com.klmn.slapp.databinding.ViewListSmallBinding
-import com.klmn.slapp.domain.SlappItem
-import com.klmn.slapp.domain.SlappList
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collect
 import kotlin.math.abs
 
@@ -50,11 +39,10 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        adapter = ListPreviewAdapter(this)
-
         exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).setDuration(500L)
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).setDuration(500L)
 
+        adapter = ListPreviewAdapter(this)
         binding.listViewPager.apply {
             adapter = this@HomeFragment.adapter
             offscreenPageLimit = 1
@@ -76,11 +64,7 @@ class HomeFragment : Fragment() {
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.listsFlow.collect {
-                when (it) {
-                    is HomeViewModel.ListState.GotList -> adapter.addList(it.list)
-                }
-            }
+            viewModel.listsFlow.collect { it.forEach(adapter::addList) }
         }
 
         return binding.root
