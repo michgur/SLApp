@@ -15,6 +15,9 @@
             app:popEnterAnim="@anim/scale_enter_long"
             app:popExitAnim="@anim/slide_right_exit">
         </action>
+        <action
+            android:id="@+id/action_homeFragment_to_createListFragment"
+            app:destination="@id/createListFragment" />
     </fragment>
     <fragment
         android:id="@+id/listFragment"
@@ -26,5 +29,13 @@
         <action
             android:id="@+id/action_listFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createListFragment"
+        android:name="com.klmn.slapp.ui.create.CreateListFragment"
+        android:label="CreateListFragment" >
+        <action
+            android:id="@+id/action_createListFragment_to_listFragment"
+            app:destination="@id/listFragment" />
     </fragment>
 </navigation>

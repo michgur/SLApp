@@ -15,4 +15,6 @@
     <string name="toast_deleted">%1$d Items Removed</string>
     <string name="list_preview_transition_name">list_preview_%1$d</string>
     <string name="list_transition_name">list</string>
+    <string name="new_list_hint">Enter List Name</string>
+    <string name="create_list_button">Create List</string>
 </resources>

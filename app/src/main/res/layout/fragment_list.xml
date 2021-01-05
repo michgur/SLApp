@@ -48,7 +48,7 @@
 
     <include
         android:id="@+id/new_item_view"
-        layout="@layout/view_new_item"
+        layout="@layout/view_enter_item"
         android:layout_width="match_parent"
         android:layout_height="72dp"
         app:layout_constraintBottom_toBottomOf="parent"/>

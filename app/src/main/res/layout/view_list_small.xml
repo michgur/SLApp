@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/preview_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/preview_list"
     app:cardCornerRadius="5dp">
 
     <View
@@ -11,32 +12,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
-        android:elevation="5dp"
         android:clickable="true"
-        android:focusable="true"/>
+        android:elevation="5dp"
+        android:focusable="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primaryDarkColor"
-        android:elevation="4dp"
-        android:gravity="center_vertical|start"
-        android:padding="16dp"
-        android:clipToPadding="false"
-        app:title="@string/app_name"
-        app:titleTextAppearance="@style/AppTitle"/>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryDarkColor"
+            android:clipToPadding="false"
+            android:elevation="4dp"
+            android:gravity="center_vertical|start"
+            android:padding="16dp"
+            app:title="@string/app_name"
+            app:titleTextAppearance="@style/AppTitle" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/items_recycler_view"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/items_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+
+            tools:listitem="@layout/view_item_small" />
 
     </LinearLayout>
 
