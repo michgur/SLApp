@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Transition
 import com.klmn.slapp.R
 import com.klmn.slapp.databinding.ViewItemSmallBinding
 import com.klmn.slapp.databinding.ViewListSmallBinding
@@ -33,14 +34,18 @@ class ListPreviewAdapter(private val home: Fragment) :
                 layoutManager = LinearLayoutManager(home.requireContext())
             }
             button.setOnClickListener {
-                AnimatorInflater.loadAnimator(home.requireContext(), R.animator.preview_scale).apply {
-                    setTarget(root)
-                    doOnEnd {
-                        home.findNavController().navigate(
-                            HomeFragmentDirections.actionHomeFragmentToListFragment(id)
-                        )
-                    }
-                }.start()
+                (home.exitTransition as Transition).targets.apply {
+                    clear()
+                    add(root)
+                }
+                (home.reenterTransition as Transition).targets.apply {
+                    clear()
+                    add(root)
+                }
+
+                home.findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToListFragment(id)
+                )
             }
         }
     }

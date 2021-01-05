@@ -21,6 +21,7 @@ import androidx.transition.TransitionInflater
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
 import com.google.android.material.transition.MaterialElevationScale
+import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentHomeBinding
 import com.klmn.slapp.databinding.ViewListSmallBinding
@@ -50,25 +51,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         adapter = ListPreviewAdapter(this)
-        adapter.addList(
-            SlappList(1, "michael", "", 0L, mutableListOf(
-                SlappItem("poop"),
-                SlappItem("item"),
-                SlappItem("hello"),
-            )))
-        adapter.addList(
-            SlappList(2, "friends", "", 0L, mutableListOf(
-                SlappItem("tomato"),
-                SlappItem("cucumber"),
-                SlappItem("gamba"),
-                SlappItem("onion"),
-            )))
-        adapter.addList(
-            SlappList(3, "party", "", 0L, mutableListOf(
-                SlappItem("plates"),
-                SlappItem("cake"),
-                SlappItem("whatever"),
-            )))
+
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).setDuration(500L)
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).setDuration(500L)
 
         binding.listViewPager.apply {
             adapter = this@HomeFragment.adapter
@@ -84,6 +69,10 @@ class HomeFragment : Fragment() {
                 page.scaleY = 1 - (.025f * abs(position))
             }
             addItemDecoration(HorizontalMarginItemDecoration(context, R.dimen.viewpager_hpadding))
+        }
+
+        binding.fabAdd.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_createListFragment)
         }
 
         lifecycleScope.launchWhenStarted {

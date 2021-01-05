@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.common.MultiSelectListAdapter
 import com.klmn.slapp.databinding.FragmentListBinding
 import com.klmn.slapp.domain.SlappItem
@@ -46,7 +47,10 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
 
-        viewModel.listId = 290L
+        viewModel.listId = args.listId
+
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).setDuration(500L)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).setDuration(500L)
 
         binding.toolbar.apply {
             viewModel.listName.observe(viewLifecycleOwner, ::setTitle)
