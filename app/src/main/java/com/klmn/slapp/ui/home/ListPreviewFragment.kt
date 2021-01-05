@@ -1,10 +1,12 @@
 package com.klmn.slapp.ui.home
 
+import android.animation.AnimatorInflater
 import android.animation.ValueAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
+import androidx.core.animation.doOnEnd
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
@@ -43,22 +45,11 @@ class ListPreviewAdapter(private val home: Fragment) :
         }
     }
 
-    private fun navigateWithZoomTransition(view: View) {
-        var navigated = false
-        ValueAnimator.ofFloat(1f, 1.2f).apply {
-            duration = 200L
-            addUpdateListener {
-                val f = animatedValue as Float
-                view.scaleX = f
-                view.scaleY = f
-
-                if (!navigated && f >= 1.15f) {
-                    navigated = true
-                    home.findNavController().navigate(R.id.action_homeFragment_to_listFragment)
-                }
-            }
+    private fun navigateWithZoomTransition(view: View) =
+        AnimatorInflater.loadAnimator(home.requireContext(), R.animator.preview_scale).apply {
+            setTarget(view)
+            doOnEnd { home.findNavController().navigate(R.id.action_homeFragment_to_listFragment) }
         }.start()
-    }
 
     override fun getItemCount() = lists.size
 
