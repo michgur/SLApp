@@ -14,11 +14,16 @@ import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionInflater
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
+import com.google.android.material.transition.MaterialElevationScale
 import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentHomeBinding
+import com.klmn.slapp.databinding.ViewListSmallBinding
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappList
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +40,7 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels()
 
-    private lateinit var adapter: ListsAdapter
+    private lateinit var adapter: ListPreviewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +49,7 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        adapter = ListsAdapter(this)
+        adapter = ListPreviewAdapter(this)
         adapter.addList(
             SlappList(1, "michael", "", 0L, mutableListOf(
                 SlappItem("poop"),
@@ -74,9 +79,7 @@ class HomeFragment : Fragment() {
             val hPadding = resources.getDimension(R.dimen.viewpager_hpadding)
             val translationX = -(peek + hPadding)
             setPageTransformer { page, position ->
-                page as FrameLayout
-                val card = page[0] as CardView
-                card.cardElevation = 4 + (12 * (1 - abs(position)))
+                (page as CardView).cardElevation = 4 + (12 * (1 - abs(position)))
                 page.translationX = translationX * position
                 page.scaleY = 1 - (.025f * abs(position))
             }
@@ -92,28 +95,6 @@ class HomeFragment : Fragment() {
         }
 
         return binding.root
-    }
-
-    private class ListsAdapter(home: Fragment) : FragmentStateAdapter(home) {
-        private val lists = mutableListOf<SlappList>()
-
-        fun addList(list: SlappList) {
-            if (lists.add(list))
-                notifyItemInserted(lists.size - 1)
-        }
-
-        override fun getItemCount() = lists.size
-        override fun getItemId(position: Int) = lists[position].id
-        override fun containsItem(itemId: Long) = lists.find { it.id == itemId } != null
-        override fun createFragment(position: Int) = ListPreviewFragment().also {
-            // next: format the lists to a smaller size & add peeking
-            // should transform to a ListFragment on click
-            // should also be highlighted somehow when changed by other users
-            it.arguments = bundleOf(
-                "listName" to lists[position].name,
-                "items" to lists[position].items.map(SlappItem::name)
-            )
-        }
     }
 
     private class HorizontalMarginItemDecoration(context: Context, @DimenRes marginInDp: Int)

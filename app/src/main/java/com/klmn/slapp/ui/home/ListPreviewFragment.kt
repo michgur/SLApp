@@ -1,43 +1,72 @@
 package com.klmn.slapp.ui.home
 
-import android.os.Bundle
+import android.animation.ValueAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.klmn.slapp.R
 import com.klmn.slapp.databinding.ViewItemSmallBinding
 import com.klmn.slapp.databinding.ViewListSmallBinding
+import com.klmn.slapp.domain.SlappItem
+import com.klmn.slapp.domain.SlappList
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-class ListPreviewFragment : Fragment() {
-    private var _binding: ViewListSmallBinding? = null
-    private val binding get() = _binding!!
+@ExperimentalCoroutinesApi
+class ListPreviewAdapter(private val home: Fragment) :
+    RecyclerView.Adapter<ListPreviewAdapter.ViewHolder>() {
+    private val lists = mutableListOf<SlappList>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = ViewListSmallBinding.inflate(inflater, container, false)
-
-        binding.textView.text = requireArguments().getString("listName")
-        binding.itemsRecyclerView.apply {
-            val a = SmallItemAdapter()
-            val lm = LinearLayoutManager(requireContext())
-            adapter = a
-            layoutManager = lm
-            a.submitList(requireArguments().getStringArrayList("items")) {
-                lm.scrollToPositionWithOffset(a.itemCount - 1, 0)
-            }
-        }
-        return binding.root
+    fun addList(list: SlappList) {
+        lists.add(list)
+        notifyItemInserted(lists.size - 1)
     }
 
-    class SmallItemAdapter : ListAdapter<String, SmallItemAdapter.ViewHolder>(SlappItemDiff) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent)
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        ViewListSmallBinding.bind(holder.itemView).apply {
+            toolbar.title = lists[position].name
+            itemsRecyclerView.apply {
+                adapter = MiniItemAdapter().apply {
+                    submitList(lists[position].items.map(SlappItem::name))
+                }
+                layoutManager = LinearLayoutManager(home.requireContext())
+            }
+            button.setOnClickListener { navigateWithZoomTransition(root) }
+        }
+    }
+
+    private fun navigateWithZoomTransition(view: View) {
+        var navigated = false
+        ValueAnimator.ofFloat(1f, 1.2f).apply {
+            duration = 200L
+            addUpdateListener {
+                val f = animatedValue as Float
+                view.scaleX = f
+                view.scaleY = f
+
+                if (!navigated && f >= 1.15f) {
+                    navigated = true
+                    home.findNavController().navigate(R.id.action_homeFragment_to_listFragment)
+                }
+            }
+        }.start()
+    }
+
+    override fun getItemCount() = lists.size
+
+    class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.view_list_small, parent, false)
+    )
+
+    private class MiniItemAdapter : ListAdapter<String, MiniItemAdapter.ViewHolder>(SlappItemDiff) {
         class ViewHolder(val binding: ViewItemSmallBinding) : RecyclerView.ViewHolder(binding.root)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
@@ -55,10 +84,5 @@ class ListPreviewFragment : Fragment() {
             override fun areContentsTheSame(oldItem: String, newItem: String) = oldItem == newItem
             override fun areItemsTheSame(oldItem: String, newItem: String) = oldItem == newItem
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

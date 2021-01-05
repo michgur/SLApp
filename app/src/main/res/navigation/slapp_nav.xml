@@ -9,7 +9,11 @@
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_listFragment"
-            app:destination="@id/listFragment">
+            app:destination="@id/listFragment"
+            app:enterAnim="@anim/scale_enter"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/scale_enter_long"
+            app:popExitAnim="@anim/slide_right_exit">
             <argument
                 android:name="listId"
                 app:argType="long" />

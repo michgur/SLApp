@@ -1,18 +1,33 @@
 package com.klmn.slapp.ui.list
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.get
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.Explode
+import androidx.transition.TransitionInflater
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.MaterialElevationScale
+import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentListBinding
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.common.MultiSelectListAdapter
+import com.klmn.slapp.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 // next on the agenda- implement the rest of the UI:
@@ -40,6 +55,11 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
+
+        binding.toolbar.setupWithNavController(findNavController())
+        (requireActivity() as AppCompatActivity).apply {
+            setSupportActionBar(binding.toolbar)
+        }
 
         viewModel.mode.observe(viewLifecycleOwner) {
             when (it) {
