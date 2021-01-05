@@ -19,6 +19,9 @@ interface SlappDao {
     fun getList(id: Long): LiveData<SlappList> =
         Transformations.map(getListEntity(id), ::toModelList)
 
+    @Query("SELECT name FROM lists WHERE id = :id")
+    fun getListName(id: Long): String
+
     @Update
     fun updateListEntity(list: SlappDatabase.ListInfo)
     // does NOT update contents!

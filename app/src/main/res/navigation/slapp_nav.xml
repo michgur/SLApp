@@ -6,7 +6,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.klmn.slapp.ui.home.HomeFragment"
-        android:label="HomeFragment" >
+        android:label="" >
         <action
             android:id="@+id/action_homeFragment_to_listFragment"
             app:destination="@id/listFragment"
@@ -14,15 +14,15 @@
             app:exitAnim="@anim/no_anim"
             app:popEnterAnim="@anim/scale_enter_long"
             app:popExitAnim="@anim/slide_right_exit">
-            <argument
-                android:name="listId"
-                app:argType="long" />
         </action>
     </fragment>
     <fragment
         android:id="@+id/listFragment"
         android:name="com.klmn.slapp.ui.list.ListFragment"
         android:label="ListFragment" >
+        <argument
+            android:name="listId"
+            app:argType="long" />
         <action
             android:id="@+id/action_listFragment_to_homeFragment"
             app:destination="@id/homeFragment" />

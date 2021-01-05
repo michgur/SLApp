@@ -13,6 +13,7 @@ class SlappRepository @Inject constructor(
 ) {
     fun getLists() = executor.task { dao.getLists() }
     fun getList(id: Long) = executor.task { dao.getList(id) }
+    fun getListName(id: Long) = executor.task { dao.getListName(id) }
     fun addList(list: SlappList) = executor.task { dao.addList(list) }
     fun addItem(listId: Long, item: SlappItem) = executor.task { dao.addItem(listId, item) }
     fun getItems(listId: Long) = executor.task { dao.getItems(listId) }
