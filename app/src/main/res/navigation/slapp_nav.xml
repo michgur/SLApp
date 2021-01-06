@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/slapp_nav"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/slapp_nav"
     app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.klmn.slapp.ui.home.HomeFragment"
-        android:label="" >
+        android:label="">
         <action
             android:id="@+id/action_homeFragment_to_listFragment"
-            app:destination="@id/listFragment">
-        </action>
+            app:destination="@id/listFragment" />
         <action
             android:id="@+id/action_homeFragment_to_createListFragment"
             app:destination="@id/createListFragment" />
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.klmn.slapp.ui.list.ListFragment"
-        android:label="ListFragment" >
+        android:label="ListFragment">
         <argument
             android:name="listId"
             app:argType="long" />
@@ -29,9 +29,11 @@
     <fragment
         android:id="@+id/createListFragment"
         android:name="com.klmn.slapp.ui.create.CreateListFragment"
-        android:label="CreateListFragment" >
+        android:label="CreateListFragment">
         <action
             android:id="@+id/action_createListFragment_to_listFragment"
-            app:destination="@id/listFragment" />
+            app:destination="@id/listFragment"
+            app:popUpTo="@id/createListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
