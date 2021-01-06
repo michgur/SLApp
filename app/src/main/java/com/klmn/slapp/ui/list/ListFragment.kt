@@ -31,9 +31,6 @@ import kotlinx.coroutines.flow.collect
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
-    private val MODE_VIEW = 0
-    private val MODE_SELECTION = 1
-
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
 
@@ -41,9 +38,9 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     private val args: ListFragmentArgs by navArgs()
 
     private lateinit var adapter: SlappListAdapter
-    private var selectionMode: ActionMode? = null
+    private var selectionToolbar: ActionMode? = null
 
-    private var addedItem = false
+    private var scrollOnSubmitList = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,11 +60,11 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             (requireActivity() as AppCompatActivity).setSupportActionBar(this)
         }
 
-        viewModel.mode.observe(viewLifecycleOwner) {
-            when (it) {
-                MODE_VIEW -> selectionMode?.finish()
-                MODE_SELECTION -> selectionMode =
-                    requireActivity().startActionMode(SelectionModeCallback(requireContext(), viewModel, adapter))
+        viewModel.selectionModeEnabled.observe(viewLifecycleOwner) {
+            if (it) {
+                selectionToolbar?.finish()
+                selectionToolbar = requireActivity()
+                    .startActionMode(SelectionModeCallback(requireContext(), viewModel, adapter))
             }
         }
 
@@ -78,8 +75,8 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             lifecycleScope.launchWhenStarted {
                 viewModel.items.collect {
                     (adapter as SlappListAdapter).submitList(it) {
-                        if (addedItem) {
-                            addedItem = false
+                        if (scrollOnSubmitList) {
+                            scrollOnSubmitList = false
                             (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
                                 adapter?.itemCount?.minus(1) ?: 0, 0)
                         }
@@ -110,15 +107,15 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
 
         viewModel.addItem(binding.newItemView.itemText.text.toString())
         binding.newItemView.itemText.text.clear()
-        addedItem = true
+        scrollOnSubmitList = true
     }
 
-    override fun onSelectionStart() { viewModel.mode.value = MODE_SELECTION }
-    override fun onSelectionEnd() { viewModel.mode.value = MODE_VIEW }
+    override fun onSelectionStart() { viewModel.selectionModeEnabled.value = true }
+    override fun onSelectionEnd() { viewModel.selectionModeEnabled.value = false }
     override fun onItemStateChanged(item: SlappItem, selected: Boolean) {
         viewModel.selection.value?.apply {
             if (selected) add(item) else remove(item)
-            selectionMode?.title = size.toString()
+            selectionToolbar?.title = size.toString()
         }
     }
 

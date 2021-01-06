@@ -29,7 +29,7 @@ class ListViewModel @ViewModelInject constructor(
         else emptyFlow()
     }
 
-    val mode = MutableLiveData(0)
+    val selectionModeEnabled = MutableLiveData(false)
 
     // i don't think there is a point in having this as a liveData
     val selection: LiveData<MutableSet<SlappItem>> = MutableLiveData(mutableSetOf())

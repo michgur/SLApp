@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DimenRes
 import androidx.cardview.widget.CardView
+import androidx.core.view.doOnLayout
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Transition
 import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentHomeBinding
@@ -39,10 +41,21 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).setDuration(500L)
-        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).setDuration(500L)
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+            .setDuration(500L).addTarget(binding.root)
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
+            .setDuration(500L).addTarget(binding.root)
 
         adapter = ListPreviewAdapter(this)
+        adapter.setOnItemClickListener {
+            (exitTransition as Transition).targets[0] = it
+            (reenterTransition as Transition).targets[0] = it
+
+            viewModel.position = binding.listViewPager.currentItem
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToListFragment(adapter.getItemId(viewModel.position))
+            )
+        }
         binding.listViewPager.apply {
             adapter = this@HomeFragment.adapter
             offscreenPageLimit = 1
@@ -64,7 +77,11 @@ class HomeFragment : Fragment() {
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.listsFlow.collect { it.forEach(adapter::addList) }
+            viewModel.listsFlow.collect {
+                adapter.submitList(it) {
+                    binding.listViewPager.setCurrentItem(viewModel.position, false)
+                }
+            }
         }
 
         return binding.root

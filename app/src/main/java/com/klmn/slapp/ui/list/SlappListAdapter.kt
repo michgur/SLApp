@@ -4,22 +4,17 @@ import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.klmn.slapp.R
+import com.klmn.slapp.common.MultiSelectListAdapter
 import com.klmn.slapp.common.formatTimeStamp
 import com.klmn.slapp.databinding.ViewItemBinding
 import com.klmn.slapp.domain.SlappItem
-import com.klmn.slapp.common.MultiSelectListAdapter
+import com.klmn.slapp.domain.SlappItemDiff
 
 class SlappListAdapter(selection: Iterable<SlappItem>? = null) :
     MultiSelectListAdapter<SlappItem, SlappListAdapter.ViewHolder>(SlappItemDiff, selection) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent)
-
-    private object SlappItemDiff : DiffUtil.ItemCallback<SlappItem>() {
-        override fun areContentsTheSame(oldItem: SlappItem, newItem: SlappItem) = oldItem == newItem
-        override fun areItemsTheSame(oldItem: SlappItem, newItem: SlappItem) = oldItem.timestamp == newItem.timestamp
-    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position), isSelected(getItem(position)))
