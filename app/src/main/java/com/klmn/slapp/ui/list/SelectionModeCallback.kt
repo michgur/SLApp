@@ -8,7 +8,9 @@ import android.widget.Toast
 import com.klmn.slapp.R
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.common.MultiSelectListAdapter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class SelectionModeCallback(
     private val context: Context,
     private val viewModel: ListViewModel,
@@ -24,7 +26,7 @@ class SelectionModeCallback(
 
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.action_delete -> viewModel.selection.value?.apply {
+            R.id.action_delete -> viewModel.selection.apply {
                 // should probably happen in a single callback since any change to th
                 forEach(viewModel::deleteItem)
                 Toast.makeText(

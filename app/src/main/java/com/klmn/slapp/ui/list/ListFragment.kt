@@ -25,10 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 
-// next on the agenda- implement the rest of the UI:
-//      HomeFragment that contains lists & list operations (requires fixing the db)
-//      item & user operations in listView
-//      check possibility of linking to some existing product dataSet on the web
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
@@ -55,20 +51,19 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).setDuration(500L)
         returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).setDuration(500L)
 
+        viewModel.selectionModeEnabled.observe(viewLifecycleOwner) {
+            if (it) selectionToolbar = requireActivity()
+                .startActionMode(SelectionModeCallback(requireContext(), viewModel, adapter))
+            else selectionToolbar?.finish()
+        }
+
         binding.toolbar.apply {
-            viewModel.listName.asLiveData().observe(viewLifecycleOwner, ::setTitle)
+            viewModel.listName.observe(viewLifecycleOwner, ::setTitle)
             setupWithNavController(findNavController())
             (requireActivity() as AppCompatActivity).setSupportActionBar(this)
         }
 
-        viewModel.selectionModeEnabled.observe(viewLifecycleOwner) {
-
-            if (it) selectionToolbar = requireActivity()
-                    .startActionMode(SelectionModeCallback(requireContext(), viewModel, adapter))
-            else selectionToolbar?.finish()
-        }
-
-        adapter = SlappListAdapter(viewModel.selection.value)
+        adapter = SlappListAdapter(viewModel.selection)
         adapter.addSelectionListener(this)
 
         binding.itemsRecyclerView.apply {
@@ -112,7 +107,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     override fun onSelectionStart() { viewModel.selectionModeEnabled.value = true }
     override fun onSelectionEnd() { viewModel.selectionModeEnabled.value = false }
     override fun onItemStateChanged(item: SlappItem, selected: Boolean) {
-        viewModel.selection.value?.apply {
+        viewModel.selection.apply {
             if (selected) add(item) else remove(item)
             selectionToolbar?.title = size.toString()
         }
