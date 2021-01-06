@@ -3,6 +3,7 @@ package com.klmn.slapp.di
 import android.content.Context
 import androidx.room.Room
 import com.klmn.slapp.SLApp
+import com.klmn.slapp.common.DATABASE_NAME
 import com.klmn.slapp.data.room.SlappDatabase
 import dagger.Module
 import dagger.Provides
@@ -26,6 +27,6 @@ object RepoModule {
     fun provideDatabase(@ApplicationContext context: Context) = Room.databaseBuilder(
         context,
         SlappDatabase::class.java,
-        "slapp_db"
+        DATABASE_NAME
     ).build()
 }

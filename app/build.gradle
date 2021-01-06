@@ -75,4 +75,7 @@ dependencies {
     def hilt_lifecycle_version = "1.0.0-alpha02"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_lifecycle_version"
     implementation "androidx.hilt:hilt-compiler:$hilt_lifecycle_version"
+
+    def datastore_version = "1.0.0-alpha05"
+    implementation "androidx.datastore:datastore-preferences:$datastore_version"
 }
