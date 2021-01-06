@@ -62,11 +62,10 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         }
 
         viewModel.selectionModeEnabled.observe(viewLifecycleOwner) {
-            if (it) {
-                selectionToolbar?.finish()
-                selectionToolbar = requireActivity()
+
+            if (it) selectionToolbar = requireActivity()
                     .startActionMode(SelectionModeCallback(requireContext(), viewModel, adapter))
-            }
+            else selectionToolbar?.finish()
         }
 
         adapter = SlappListAdapter(viewModel.selection.value)
