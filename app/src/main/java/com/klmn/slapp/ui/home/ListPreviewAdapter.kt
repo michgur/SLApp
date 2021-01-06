@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.klmn.slapp.R
+import com.klmn.slapp.common.scrollToBottom
 import com.klmn.slapp.databinding.ViewItemSmallBinding
 import com.klmn.slapp.databinding.ViewListSmallBinding
 import com.klmn.slapp.domain.SlappItem
@@ -38,10 +39,7 @@ class ListPreviewAdapter(private val home: Fragment) :
         val list = currentList[position]
         toolbar.title = list.name
         itemsRecyclerView.run {
-            (adapter as MiniItemAdapter).submitList(list.items) {
-                (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                    adapter?.itemCount?.minus(1) ?: 0, 0)
-            }
+            (adapter as MiniItemAdapter).submitList(list.items, ::scrollToBottom)
         }
     }
 

@@ -18,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.common.MultiSelectListAdapter
+import com.klmn.slapp.common.scrollToBottom
 import com.klmn.slapp.databinding.FragmentListBinding
 import com.klmn.slapp.domain.SlappItem
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,8 +78,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
                     (adapter as SlappListAdapter).submitList(it) {
                         if (scrollOnSubmitList) {
                             scrollOnSubmitList = false
-                            (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                                adapter?.itemCount?.minus(1) ?: 0, 0)
+                            scrollToBottom()
                         }
                     }
                 }

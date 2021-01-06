@@ -49,7 +49,6 @@ class CreateListFragment : Fragment() {
             binding.textInputLayout.editText?.let {
                 viewModel.createList(it.text.toString()) {
                     (requireActivity().application as SLApp).mainThread.execute {
-                        // todo: pop this from backstack
                         findNavController().navigate(
                             CreateListFragmentDirections
                                 .actionCreateListFragmentToListFragment(it)
