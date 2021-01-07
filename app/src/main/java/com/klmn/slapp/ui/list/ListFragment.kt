@@ -1,42 +1,32 @@
 package com.klmn.slapp.ui.list
 
 import android.os.Bundle
-import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.transition.MaterialSharedAxis
-import com.klmn.slapp.common.MultiSelectListAdapter
-import com.klmn.slapp.common.scrollToBottom
+import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentListBinding
-import com.klmn.slapp.domain.SlappItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
+class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ListViewModel by viewModels()
+    private val viewModel: ListViewModel by activityViewModels()
     private val args: ListFragmentArgs by navArgs()
-
-    private lateinit var adapter: SlappListAdapter
-    private var selectionToolbar: ActionMode? = null
-
-    private var scrollOnSubmitList = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,65 +40,38 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).setDuration(500L)
         returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).setDuration(500L)
 
-        viewModel.selectionModeEnabled.observe(viewLifecycleOwner) {
-            if (it) selectionToolbar = requireActivity()
-                .startActionMode(SelectionModeCallback(requireContext(), viewModel, adapter))
-            else selectionToolbar?.finish()
-        }
-
+        // setup toolbar with list title and connect to activity & navController
         binding.toolbar.apply {
             viewModel.listName.observe(viewLifecycleOwner, ::setTitle)
             setupWithNavController(findNavController())
             (requireActivity() as AppCompatActivity).setSupportActionBar(this)
         }
 
-        adapter = SlappListAdapter(viewModel.selection)
-        adapter.addSelectionListener(this)
+        binding.tabContainer.adapter = TabAdapter(this)
+        // the tabs are already configured, only need to be attached to the ViewPager2
+        TabLayoutMediator(binding.tabLayout, binding.tabContainer) { tab, position ->
+            if (position == 0) tab.setText(R.string.tab_items)
+            else tab.setText(R.string.tab_users)
+        }.attach()
 
-        binding.itemsRecyclerView.apply {
-            lifecycleScope.launchWhenStarted {
-                viewModel.items.collect {
-                    (adapter as SlappListAdapter).submitList(it) {
-                        if (scrollOnSubmitList) {
-                            scrollOnSubmitList = false
-                            scrollToBottom()
-                        }
-                    }
-                }
+        // kill selection action mode on tab switch
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                viewModel.selectionModeEnabled.value = false
             }
-
-            adapter = this@ListFragment.adapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
-
-        binding.newItemView.apply {
-            itemText.apply {
-                doAfterTextChanged { addButton.isEnabled = !it.isNullOrBlank() }
-                setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == IME_ACTION_DONE) addNewItem()
-                    true
-                }
-            }
-            addButton.setOnClickListener { addNewItem() }
-        }
+        })
 
         return binding.root
     }
 
-    private fun addNewItem() {
-        if (binding.newItemView.itemText.text.isNullOrBlank()) return
-
-        viewModel.addItem(binding.newItemView.itemText.text.toString())
-        binding.newItemView.itemText.text.clear()
-        scrollOnSubmitList = true
-    }
-
-    override fun onSelectionStart() { viewModel.selectionModeEnabled.value = true }
-    override fun onSelectionEnd() { viewModel.selectionModeEnabled.value = false }
-    override fun onItemStateChanged(item: SlappItem, selected: Boolean) {
-        viewModel.selection.apply {
-            if (selected) add(item) else remove(item)
-            selectionToolbar?.title = size.toString()
+    private class TabAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+        override fun getItemCount() = 2
+        override fun createFragment(position: Int): Fragment = when(position) {
+            0 -> ItemsTab()
+            1 -> UsersTab()
+            else -> throw IllegalArgumentException("there are only 2 tabs")
         }
     }
 

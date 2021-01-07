@@ -22,9 +22,12 @@ class SlappRepository @Inject constructor(
     suspend fun addItem(listId: Long, item: SlappItem) =
         dao.addItem(ItemEntityMapper.toEntity(listId to item))
 
+    // should be suspend
     fun getItems(listId: Long) = dao.getItems(listId).map { items ->
         ItemEntityMapper.toModelList(items).map { it.second }
     }
+
+    fun getUsers(listId: Long) = dao.getUsers(listId)
 
     suspend fun updateItem(listId: Long, item: SlappItem) = 
         dao.updateItem(ItemEntityMapper.toEntity(listId to item))

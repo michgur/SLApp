@@ -11,6 +11,17 @@ object SlappListDiff : DiffUtil.ItemCallback<SlappList>() {
 }
 
 object SlappItemDiff : DiffUtil.ItemCallback<SlappItem>() {
-    override fun areContentsTheSame(oldItem: SlappItem, newItem: SlappItem) = oldItem == newItem
-    override fun areItemsTheSame(oldItem: SlappItem, newItem: SlappItem) = oldItem.timestamp == newItem.timestamp
+    override fun areItemsTheSame(oldItem: SlappItem, newItem: SlappItem) =
+        oldItem.timestamp == newItem.timestamp
+
+    override fun areContentsTheSame(oldItem: SlappItem, newItem: SlappItem) =
+        oldItem == newItem
+}
+
+object ContactDiff : DiffUtil.ItemCallback<Contact>() {
+    override fun areItemsTheSame(oldItem: Contact, newItem: Contact) =
+        oldItem.phoneNumber == newItem.phoneNumber
+
+    override fun areContentsTheSame(oldItem: Contact, newItem: Contact) =
+        oldItem == newItem
 }

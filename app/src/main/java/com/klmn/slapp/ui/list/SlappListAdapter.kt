@@ -4,16 +4,21 @@ import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.klmn.slapp.R
 import com.klmn.slapp.common.MultiSelectListAdapter
 import com.klmn.slapp.common.formatTimeStamp
 import com.klmn.slapp.databinding.ViewItemBinding
+import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappItemDiff
 
-class SlappListAdapter(selection: Iterable<SlappItem>? = null) :
-    MultiSelectListAdapter<SlappItem, SlappListAdapter.ViewHolder>(SlappItemDiff, selection) {
+class SlappListAdapter(
+    private val users: LiveData<List<Contact>>,
+    selection: Iterable<SlappItem>? = null
+) : MultiSelectListAdapter<SlappItem, SlappListAdapter.ViewHolder>(SlappItemDiff, selection) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -29,7 +34,7 @@ class SlappListAdapter(selection: Iterable<SlappItem>? = null) :
             root.isActivated = selected
 
             textName.text = item.name
-            textUser.text = item.user
+            textUser.text = users.value?.find { it.phoneNumber == item.user }?.displayName ?: item.user
             textTime.text = formatTimeStamp(item.timestamp)
 
             if (adapterPosition > 0)  {

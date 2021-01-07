@@ -2,6 +2,7 @@ package com.klmn.slapp.di
 
 import android.content.Context
 import com.klmn.slapp.data.contacts.ContactProvider
+import com.klmn.slapp.data.contacts.ContactsRepository
 import com.klmn.slapp.data.contacts.ContactsRepositoryImpl
 import dagger.Module
 import dagger.Provides
@@ -19,5 +20,5 @@ object ContactsModule {
 
     @Provides @Singleton
     fun provideContactsRepository(contactProvider: ContactProvider) =
-        ContactsRepositoryImpl(contactProvider)
+        ContactsRepositoryImpl(contactProvider) as ContactsRepository
 }

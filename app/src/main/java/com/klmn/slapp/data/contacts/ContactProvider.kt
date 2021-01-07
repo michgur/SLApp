@@ -36,7 +36,7 @@ class ContactProvider(private val contentResolver: ContentResolver) {
             while (!isAfterLast) {
                 contacts += Contact(
                     getString(getColumnIndex(NORMALIZED_NUMBER)) ?: "",
-                    getString(getColumnIndex(DISPLAY_NAME_PRIMARY)) ?: ""
+                    getString(getColumnIndex(DISPLAY_NAME_PRIMARY))
                 )
                 moveToNext()
             }
@@ -44,7 +44,7 @@ class ContactProvider(private val contentResolver: ContentResolver) {
         }
 
         return contacts.apply {
-            removeAll { it.displayName.isBlank() || it.phoneNumber.isBlank() }
+            removeAll { it.phoneNumber.isBlank() }
         }
     }
 }
