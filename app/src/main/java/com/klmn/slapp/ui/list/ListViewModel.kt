@@ -3,6 +3,7 @@ package com.klmn.slapp.ui.list
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.klmn.slapp.data.contacts.ContactProvider
 import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.SlappItem
@@ -14,9 +15,17 @@ import kotlinx.coroutines.launch
 class ListViewModel @ViewModelInject constructor(
     private val repository: SlappRepository,
     private val userPreferences: UserPreferences,
+    private val contactProvider: ContactProvider,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val listId = MutableStateFlow(0L)
+
+    init {
+        viewModelScope.launch {
+            println(contactProvider.getContact("+972508192585"))
+            contactProvider.fetchContacts("היק").forEach(::println)
+        }
+    }
 
     val items = listId.flatMapLatest {
         if (it != 0L) repository.getItems(it)

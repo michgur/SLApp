@@ -44,7 +44,7 @@ class CreateListFragment : Fragment() {
         returnTransition = Slide().addTarget(binding.root)
 
         binding.textInputLayout.editText?.doAfterTextChanged {
-            binding.createListBtn.isEnabled = !it.isNullOrEmpty()
+            binding.createListBtn.isEnabled = !it.isNullOrBlank()
         }
 
         binding.createListBtn.setOnClickListener {

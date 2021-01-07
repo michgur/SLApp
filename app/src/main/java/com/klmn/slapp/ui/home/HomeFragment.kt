@@ -85,6 +85,10 @@ class HomeFragment : Fragment() {
             }
         }
 
+//        requireActivity().contentResolver.query(
+//
+//        )
+
         return binding.root
     }
 

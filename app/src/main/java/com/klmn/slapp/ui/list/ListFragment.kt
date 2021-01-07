@@ -83,7 +83,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
 
         binding.newItemView.apply {
             itemText.apply {
-                doAfterTextChanged { addButton.isEnabled = !it.isNullOrEmpty() }
+                doAfterTextChanged { addButton.isEnabled = !it.isNullOrBlank() }
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == IME_ACTION_DONE) addNewItem()
                     true
@@ -96,7 +96,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     }
 
     private fun addNewItem() {
-        if (binding.newItemView.itemText.text.isNullOrEmpty()) return
+        if (binding.newItemView.itemText.text.isNullOrBlank()) return
 
         viewModel.addItem(binding.newItemView.itemText.text.toString())
         binding.newItemView.itemText.text.clear()
