@@ -14,24 +14,25 @@
         android:backgroundTint="@android:color/white"
         android:elevation="2dp"
         android:hint="@string/new_item_hint"
+        android:inputType="text"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/add_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_button"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:background="@drawable/ic_add"
-        android:enabled="false"
         android:backgroundTint="@color/disableable_button"
-        android:clickable="true"
-        android:focusable="true"
+        android:enabled="false"
+        android:src="@drawable/ic_add"
+        android:tint="@color/secondaryTextColor"
+        android:translationZ="6dp"
+        app:borderWidth="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

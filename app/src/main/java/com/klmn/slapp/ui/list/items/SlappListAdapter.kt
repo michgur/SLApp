@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui.list
+package com.klmn.slapp.ui.list.items
 
 import android.view.LayoutInflater
 import android.view.View.GONE
@@ -22,7 +22,7 @@ class SlappListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), isSelected(getItem(position)))
+        holder.bind(getItem(position), isSelected(position))
     }
 
     inner class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(

@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui.list
+package com.klmn.slapp.ui.list.items
 
 import android.os.Bundle
 import android.view.ActionMode
@@ -16,6 +16,7 @@ import com.klmn.slapp.common.MultiSelectListAdapter
 import com.klmn.slapp.common.scrollToBottom
 import com.klmn.slapp.databinding.TabItemsBinding
 import com.klmn.slapp.domain.SlappItem
+import com.klmn.slapp.ui.list.ListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -30,8 +31,6 @@ class ItemsTab : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
 
     private var selectionToolbar: ActionMode? = null
 
-    private lateinit var adapter: SlappListAdapter
-
     private var scrollOnSubmitList = true
 
     override fun onCreateView(
@@ -41,7 +40,7 @@ class ItemsTab : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     ): View {
         _binding = TabItemsBinding.inflate(inflater, container, false)
 
-        adapter = SlappListAdapter(viewModel.users.asLiveData(), viewModel.selection)
+        val adapter = SlappListAdapter(viewModel.users.asLiveData(), viewModel.selection)
         adapter.addSelectionListener(this)
 
         viewModel.selectionModeEnabled.observe(viewLifecycleOwner) {
@@ -61,7 +60,7 @@ class ItemsTab : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         binding.itemsRecyclerView.apply {
             lifecycleScope.launchWhenStarted {
                 viewModel.items.collect {
-                    (adapter as SlappListAdapter).submitList(it) {
+                    adapter.submitList(it) {
                         if (scrollOnSubmitList) {
                             scrollOnSubmitList = false
                             scrollToBottom()
@@ -70,7 +69,7 @@ class ItemsTab : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
                 }
             }
 
-            adapter = this@ItemsTab.adapter
+            this.adapter = adapter
             layoutManager = LinearLayoutManager(requireContext())
         }
 

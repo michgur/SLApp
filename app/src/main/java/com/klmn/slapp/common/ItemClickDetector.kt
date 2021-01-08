@@ -12,7 +12,7 @@ class ItemClickDetector(
     }
 
     private var listener: Listener = object : Listener {
-        override fun onItemClick(holder: RecyclerView.ViewHolder) = Unit
+        override fun onItemClick(position: Int) = Unit
     }
 
     fun setListener(listener: Listener) { this.listener = listener }
@@ -21,7 +21,7 @@ class ItemClickDetector(
     override fun onLongPress(e: MotionEvent) {
         recyclerView.run {
             findChildViewUnder(e.x, e.y)?.let {
-                getChildViewHolder(it)
+                getChildViewHolder(it).adapterPosition
             }?.let(listener::onItemLongClick)
         }
     }
@@ -29,7 +29,7 @@ class ItemClickDetector(
     override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
         if (gestureDetector.onTouchEvent(e))
             rv.findChildViewUnder(e.x, e.y)?.let {
-                rv.getChildViewHolder(it)
+                rv.getChildViewHolder(it).adapterPosition
             }?.let(listener::onItemClick)
         return false
     }
@@ -38,7 +38,7 @@ class ItemClickDetector(
     override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) = Unit
 
     interface Listener {
-        fun onItemClick(holder: RecyclerView.ViewHolder)
-        fun onItemLongClick(holder: RecyclerView.ViewHolder) = Unit
+        fun onItemClick(position: Int)
+        fun onItemLongClick(position: Int) = Unit
     }
 }

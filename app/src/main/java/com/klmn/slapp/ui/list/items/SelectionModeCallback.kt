@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui.list
+package com.klmn.slapp.ui.list.items
 
 import android.content.Context
 import android.view.ActionMode
@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.klmn.slapp.R
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.common.MultiSelectListAdapter
+import com.klmn.slapp.ui.list.ListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi

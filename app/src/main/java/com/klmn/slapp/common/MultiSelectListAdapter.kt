@@ -44,7 +44,8 @@ abstract class MultiSelectListAdapter<T, VH : RecyclerView.ViewHolder>(
             ItemClickDetector(recyclerView).also { it.setListener(this) }
         )
 
-    private fun select(position: Int) {
+    protected fun isSelected(position: Int) = isSelected(getItem(position))
+    protected fun select(position: Int) {
         val item = getItem(position)
         if (_selection.isEmpty()) callbacks.forEach(Callback<T>::onSelectionStart)
         if (_selection.add(item)) {
@@ -52,7 +53,7 @@ abstract class MultiSelectListAdapter<T, VH : RecyclerView.ViewHolder>(
             callbacks.forEach { it.onItemStateChanged(item, true) }
         }
     }
-    private fun deselect(position: Int) {
+    protected fun deselect(position: Int) {
         val item = getItem(position)
         if (_selection.remove(item)) {
             notifyItemChanged(position, Unit)
@@ -67,14 +68,14 @@ abstract class MultiSelectListAdapter<T, VH : RecyclerView.ViewHolder>(
         fun onItemStateChanged(item: T, selected: Boolean) {}
     }
 
-    override fun onItemClick(holder: RecyclerView.ViewHolder) {
+    override fun onItemClick(position: Int) {
         if (_selection.isNotEmpty()) {
-            if (_selection.contains(getItem(holder.adapterPosition))) deselect(holder.adapterPosition)
-            else select(holder.adapterPosition)
+            if (_selection.contains(getItem(position))) deselect(position)
+            else select(position)
         }
     }
 
-    override fun onItemLongClick(holder: RecyclerView.ViewHolder) {
-        if (_selection.isEmpty()) select(holder.adapterPosition)
+    override fun onItemLongClick(position: Int) {
+        if (_selection.isEmpty()) select(position)
     }
 }

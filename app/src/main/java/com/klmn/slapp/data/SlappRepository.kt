@@ -28,6 +28,9 @@ class SlappRepository @Inject constructor(
     }
 
     fun getUsers(listId: Long) = dao.getUsers(listId)
+    suspend fun addUsers(listId: Long, users: List<String>) {
+        users.forEach { dao.addUser(listId, it) }
+    }
 
     suspend fun updateItem(listId: Long, item: SlappItem) = 
         dao.updateItem(ItemEntityMapper.toEntity(listId to item))

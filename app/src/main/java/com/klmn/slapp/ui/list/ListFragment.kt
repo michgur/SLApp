@@ -16,6 +16,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentListBinding
+import com.klmn.slapp.ui.list.items.ItemsTab
+import com.klmn.slapp.ui.list.users.UsersTab
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 

@@ -19,4 +19,6 @@
     <string name="create_list_button">Create List</string>
     <string name="add_users_title">Add Participants</string>
     <string name="content_decsription_selected">Selected</string>
+    <string name="action_search">Search</string>
+    <string name="search_hint">Search Contacts</string>
 </resources>
