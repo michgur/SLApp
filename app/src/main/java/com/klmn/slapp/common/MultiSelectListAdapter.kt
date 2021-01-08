@@ -1,7 +1,5 @@
 package com.klmn.slapp.common
 
-import android.view.GestureDetector
-import android.view.MotionEvent
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +9,7 @@ abstract class MultiSelectListAdapter<T, VH : RecyclerView.ViewHolder>(
     /* When initializing adapter after configuration change, pass the previous selection.
     * Items will be selected after a list is first submitted to this adapter */
     private var initialSelection: Iterable<T>? = null
-) : ListAdapter<T, VH>(diffCallback), RecyclerView.OnItemTouchListener {
+) : ListAdapter<T, VH>(diffCallback), ItemClickDetector.Listener {
     private val _selection = mutableSetOf<T>()
     val selection: Set<T> get() = _selection
 
@@ -41,10 +39,10 @@ abstract class MultiSelectListAdapter<T, VH : RecyclerView.ViewHolder>(
         }
     }
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        initGestureDetector(recyclerView)
-        recyclerView.addOnItemTouchListener(this@MultiSelectListAdapter)
-    }
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) =
+        recyclerView.addOnItemTouchListener(
+            ItemClickDetector(recyclerView).also { it.setListener(this) }
+        )
 
     private fun select(position: Int) {
         val item = getItem(position)
@@ -69,27 +67,14 @@ abstract class MultiSelectListAdapter<T, VH : RecyclerView.ViewHolder>(
         fun onItemStateChanged(item: T, selected: Boolean) {}
     }
 
-    private lateinit var gestureDetector: GestureDetector
-    private fun initGestureDetector(recyclerView: RecyclerView) {
-        val listener = object : GestureDetector.SimpleOnGestureListener() {
-            override fun onSingleTapUp(e: MotionEvent?) = true
-            override fun onLongPress(e: MotionEvent) = with(recyclerView) {
-                if (_selection.isEmpty())
-                    findChildViewUnder(e.x, e.y)?.let { getChildViewHolder(it).adapterPosition }?.let(::select)
-            }
+    override fun onItemClick(holder: RecyclerView.ViewHolder) {
+        if (_selection.isNotEmpty()) {
+            if (_selection.contains(getItem(holder.adapterPosition))) deselect(holder.adapterPosition)
+            else select(holder.adapterPosition)
         }
-        gestureDetector = GestureDetector(recyclerView.context, listener)
     }
 
-    override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-        if (gestureDetector.onTouchEvent(e) && _selection.isNotEmpty()) {
-            val vh = rv.findChildViewUnder(e.x, e.y)?.let { rv.getChildViewHolder(it).adapterPosition }!!
-            if (_selection.contains(getItem(vh))) deselect(vh)
-            else select(vh)
-        }
-        return false
+    override fun onItemLongClick(holder: RecyclerView.ViewHolder) {
+        if (_selection.isEmpty()) select(holder.adapterPosition)
     }
-
-    override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) = Unit
-    override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) = Unit
 }
