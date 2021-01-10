@@ -24,7 +24,8 @@ import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class AddUsersFragment : Fragment(), MultiSelectListAdapter.Callback<Contact> {
+class AddUsersFragment : Fragment(), MultiSelectListAdapter.Callback<Contact>,
+    SearchView.OnQueryTextListener {
     private var _binding: FragmentAddUsersBinding? = null
     private val binding get() = _binding!!
 
@@ -37,11 +38,6 @@ class AddUsersFragment : Fragment(), MultiSelectListAdapter.Callback<Contact> {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddUsersBinding.inflate(inflater, container, false)
-
-        binding.toolbar.apply {
-            setupWithNavController(findNavController())
-            (requireActivity() as AppCompatActivity).setSupportActionBar(this)
-        }
 
         val adapter = AddUsersAdapter(viewModel.selection).also {
             it.addSelectionListener(this)
@@ -58,6 +54,15 @@ class AddUsersFragment : Fragment(), MultiSelectListAdapter.Callback<Contact> {
             findNavController().navigateUp()
         }
 
+        binding.toolbar.apply {
+            setupWithNavController(findNavController())
+            (requireActivity() as AppCompatActivity).setSupportActionBar(this)
+            setOnMenuItemClickListener {
+                (it.actionView as SearchView).setOnQueryTextListener(this@AddUsersFragment)
+                true
+            }
+        }
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -70,6 +75,13 @@ class AddUsersFragment : Fragment(), MultiSelectListAdapter.Callback<Contact> {
             if (selected) add(item)
             else remove(item)
         }
+    }
+
+    override fun onQueryTextSubmit(query: String?) = true
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        viewModel.query.value = newText
+        return true
     }
 
     override fun onDestroyView() {

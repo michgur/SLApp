@@ -42,7 +42,7 @@
     <fragment
         android:id="@+id/addUsersFragment"
         android:name="com.klmn.slapp.ui.list.users.AddUsersFragment"
-        android:label="AddUsersFragment">
+        android:label="@string/add_users_title">
         <argument
             android:name="listId"
             app:argType="long" />
