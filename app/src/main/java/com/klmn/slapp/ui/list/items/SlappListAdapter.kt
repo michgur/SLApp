@@ -34,6 +34,7 @@ class SlappListAdapter(
             root.isActivated = selected
 
             textName.text = item.name
+            println("$item ${users.value}")
             textUser.text = users.value?.find { it.phoneNumber == item.user }?.displayName ?: item.user
             textTime.text = formatTimeStamp(item.timestamp)
 

@@ -1,11 +1,16 @@
 package com.klmn.slapp.data.contacts
 
-import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
 import android.provider.ContactsContract.CommonDataKinds.Phone.*
+import com.klmn.slapp.R
+import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.Contact
 
-class ContactProvider(private val contentResolver: ContentResolver) {
+class ContactProvider(
+    private val context: Context,
+    private val userPreferences: UserPreferences
+) {
     private val projection = arrayOf(
         NORMALIZED_NUMBER,
         DISPLAY_NAME_PRIMARY
@@ -13,19 +18,19 @@ class ContactProvider(private val contentResolver: ContentResolver) {
 
     fun getContact(phoneNumber: String): Contact? {
         val uri = Uri.withAppendedPath(CONTENT_FILTER_URI, Uri.encode(phoneNumber))
-        val cursor = contentResolver.query(uri, projection, null, null, null)
+        val cursor = context.contentResolver.query(uri, projection, null, null, null)
         return cursor?.run {
             moveToFirst()
             Contact(
                 phoneNumber,
-                getString(getColumnIndex(DISPLAY_NAME_PRIMARY))
+                findUser(phoneNumber) ?: getString(getColumnIndex(DISPLAY_NAME_PRIMARY))
             )
         }.also { cursor?.close() }
     }
 
     fun fetchContacts(query: String? = null): List<Contact> {
         val contacts = mutableListOf<Contact>()
-        contentResolver.query(
+        context.contentResolver.query(
             CONTENT_URI,
             projection,
             query?.run { "$DISPLAY_NAME_PRIMARY LIKE ?" },
@@ -34,9 +39,10 @@ class ContactProvider(private val contentResolver: ContentResolver) {
         )?.apply {
             moveToFirst()
             while (!isAfterLast) {
+                val phoneNumber = getString(getColumnIndex(NORMALIZED_NUMBER)) ?: ""
                 contacts += Contact(
-                    getString(getColumnIndex(NORMALIZED_NUMBER)) ?: "",
-                    getString(getColumnIndex(DISPLAY_NAME_PRIMARY))
+                    phoneNumber,
+                    findUser(phoneNumber) ?: getString(getColumnIndex(DISPLAY_NAME_PRIMARY))
                 )
                 moveToNext()
             }
@@ -47,4 +53,8 @@ class ContactProvider(private val contentResolver: ContentResolver) {
             removeAll { it.phoneNumber.isBlank() }
         }
     }
+
+    private fun findUser(phoneNumber: String) =
+        if (phoneNumber != userPreferences.phoneNumber.value) null
+        else context.getString(R.string.contact_you)
 }

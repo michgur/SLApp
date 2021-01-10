@@ -30,6 +30,7 @@ class ListViewModel @ViewModelInject constructor(
 
     val users = listId.flatMapLatest { id ->
         if (id.isNotEmpty()) repository.getUsers(id).map {
+            println(it)
             it.mapNotNull(contactProvider::getContact)
         }
         else emptyFlow()

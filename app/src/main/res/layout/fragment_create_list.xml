@@ -49,7 +49,7 @@
         android:textColor="@color/secondaryColor"
         app:icon="@drawable/ic_add"
         app:iconTint="@color/secondaryColor"
-        app:layout_constraintEnd_toEndOf="@+id/field_phone"
-        app:layout_constraintTop_toBottomOf="@+id/field_phone" />
+        app:layout_constraintEnd_toEndOf="@+id/field_list_name"
+        app:layout_constraintTop_toBottomOf="@+id/field_list_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

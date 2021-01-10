@@ -4,6 +4,7 @@ import android.content.Context
 import com.klmn.slapp.data.contacts.ContactProvider
 import com.klmn.slapp.data.contacts.ContactsRepository
 import com.klmn.slapp.data.contacts.ContactsRepositoryImpl
+import com.klmn.slapp.data.datastore.UserPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,8 +16,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ContactsModule {
     @Provides @Singleton
-    fun provideContactProvider(@ApplicationContext context: Context) =
-        ContactProvider(context.contentResolver)
+    fun provideContactProvider(
+        @ApplicationContext context: Context,
+        userPreferences: UserPreferences
+    ) = ContactProvider(context, userPreferences)
 
     @Provides @Singleton
     fun provideContactsRepository(contactProvider: ContactProvider) =
