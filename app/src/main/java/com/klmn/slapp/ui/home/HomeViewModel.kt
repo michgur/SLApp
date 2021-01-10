@@ -19,7 +19,7 @@ class HomeViewModel @ViewModelInject constructor(
     private val userPreferences: UserPreferences,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val listsFlow = userPreferences.uid.asFlow().flatMapLatest {
+    val listsFlow = userPreferences.phoneNumber.asFlow().flatMapLatest {
         repository.getLists(it)
     }
 

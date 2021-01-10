@@ -17,13 +17,16 @@ class ContactProvider(
     )
 
     fun getContact(phoneNumber: String): Contact? {
+        if (phoneNumber != userPreferences.phoneNumber.value)
+            return Contact(phoneNumber, context.getString(R.string.contact_you))
+
         val uri = Uri.withAppendedPath(CONTENT_FILTER_URI, Uri.encode(phoneNumber))
         val cursor = context.contentResolver.query(uri, projection, null, null, null)
         return cursor?.run {
             moveToFirst()
             Contact(
                 phoneNumber,
-                findUser(phoneNumber) ?: getString(getColumnIndex(DISPLAY_NAME_PRIMARY))
+                getString(getColumnIndex(DISPLAY_NAME_PRIMARY))
             )
         }.also { cursor?.close() }
     }
@@ -39,10 +42,9 @@ class ContactProvider(
         )?.apply {
             moveToFirst()
             while (!isAfterLast) {
-                val phoneNumber = getString(getColumnIndex(NORMALIZED_NUMBER)) ?: ""
                 contacts += Contact(
-                    phoneNumber,
-                    findUser(phoneNumber) ?: getString(getColumnIndex(DISPLAY_NAME_PRIMARY))
+                    getString(getColumnIndex(NORMALIZED_NUMBER)) ?: "",
+                    getString(getColumnIndex(DISPLAY_NAME_PRIMARY))
                 )
                 moveToNext()
             }
@@ -53,8 +55,4 @@ class ContactProvider(
             removeAll { it.phoneNumber.isBlank() }
         }
     }
-
-    private fun findUser(phoneNumber: String) =
-        if (phoneNumber != userPreferences.phoneNumber.value) null
-        else context.getString(R.string.contact_you)
 }
