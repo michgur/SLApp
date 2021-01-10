@@ -43,12 +43,12 @@ class CreateListFragment : Fragment() {
         }
         returnTransition = Slide().addTarget(binding.root)
 
-        binding.textInputLayout.editText?.doAfterTextChanged {
+        binding.fieldListName.editText?.doAfterTextChanged {
             binding.createListBtn.isEnabled = !it.isNullOrBlank()
         }
 
         binding.createListBtn.setOnClickListener {
-            binding.textInputLayout.editText?.let {
+            binding.fieldListName.editText?.let {
                 viewModel.createList(it.text.toString()) {
                     (requireActivity().application as SLApp).mainThread.execute {
                         findNavController().navigate(

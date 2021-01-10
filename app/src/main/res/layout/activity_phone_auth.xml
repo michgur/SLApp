@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_pattern">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="56dp"
+        android:contentDescription="@string/shopping_bag_desc"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_shopping_bag" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/field_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/enter_number_hint"
+        android:textSize="20sp"
+        app:boxBackgroundColor="@color/primaryDarkColor"
+        app:boxBackgroundMode="filled"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
+        app:endIconMode="clear_text"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:prefixText="@string/prefix_972">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:textSize="20sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/send_code_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/send_code"
+        android:textAppearance="@style/AppTitle"
+        android:textColor="@color/secondaryColor"
+        android:theme="@style/Widget.MaterialComponents.Button.TextButton"
+        app:layout_constraintEnd_toEndOf="@+id/field_phone"
+        app:layout_constraintTop_toBottomOf="@+id/field_phone" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/field_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/enter_code_hint"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:boxBackgroundColor="@color/primaryDarkColor"
+        app:boxBackgroundMode="filled"
+        app:endIconMode="clear_text"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/sign_in_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/sign_in"
+        android:textAppearance="@style/AppTitle"
+        android:textColor="@color/secondaryColor"
+        android:theme="@style/Widget.MaterialComponents.Button.TextButton"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/field_code"
+        app:layout_constraintTop_toBottomOf="@+id/field_code" />
+
+    <Button
+        android:id="@+id/resend_code_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/resend_code"
+        android:textAppearance="@style/AppTitle"
+        android:textColor="@color/primaryDarkerColor"
+        android:theme="@style/Widget.MaterialComponents.Button.TextButton"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/sign_in_btn"
+        app:layout_constraintTop_toBottomOf="@+id/field_code" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

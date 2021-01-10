@@ -21,4 +21,13 @@
     <string name="content_decsription_selected">Selected</string>
     <string name="action_search">Search</string>
     <string name="search_hint">Search Contacts</string>
+    <string name="prefix_972">+972</string>
+    <string name="enter_number_hint">Your Phone Number</string>
+    <string name="sign_in">Sign In</string>
+    <string name="error_invalid_number">Invalid Phone Number</string>
+    <string name="error_verification_failed">Verification Failed</string>
+    <string name="enter_code_hint">Enter Verification Code</string>
+    <string name="send_code">Send Verification Code</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="error_invalid_code">Invalid Verification Code</string>
 </resources>

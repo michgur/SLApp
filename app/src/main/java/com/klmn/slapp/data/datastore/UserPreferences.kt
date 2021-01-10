@@ -17,11 +17,19 @@ class UserPreferences @Inject constructor(
 ) {
     private val dataStore = context.createDataStore(DATASTORE_NAME)
 
-    val uid = dataStore.data.map { it[KEY_UID] }.asLiveData()
+    val uid = dataStore.data.map {
+        it[KEY_UID] ?: ""
+    }.asLiveData()
+
+    val phoneNumber = dataStore.data.map {
+        it[KEY_PHONE_NUMBER] ?: ""
+    }.asLiveData()
 
     suspend fun saveUID(uid: String) = dataStore.edit { it[KEY_UID] = uid }
+    suspend fun savePhoneNumber(number: String) = dataStore.edit { it[KEY_PHONE_NUMBER] = number }
 
     companion object {
         private val KEY_UID = preferencesKey<String>("key_uid")
+        private val KEY_PHONE_NUMBER = preferencesKey<String>("key_phone_number")
     }
 }

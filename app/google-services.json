@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "924562296577",
+    "project_id": "slappfb",
+    "storage_bucket": "slappfb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924562296577:android:332e8b7eeb226f8d619500",
+        "android_client_info": {
+          "package_name": "com.klmn.slapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "924562296577-bshoodcsmj6pj4mvr83gcb91gg94a2mi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrNSH_-Ynbjo7y_3FOzuxVLI-X1tNctiA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "924562296577-bshoodcsmj6pj4mvr83gcb91gg94a2mi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

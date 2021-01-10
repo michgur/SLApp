@@ -11,7 +11,7 @@ import javax.inject.Inject
 class SlappRepository @Inject constructor(
     private val dao: SlappDao
 ) {
-    fun getLists() = ListEntityMapper.toModelListFlow(dao.getLists())
+    fun getLists(uid: String) = ListEntityMapper.toModelListFlow(dao.getLists(uid))
 
     fun getList(id: Long) = ListEntityMapper.toModelFlow(dao.getList(id))
 

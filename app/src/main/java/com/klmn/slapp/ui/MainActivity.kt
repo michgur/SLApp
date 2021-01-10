@@ -1,6 +1,7 @@
 package com.klmn.slapp.ui
 
 import android.Manifest.permission.READ_CONTACTS
+import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
 import android.widget.Toast
@@ -11,11 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.klmn.slapp.R
+import com.klmn.slapp.common.REQUEST_CODE_SIGNIN
 import com.klmn.slapp.common.hideKeyboard
 import com.klmn.slapp.data.datastore.UserPreferences
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -27,10 +30,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        userPreferences.uid.observe(this, ::println)
-
-        lifecycleScope.launch {
-            userPreferences.saveUID("Michael")
+        userPreferences.uid.observe(this) {
+            if (it == "")
+                startActivity(Intent(this, PhoneAuthActivity::class.java))
         }
 
         navController = findNavController(R.id.fragment_container_view)
@@ -48,19 +50,16 @@ class MainActivity : AppCompatActivity() {
         if (requestCode != 1)
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        Toast.makeText(this,
+        Toast.makeText(
+            this,
             "permission granted: ${grantResults[0] == PERMISSION_GRANTED}",
-            Toast.LENGTH_SHORT).show()
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     /*
     * NEXT:
-    *   implement the foundation for integrating user operations:
-    *       keep track of user in fragments, show only lists that the user is a part of,
-    *           pass the user id when creating lists & items
-    *       implement the 'users' tab in ListFragment
-    *       check how to access phone contacts and display names from phone numbers
-    *       consider using unit tests, as this shit is complicated to test manually by yourself
+    *   implement the foundation for integrating user operations
     *   FIREBASE
     *   Some last features
     *   Move on with your life

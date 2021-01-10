@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SlappDao {
-    @Query("SELECT * FROM lists")
-    fun getLists(): Flow<List<Entities.SList>>
+    @Query("SELECT * FROM lists WHERE id IN (SELECT listId FROM users WHERE userId = :uid) ORDER BY timestamp")
+    fun getLists(uid: String): Flow<List<Entities.SList>>
 
     @Query("SELECT * FROM lists WHERE id = :id")
     fun getList(id: Long): Flow<Entities.SList>
@@ -30,7 +30,7 @@ interface SlappDao {
     @Query("INSERT INTO users (listId, userId) VALUES (:listId, :user)")
     suspend fun addUser(listId: Long, user: String)
 
-    @Query("SELECT * FROM items WHERE listId = :listId")
+    @Query("SELECT * FROM items WHERE listId = :listId ORDER BY timestamp")
     fun getItems(listId: Long): Flow<List<Entities.Item>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
