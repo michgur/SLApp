@@ -21,7 +21,7 @@
         android:label="ListFragment">
         <argument
             android:name="listId"
-            app:argType="long" />
+            app:argType="string" />
         <action
             android:id="@+id/action_listFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
@@ -45,6 +45,6 @@
         android:label="@string/add_users_title">
         <argument
             android:name="listId"
-            app:argType="long" />
+            app:argType="string" />
     </fragment>
 </navigation>

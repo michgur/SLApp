@@ -53,7 +53,7 @@ class HomeFragment : Fragment() {
             viewModel.position = binding.listViewPager.currentItem
             findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToListFragment(
-                    adapter.getItemId(viewModel.position)
+                    adapter.getListId(viewModel.position)
                 )
             )
         }
@@ -84,10 +84,6 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-
-//        requireActivity().contentResolver.query(
-//
-//        )
 
         return binding.root
     }

@@ -43,7 +43,7 @@ class ListPreviewAdapter(private val home: Fragment) :
         }
     }
 
-    override fun getItemId(position: Int) = currentList[position].id
+    fun getListId(position: Int) = currentList[position].id
 
     class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.view_list_small, parent, false)

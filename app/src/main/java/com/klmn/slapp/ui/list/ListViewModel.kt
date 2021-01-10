@@ -21,22 +21,22 @@ class ListViewModel @ViewModelInject constructor(
     private val contactProvider: ContactsRepository,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val listId = MutableStateFlow(0L)
+    val listId = MutableStateFlow("")
 
     val items = listId.flatMapLatest {
-        if (it != 0L) repository.getItems(it)
+        if (it.isNotEmpty()) repository.getItems(it)
         else emptyFlow()
     }
 
     val users = listId.flatMapLatest { id ->
-        if (id != 0L) repository.getUsers(id).map {
+        if (id.isNotEmpty()) repository.getUsers(id).map {
             it.mapNotNull(contactProvider::getContact)
         }
         else emptyFlow()
     }
 
     val listName = listId.flatMapLatest {
-        if (it != 0L) repository.getListName(it)
+        if (it.isNotEmpty()) repository.getListName(it)
         else emptyFlow()
     }.asLiveData()
 
@@ -46,7 +46,7 @@ class ListViewModel @ViewModelInject constructor(
     val selection = mutableSetOf<SlappItem>()
 
     fun addItem(name: String) = viewModelScope.launch {
-        repository.addItem(listId.value, SlappItem(name, userPreferences.uid.value ?: ""))
+        repository.addItem(listId.value, SlappItem(name, userPreferences.phoneNumber.value ?: ""))
     }
 
     fun deleteItem(item: SlappItem) = viewModelScope.launch {

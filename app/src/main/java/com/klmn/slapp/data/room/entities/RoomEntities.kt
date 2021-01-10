@@ -2,7 +2,7 @@ package com.klmn.slapp.data.room.entities
 
 import androidx.room.*
 
-object Entities {
+object RoomEntities {
     @Entity(tableName = "lists")
     data class ListInfo(
         @PrimaryKey(autoGenerate = true) val id: Long = 0,

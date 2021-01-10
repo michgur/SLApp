@@ -1,40 +1,41 @@
 package com.klmn.slapp.data
 
+import com.klmn.slapp.data.firestore.FirestoreService
+import com.klmn.slapp.data.firestore.entities.ItemFirestoreMapper
+import com.klmn.slapp.data.firestore.entities.ListFirestoreMapper
 import com.klmn.slapp.data.room.SlappDao
-import com.klmn.slapp.data.room.entities.ItemEntityMapper
-import com.klmn.slapp.data.room.entities.ListEntityMapper
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappList
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SlappRepository @Inject constructor(
+    private val service: FirestoreService,
     private val dao: SlappDao
 ) {
-    fun getLists(uid: String) = ListEntityMapper.toModelListFlow(dao.getLists(uid))
+    suspend fun getLists(uid: String) = ListFirestoreMapper.toModelListFlow(service.getLists(uid))
 
-    fun getList(id: Long) = ListEntityMapper.toModelFlow(dao.getList(id))
+    suspend fun getList(id: String) = ListFirestoreMapper.toModelFlow(service.getList(id))
 
-    fun getListName(id: Long) = dao.getListName(id)
+    suspend fun getListName(id: String) = service.getListName(id)
 
-    suspend fun addList(list: SlappList) = dao.addList(ListEntityMapper.toEntity(list).info)
+    suspend fun addList(list: SlappList) = service.addList(ListFirestoreMapper.toEntity(list))
 
-    suspend fun addItem(listId: Long, item: SlappItem) =
-        dao.addItem(ItemEntityMapper.toEntity(listId to item))
+    suspend fun addItem(listId: String, item: SlappItem) =
+        service.addItem(listId, ItemFirestoreMapper.toEntity(item))
 
-    // should be suspend
-    fun getItems(listId: Long) = dao.getItems(listId).map { items ->
-        ItemEntityMapper.toModelList(items).map { it.second }
+    suspend fun getItems(listId: String) = service.getItems(listId).map { items ->
+        ItemFirestoreMapper.toModelList(items)
     }
 
-    fun getUsers(listId: Long) = dao.getUsers(listId)
-    suspend fun addUsers(listId: Long, users: List<String>) {
-        users.forEach { dao.addUser(listId, it) }
+    suspend fun getUsers(listId: String) = service.getUsers(listId)
+    suspend fun addUsers(listId: String, users: List<String>) {
+        users.forEach { service.addUser(listId, it) }
     }
 
-    suspend fun updateItem(listId: Long, item: SlappItem) = 
-        dao.updateItem(ItemEntityMapper.toEntity(listId to item))
+    suspend fun updateItem(listId: String, item: SlappItem) = 
+        service.updateItem(listId, ItemFirestoreMapper.toEntity(item))
 
-    suspend fun deleteItem(listId: Long, item: SlappItem) = 
-        dao.deleteItem(ItemEntityMapper.toEntity(listId to item))
+    suspend fun deleteItem(listId: String, item: SlappItem) =
+        service.deleteItem(listId, ItemFirestoreMapper.toEntity(item))
 }

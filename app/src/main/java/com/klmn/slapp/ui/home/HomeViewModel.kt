@@ -11,7 +11,6 @@ import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.SlappList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -26,7 +25,12 @@ class HomeViewModel @ViewModelInject constructor(
 
     var position = 0
 
-    fun createList(name: String, callback: (Long) -> Unit) = viewModelScope.launch {
-        callback(repository.addList(SlappList(name = name, user = userPreferences.uid.value ?: "")))
+    fun createList(name: String, callback: (String) -> Unit) = viewModelScope.launch {
+        callback(repository.addList(
+            SlappList(
+                name = name,
+                user = userPreferences.phoneNumber.value ?: ""
+            )
+        ))
     }
 }

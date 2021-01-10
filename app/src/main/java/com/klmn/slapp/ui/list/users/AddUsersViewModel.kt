@@ -26,7 +26,7 @@ class AddUsersViewModel @ViewModelInject constructor(
         contactsRepository.fetchContacts(it)
     }
 
-    fun addUsers(listId: Long) = viewModelScope.launch {
+    fun addUsers(listId: String) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             repository.addUsers(listId, selection.map(Contact::phoneNumber))
         }

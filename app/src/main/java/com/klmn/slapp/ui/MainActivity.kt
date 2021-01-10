@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        userPreferences.uid.observe(this) {
+        userPreferences.phoneNumber.observe(this) {
             if (it == "")
                 startActivity(Intent(this, PhoneAuthActivity::class.java))
         }
