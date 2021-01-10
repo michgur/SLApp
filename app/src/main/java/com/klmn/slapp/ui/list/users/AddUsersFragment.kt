@@ -1,12 +1,9 @@
 package com.klmn.slapp.ui.list.users
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -53,6 +50,7 @@ class AddUsersFragment : Fragment(), MultiSelectListAdapter.Callback<Contact>,
             viewModel.addUsers(args.listId)
             findNavController().navigateUp()
         }
+        binding.fabDone.hide()
 
         binding.toolbar.apply {
             setupWithNavController(findNavController())
@@ -74,6 +72,9 @@ class AddUsersFragment : Fragment(), MultiSelectListAdapter.Callback<Contact>,
         viewModel.selection.apply {
             if (selected) add(item)
             else remove(item)
+
+            if (isEmpty()) binding.fabDone.hide()
+            else binding.fabDone.show()
         }
     }
 
