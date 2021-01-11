@@ -6,12 +6,10 @@ import androidx.lifecycle.*
 import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.data.contacts.ContactsRepository
 import com.klmn.slapp.data.datastore.UserPreferences
+import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -23,15 +21,20 @@ class ListViewModel @ViewModelInject constructor(
 ) : ViewModel() {
     val listId = MutableStateFlow("")
 
-
     val items = listId.flatMapLatest {
-        repository.getItems(it)
+        if (it.isNotEmpty()) repository.getItems(it)
+        else emptyFlow()
     }
 
-    // problematic
-    val users = listId.flatMapLatest { id ->
-        repository.getUsers(id).map {
-            it.mapNotNull(contactProvider::getContact)
+    // we need a StateFlow here since this data is used both in the ItemsTab and the UserTab
+    lateinit var users: StateFlow<List<Contact>>
+    init {
+        viewModelScope.launch {
+            users = listId.flatMapLatest { id ->
+                if (id.isNotEmpty()) repository.getUsers(id).map {
+                    it.mapNotNull(contactProvider::getContact)
+                } else emptyFlow()
+            }.stateIn(viewModelScope)
         }
     }
 

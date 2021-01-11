@@ -24,11 +24,11 @@ class FirestoreServiceImpl : FirestoreService {
             .whereArrayContains("users", uid)
             .addSnapshotListener { snapshot, e ->
                 e?.let { Log.e(TAG, "${e.message}") }
-                snapshot?.let { 
+                snapshot?.let {
                     offer(
-                        snapshot.documents.map {
-                            it.toObject(FirestoreEntities.SList::class.java) 
-                        }.filterNotNull()
+                        snapshot.documents.mapNotNull {
+                            it.toObject(FirestoreEntities.SList::class.java)
+                        }
                     )
                 }
             }

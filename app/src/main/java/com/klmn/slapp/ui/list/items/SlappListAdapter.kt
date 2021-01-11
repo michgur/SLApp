@@ -4,20 +4,20 @@ import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.klmn.slapp.R
 import com.klmn.slapp.common.MultiSelectListAdapter
 import com.klmn.slapp.common.formatTimeStamp
 import com.klmn.slapp.databinding.ViewItemBinding
-import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappItemDiff
+import com.klmn.slapp.ui.list.ListViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class SlappListAdapter(
-    private val users: LiveData<List<Contact>>,
-    selection: Iterable<SlappItem>? = null
-) : MultiSelectListAdapter<SlappItem, SlappListAdapter.ViewHolder>(SlappItemDiff, selection) {
+    private val viewModel: ListViewModel
+) : MultiSelectListAdapter<SlappItem, SlappListAdapter.ViewHolder>(SlappItemDiff, viewModel.selection) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent)
 
@@ -34,8 +34,8 @@ class SlappListAdapter(
             root.isActivated = selected
 
             textName.text = item.name
-            println("$item ${users.value}")
-            textUser.text = users.value?.find { it.phoneNumber == item.user }?.displayName ?: item.user
+            println("$item ${viewModel.users.value}")
+            textUser.text = viewModel.users.value.find { it.phoneNumber == item.user }?.displayName ?: item.user
             textTime.text = formatTimeStamp(item.timestamp)
 
             if (adapterPosition > 0)  {

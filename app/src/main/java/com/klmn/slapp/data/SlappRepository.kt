@@ -15,8 +15,6 @@ class SlappRepository @Inject constructor(
 ) {
     suspend fun addList(list: SlappList) = service.addList(ListFirestoreMapper.toEntity(list))
 
-    suspend fun getList(id: String) = service.getList(id)
-
     suspend fun getLists(uid: String) = ListFirestoreMapper.toModelListFlow(service.getLists(uid))
 
     suspend fun getListName(id: String) = service.getListName(id)

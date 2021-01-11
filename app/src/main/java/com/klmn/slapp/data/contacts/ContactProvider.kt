@@ -17,8 +17,7 @@ class ContactProvider(
     )
 
     fun getContact(phoneNumber: String): Contact? {
-        println("$phoneNumber != ${userPreferences.phoneNumber.value}")
-        if (phoneNumber != userPreferences.phoneNumber.value)
+        if (phoneNumber == userPreferences.phoneNumber.value)
             return Contact(phoneNumber, context.getString(R.string.contact_you))
 
         val uri = Uri.withAppendedPath(CONTENT_FILTER_URI, Uri.encode(phoneNumber))

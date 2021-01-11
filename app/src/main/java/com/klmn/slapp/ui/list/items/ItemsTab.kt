@@ -9,7 +9,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.klmn.slapp.common.MultiSelectListAdapter
@@ -40,7 +39,7 @@ class ItemsTab : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     ): View {
         _binding = TabItemsBinding.inflate(inflater, container, false)
 
-        val adapter = SlappListAdapter(viewModel.users.asLiveData(), viewModel.selection)
+        val adapter = SlappListAdapter(viewModel)
         adapter.addSelectionListener(this)
 
         viewModel.selectionModeEnabled.observe(viewLifecycleOwner) {
