@@ -4,24 +4,26 @@ import com.klmn.slapp.common.EntityModelMapper
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappList
 
-object ListEntityMapper : EntityModelMapper<RoomEntities.SList, SlappList> {
-    override fun toEntity(model: SlappList) = RoomEntities.SList(
+object ListEntityMapper : EntityModelMapper<RoomEntities.SList, Pair<SlappList, EntityState>> {
+    override fun toEntity(model: Pair<SlappList, EntityState>) = RoomEntities.SList(
         RoomEntities.ListInfo(
-            // fixme this obviously won't work, when working on caching strategy figure out how to manage cached ids
-            model.id.toLong(),
-            model.name,
-            model.user,
-            model.timestamp
+            0L,
+            model.first.id,
+            model.first.name,
+            model.first.user,
+            model.first.timestamp,
+            model.second.ordinal
         ),
-        model.items.map {
+        model.first.items.map {
             RoomEntities.Item(
-                model.id.toLong(),
+                model.first.id.toLong(),
                 it.name,
                 it.user,
-                it.timestamp
+                it.timestamp,
+                model.second.ordinal
             )
         },
-        model.users
+        model.first.users
     )
 
     override fun toModel(entity: RoomEntities.SList) = SlappList(
@@ -37,5 +39,5 @@ object ListEntityMapper : EntityModelMapper<RoomEntities.SList, SlappList> {
             )
         }.toMutableList(),
         entity.users
-    )
+    ) to EntityState.values()[entity.info.state]
 }
