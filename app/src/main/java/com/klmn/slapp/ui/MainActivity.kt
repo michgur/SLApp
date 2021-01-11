@@ -8,15 +8,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.klmn.slapp.R
-import com.klmn.slapp.common.REQUEST_CODE_SIGNIN
 import com.klmn.slapp.common.hideKeyboard
 import com.klmn.slapp.data.datastore.UserPreferences
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -33,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         userPreferences.phoneNumber.observe(this) {
             if (it == "")
                 startActivity(Intent(this, PhoneAuthActivity::class.java))
+            // else start this activity. DON'T start before that
         }
 
         navController = findNavController(R.id.fragment_container_view)
@@ -59,8 +57,9 @@ class MainActivity : AppCompatActivity() {
 
     /*
     * NEXT:
-    *   implement the foundation for integrating user operations
-    *   FIREBASE
+    *   -implement the foundation for integrating user operations
+    *   -FIREBASE
+    *   -caching strategy- NO NEED FIRESTORE HAS A CACHE BY DEFAULT
     *   Some last features
     *   Move on with your life
     * */

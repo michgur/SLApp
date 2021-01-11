@@ -15,6 +15,9 @@ interface SlappDao {
     @Query("SELECT name FROM lists WHERE id = :id")
     fun getListName(id: Long): Flow<String>
 
+    @Query("SELECT firestoreId FROM lists WHERE id = :id")
+    fun getListFirestoreId(id: Long): Flow<String>
+
     @Update
     suspend fun updateList(list: RoomEntities.ListInfo)
 

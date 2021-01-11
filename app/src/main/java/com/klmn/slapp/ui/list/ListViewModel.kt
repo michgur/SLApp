@@ -23,19 +23,22 @@ class ListViewModel @ViewModelInject constructor(
 ) : ViewModel() {
     val listId = MutableStateFlow("")
 
-    private val list = listId.flatMapLatest {
-        if (it.isNotEmpty()) repository.getList(it)
-        else emptyFlow()
+
+    val items = listId.flatMapLatest {
+        repository.getItems(it)
     }
 
-    // not great, every time anything in the list changes all of these are being called
-    // maybe better than having 3 snapshot listeners tho
-    val items = list.map {
-        println(it)
-        it.items
+    // problematic
+    val users = listId.flatMapLatest { id ->
+        repository.getUsers(id).map {
+            it.mapNotNull(contactProvider::getContact)
+        }
     }
-    val users = list.map { it.users.mapNotNull(contactProvider::getContact) }
-    val listName = list.map { it.name }.asLiveData()
+
+    val listName = listId.flatMapLatest {
+        if (it.isNotEmpty()) repository.getListName(it)
+        else emptyFlow()
+    }.asLiveData()
 
     val selectionModeEnabled = MutableLiveData(false)
     val selectionModeTitle = MutableLiveData<String>()

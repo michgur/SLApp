@@ -3,8 +3,8 @@ package com.klmn.slapp.data.room.entities
 import com.klmn.slapp.common.EntityModelMapper
 import com.klmn.slapp.domain.SlappItem
 
-object ItemEntityMapper : EntityModelMapper<RoomEntities.Item, Triple<String, SlappItem, EntityState>> {
-    override fun toEntity(model: Triple<String, SlappItem, EntityState>) = RoomEntities.Item(
+object ItemEntityMapper : EntityModelMapper<RoomEntities.Item, Triple<Long, SlappItem, EntityState>> {
+    override fun toEntity(model: Triple<Long, SlappItem, EntityState>) = RoomEntities.Item(
         model.first,
         model.second.name,
         model.second.user,

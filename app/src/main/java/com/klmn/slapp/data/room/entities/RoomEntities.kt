@@ -16,13 +16,13 @@ object RoomEntities {
     @Entity(
         tableName = "items", foreignKeys = [ForeignKey(
             entity = ListInfo::class,
-            parentColumns = ["firestoreId"],
+            parentColumns = ["id"],
             childColumns = ["listId"],
             onUpdate = ForeignKey.CASCADE
         )]
     )
     data class Item(
-        val listId: String,
+        val listId: Long,
         val name: String,
         val user: String,
         @PrimaryKey val timestamp: Long,
@@ -32,13 +32,13 @@ object RoomEntities {
     @Entity(
         tableName = "users", foreignKeys = [ForeignKey(
             entity = ListInfo::class,
-            parentColumns = ["firestoreId"],
+            parentColumns = ["id"],
             childColumns = ["listId"],
             onUpdate = ForeignKey.CASCADE
         )]
     )
     data class User(
-        val listId: String,
+        val listId: Long,
         val userId: String,
         @PrimaryKey(autoGenerate = true) val index: Int,
         //val state: Int todo
@@ -46,10 +46,10 @@ object RoomEntities {
 
     data class SList(
         @Embedded val info: ListInfo,
-        @Relation(parentColumn = "firestoreId", entityColumn = "listId", entity = Item::class)
+        @Relation(parentColumn = "id", entityColumn = "listId", entity = Item::class)
         val items: List<Item>,
         @Relation(
-            parentColumn = "firestoreId",
+            parentColumn = "id",
             entityColumn = "listId",
             entity = User::class,
             projection = ["userId"]
