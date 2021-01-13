@@ -60,6 +60,9 @@ class MainActivity : AppCompatActivity() {
     *   -implement the foundation for integrating user operations
     *   -FIREBASE
     *   -caching strategy- NO NEED FIRESTORE HAS A CACHE BY DEFAULT
+    *   the actual shopping option
+    *   NOTIFICATIONS when Items are added/bought
+    *   fix & test the sign-in operation (try reducing latency when starting the app)
     *   Some last features
     *   Move on with your life
     * */

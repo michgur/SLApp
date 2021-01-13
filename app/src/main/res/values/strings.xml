@@ -31,4 +31,5 @@
     <string name="resend_code">Resend Code</string>
     <string name="error_invalid_code">Invalid Verification Code</string>
     <string name="contact_you">You</string>
+    <string name="shopping_cart">Shopping Cart</string>
 </resources>

@@ -34,7 +34,6 @@ class SlappListAdapter(
             root.isActivated = selected
 
             textName.text = item.name
-            println("$item ${viewModel.users.value}")
             textUser.text = viewModel.users.value.find { it.phoneNumber == item.user }?.displayName ?: item.user
             textTime.text = formatTimeStamp(item.timestamp)
 
