@@ -32,4 +32,6 @@
     <string name="error_invalid_code">Invalid Verification Code</string>
     <string name="contact_you">You</string>
     <string name="shopping_cart">Shopping Cart</string>
+    <string name="add_people">Add Participants</string>
+    <string name="tap_details">tap for list details</string>
 </resources>

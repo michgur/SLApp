@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="@color/clickable_item">
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:backgroundTint="@color/primaryColor">
 
     <View
         android:id="@+id/divider"

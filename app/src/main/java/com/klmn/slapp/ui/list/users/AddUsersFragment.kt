@@ -1,5 +1,6 @@
 package com.klmn.slapp.ui.list.users
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.Slide
+import com.google.android.material.transition.MaterialContainerTransform
 import com.klmn.slapp.R
 import com.klmn.slapp.common.MultiSelectListAdapter
 import com.klmn.slapp.databinding.FragmentAddUsersBinding
@@ -35,6 +38,14 @@ class AddUsersFragment : Fragment(), MultiSelectListAdapter.Callback<Contact>,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddUsersBinding.inflate(inflater, container, false)
+
+        enterTransition = MaterialContainerTransform().apply {
+            startView = requireActivity().findViewById(R.id.view_add_users)
+            endView = binding.root
+            scrimColor = Color.TRANSPARENT
+            setAllContainerColors(resources.getColor(R.color.primaryColor))
+        }
+        returnTransition = Slide()
 
         val adapter = AddUsersAdapter(viewModel.selection).also {
             it.addSelectionListener(this)

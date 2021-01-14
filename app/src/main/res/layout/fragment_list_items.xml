@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryColor"
+    android:clipChildren="false">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/primaryDarkColor"
+            android:elevation="4dp"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <LinearLayout
+                android:id="@+id/title_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/list_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/app_name"
+                    android:textAppearance="@style/AppTitle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tap_details"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="64dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/items_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/view_item" />
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/new_item_view"
+        layout="@layout/view_enter_item"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_gravity="bottom"
+        app:layout_behavior=".ui.list.items.EnterItemBehavior" />
+
+    <include
+        android:id="@+id/bottom_sheet"
+        layout="@layout/sheet_shop" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!--    old layout-->
+    <!--    <com.google.android.material.tabs.TabLayout-->
+    <!--        android:id="@+id/tab_layout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:background="@color/primaryDarkColor"-->
+    <!--        android:elevation="4dp"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/toolbar"-->
+    <!--        app:tabIndicatorColor="@color/secondaryColor"-->
+    <!--        app:tabMaxWidth="0dp"-->
+    <!--        app:tabMode="fixed"-->
+    <!--        app:tabSelectedTextColor="@color/secondaryColor"-->
+    <!--        app:tabTextColor="@color/primaryTextColor">-->
+
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:text="@string/tab_items" />-->
+
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:text="@string/tab_users" />-->
+
+    <!--    </com.google.android.material.tabs.TabLayout>-->
+
+    <!--    <androidx.viewpager2.widget.ViewPager2-->
+    <!--        android:id="@+id/tab_container"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/tab_layout" />-->

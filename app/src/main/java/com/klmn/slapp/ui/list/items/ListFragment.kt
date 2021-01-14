@@ -1,51 +1,46 @@
 package com.klmn.slapp.ui.list.items
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.util.AttributeSet
 import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.animation.doOnEnd
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.TransitionManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.transition.MaterialContainerTransform
-import com.google.android.material.transition.MaterialElevationScale
+import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.R
 import com.klmn.slapp.common.MultiSelectListAdapter
 import com.klmn.slapp.common.scrollToBottom
-import com.klmn.slapp.databinding.TabItemsBinding
+import com.klmn.slapp.databinding.FragmentListItemsBinding
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.ui.list.ListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
-import kotlin.math.abs
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class ItemsTab : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
-    private var _binding: TabItemsBinding? = null
+class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
+    private var _binding: FragmentListItemsBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: ListViewModel by activityViewModels()
+    private val args: ListFragmentArgs by navArgs()
 
     private var selectionToolbar: ActionMode? = null
     private lateinit var sheetBehavior: BottomSheetBehavior<View>
@@ -58,7 +53,23 @@ class ItemsTab : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = TabItemsBinding.inflate(inflater, container, false)
+        _binding = FragmentListItemsBinding.inflate(inflater, container, false)
+
+        viewModel.listId.value = args.listId
+
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).setDuration(500L)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).setDuration(500L)
+
+        binding.titleBox.setOnClickListener {
+            findNavController().navigate(R.id.action_listFragment_to_listInfoFragment)
+        }
+
+        binding.toolbar.apply {
+            setupWithNavController(findNavController())
+            (requireActivity() as AppCompatActivity).setSupportActionBar(this)
+        }
+
+        viewModel.listName.observe(viewLifecycleOwner, binding.listName::setText)
 
         val adapter = SlappListAdapter(viewModel)
         adapter.addSelectionListener(this)
@@ -109,6 +120,7 @@ class ItemsTab : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         }
 
         sheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.root)
+        // when user hides bottomSheet manually- remove the backNavigationCallback that collapses the sheet
         sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -122,14 +134,18 @@ class ItemsTab : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
 
     private fun updateFAB(text: Editable?) {
         if (text.isNullOrBlank() && viewModel.fabMode.value != ListViewModel.FABMode.SHOP) {
-            fabAnimatorShop.start()
             viewModel.fabMode.value = ListViewModel.FABMode.SHOP
-            binding.newItemView.addButton.setOnClickListener { enterShoppingMode() }
+            binding.newItemView.addButton.apply {
+                animateShopIcon()
+                setOnClickListener { enterShoppingMode() }
+            }
         }
         else if (viewModel.fabMode.value != ListViewModel.FABMode.ADD_ITEM) {
-            fabAnimatorAdd.start()
             viewModel.fabMode.value = ListViewModel.FABMode.ADD_ITEM
-            binding.newItemView.addButton.setOnClickListener { addNewItem() }
+            binding.newItemView.addButton.apply {
+                animateAddIcon()
+                setOnClickListener { addNewItem() }
+            }
         }
     }
 
@@ -162,64 +178,5 @@ class ItemsTab : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    class EnterItemBehavior(context: Context, attrs: AttributeSet) :
-        CoordinatorLayout.Behavior<View>(context, attrs) {
-        override fun layoutDependsOn(
-            parent: CoordinatorLayout,
-            child: View,
-            dependency: View
-        ) = dependency.id == R.id.bottom_sheet
-
-        override fun onDependentViewChanged(
-            parent: CoordinatorLayout,
-            child: View,
-            dependency: View
-        ) = with(child) {
-            val fraction = (dependency.height - dependency.top).toFloat() /
-                    BottomSheetBehavior.from(dependency).peekHeight
-            alpha = 1f - fraction
-            scaleX = 1f - (fraction / 5f)
-            scaleY = scaleX
-            true
-        }
-    }
-
-    private val fabAnimatorShop by lazy {
-        with(binding.newItemView.addButton) {
-            ValueAnimator.ofObject(
-                ArgbEvaluator(),
-                resources.getColor(R.color.secondaryColor),
-                resources.getColor(R.color.primaryTextColor)
-            ).apply {
-                duration = 300L
-                addUpdateListener {
-                    backgroundTintList = ColorStateList.valueOf(it.animatedValue as Int)
-                    scaleX = 1.1f - (abs(it.animatedFraction - .5f) / 5)
-                    scaleY = scaleX
-                    rotation = 360 * it.animatedFraction
-                }
-                doOnEnd { setImageResource(R.drawable.ic_shopping_cart) }
-            }
-        }
-    }
-    private val fabAnimatorAdd by lazy {
-        with(binding.newItemView.addButton) {
-            ValueAnimator.ofObject(
-                ArgbEvaluator(),
-                resources.getColor(R.color.primaryTextColor),
-                resources.getColor(R.color.secondaryColor)
-            ).apply {
-                duration = 300L
-                addUpdateListener {
-                    backgroundTintList = ColorStateList.valueOf(it.animatedValue as Int)
-                    scaleX = 1.1f - (abs(it.animatedFraction - .5f) / 5)
-                    scaleY = scaleX
-                    rotation = 360 * it.animatedFraction
-                }
-                doOnEnd { setImageResource(R.drawable.ic_add) }
-            }
-        }
     }
 }
