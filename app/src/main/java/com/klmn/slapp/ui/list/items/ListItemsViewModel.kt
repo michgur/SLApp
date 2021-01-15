@@ -3,6 +3,7 @@ package com.klmn.slapp.ui.list.items
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.data.contacts.ContactsRepository
 import com.klmn.slapp.data.datastore.UserPreferences
@@ -26,14 +27,14 @@ class ListItemsViewModel @ViewModelInject constructor(
         else emptyFlow()
     }
 
-    lateinit var users: Flow<List<Contact>>
+    lateinit var users: LiveData<List<Contact>>
     init {
         viewModelScope.launch {
             users = listId.flatMapLatest { id ->
                 if (id.isNotEmpty()) repository.getUsers(id).map {
                     it.mapNotNull(contactProvider::getContact)
                 } else emptyFlow()
-            }
+            }.asLiveData()
         }
     }
 
@@ -49,7 +50,11 @@ class ListItemsViewModel @ViewModelInject constructor(
 
     val enterItemEnabled = MutableLiveData(false)
 
-    val bottomSheetState = MutableLiveData(5)
+    val bottomSheetState = MutableLiveData(STATE_HIDDEN)
+
+    val shoppingModeEnabled = bottomSheetState.map { it != STATE_HIDDEN }
+
+    val shoppingCart = mutableListOf<SlappItem>()
 
     fun addItem(name: String) = viewModelScope.launch {
         repository.addItem(listId.value, SlappItem(name, userPreferences.phoneNumber.value ?: ""))

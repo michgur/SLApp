@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,7 +20,6 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.transition.MaterialSharedAxis
-import com.klmn.slapp.R
 import com.klmn.slapp.common.MultiSelectListAdapter
 import com.klmn.slapp.common.scrollToBottom
 import com.klmn.slapp.databinding.FragmentListItemsBinding
@@ -68,7 +68,10 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
 
         viewModel.listName.observe(viewLifecycleOwner, binding.listName::setText)
 
-        val adapter = SlappListAdapter(viewModel)
+        val adapter = SlappListAdapter(viewModel) {
+            viewModel.shoppingCart.add(it)
+            (binding.bottomSheet.itemsRecyclerView.adapter as ShoppingCartAdapter).addItem(it)
+        }
         adapter.addSelectionListener(this)
 
         viewModel.selectionModeEnabled.observe(viewLifecycleOwner) {
@@ -86,13 +89,17 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         }
 
         // todo: shopping mode
-        //      on item click -> hide item & put it in cart sheet
+        //      -on item click -> hide item & put it in cart sheet
         //      checkout & cancel buttons
-        //      navigate up -> hide sheet
+        //      -navigate up -> hide sheet
         binding.itemsRecyclerView.apply {
             lifecycleScope.launchWhenStarted {
                 viewModel.items.collect {
-                    adapter.submitList(it) {
+                    val list = mutableListOf<SlappItem>().apply {
+                        addAll(it)
+                        removeAll(viewModel.shoppingCart)
+                    }
+                    adapter.submitList(list) {
                         if (scrollOnSubmitList) {
                             scrollOnSubmitList = false
                             scrollToBottom()
@@ -125,6 +132,10 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             }
         }
 
+        viewModel.shoppingModeEnabled.observe(viewLifecycleOwner) {
+            binding.newItemView.root.isVisible = !it
+        }
+
         sheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.root)
         // when user hides bottomSheet manually- remove the backNavigationCallback that collapses the sheet
         sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -144,6 +155,14 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
                     collapseSheetCallback = null
                     remove()
                 }
+        }
+
+        binding.bottomSheet.sheetTop.setOnClickListener {
+            viewModel.bottomSheetState.value = BottomSheetBehavior.STATE_EXPANDED
+        }
+        binding.bottomSheet.itemsRecyclerView.apply {
+            this.adapter = ShoppingCartAdapter().apply { addItems(viewModel.shoppingCart) }
+            layoutManager = LinearLayoutManager(requireContext())
         }
 
         return binding.root

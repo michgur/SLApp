@@ -13,6 +13,8 @@ import javax.inject.Inject
 class SlappRepository @Inject constructor(
     private val service: FirestoreService
 ) {
+    // todo: minimize document-reads by storing all of the lists as flows and mapping them
+    //      here for list properties
     suspend fun addList(list: SlappList) = service.addList(ListFirestoreMapper.toEntity(list))
 
     suspend fun getLists(uid: String) = ListFirestoreMapper.toModelListFlow(service.getLists(uid))

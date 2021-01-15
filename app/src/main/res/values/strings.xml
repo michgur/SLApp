@@ -34,4 +34,7 @@
     <string name="shopping_cart">Shopping Cart</string>
     <string name="add_people">Add Participants</string>
     <string name="tap_details">tap for list details</string>
+    <string name="shopping_cart_desc">tap on items to add them to cart</string>
+    <string name="action_shopping_done">Done</string>
+    <string name="action_shopping_cancel">Cancel</string>
 </resources>

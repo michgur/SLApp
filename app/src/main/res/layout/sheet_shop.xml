@@ -4,22 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/shape_sheet"
+    android:clipChildren="false"
     app:behavior_hideable="true"
     app:behavior_peekHeight="56dp"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/shopping_cart"
-        android:textColor="@color/secondaryTextColor"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/sheet_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/sheet_icon" />
+    <LinearLayout
+        android:id="@+id/sheet_top"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/shape_sheet"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:elevation="4dp"
+            android:text="@string/shopping_cart"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:elevation="4dp"
+            android:text="@string/shopping_cart_desc"
+            android:textColor="@color/primaryDarkerColor"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/sheet_drag"
@@ -27,6 +47,7 @@
         android:layout_height="4dp"
         android:layout_margin="8dp"
         android:contentDescription="@string/shopping_cart"
+        android:elevation="4dp"
         android:src="@drawable/shape_pill"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:contentDescription="@string/shopping_cart"
+        android:elevation="4dp"
         android:src="@drawable/ic_shopping_cart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -47,9 +69,41 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/items_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="56dp"
+        android:layout_height="wrap_content"
         android:background="@color/primaryColor"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_top"
         tools:listitem="@layout/view_item_small" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/primaryTextColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/items_recycler_view" />
+
+    <Button
+        android:id="@+id/btn_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_shopping_done"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/items_recycler_view" />
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_shopping_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@id/btn_done"
+        app:layout_constraintTop_toBottomOf="@id/items_recycler_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
