@@ -15,8 +15,29 @@ class ListFAB @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.floatingActionButtonStyle
 ): FloatingActionButton(context, attrs, defStyleAttr) {
-    fun animateShopIcon() = shopAnimator.start()
-    fun animateAddIcon() = addAnimator.start()
+    fun shopMode() {
+        if (!mode) {
+            if (first) {
+                backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.primaryTextColor))
+                setImageResource(R.drawable.ic_shopping_cart)
+                first = false
+            } else shopAnimator.start()
+            mode = true
+        }
+    }
+    fun addMode() {
+        if (mode) {
+            if (first) {
+                backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.secondaryColor))
+                setImageResource(R.drawable.ic_add)
+                first = false
+            } else addAnimator.start()
+            mode = false
+        }
+    }
+
+    private var first = true // on first mode don't animate
+    private var mode = false // true = add, false = shop
 
     private val shopAnimator = ValueAnimator.ofObject(
         ArgbEvaluator(),

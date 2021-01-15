@@ -48,7 +48,9 @@ class ListViewModel @ViewModelInject constructor(
 
     val selection = mutableSetOf<SlappItem>()
 
-    val fabMode = MutableLiveData<FABMode>()
+    val enterItemEnabled = MutableLiveData(false)
+
+    val bottomSheetState = MutableLiveData(5)
 
     fun addItem(name: String) = viewModelScope.launch {
         repository.addItem(listId.value, SlappItem(name, userPreferences.phoneNumber.value ?: ""))
@@ -56,11 +58,5 @@ class ListViewModel @ViewModelInject constructor(
 
     fun deleteItem(item: SlappItem) = viewModelScope.launch {
         repository.deleteItem(listId.value, item)
-    }
-
-    enum class FABMode {
-        ADD_ITEM,
-        SHOP,
-        ADD_USERS
     }
 }

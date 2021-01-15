@@ -1,9 +1,6 @@
 package com.klmn.slapp.ui.list.items
 
-import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.util.AttributeSet
 import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +9,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -108,15 +104,24 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        binding.newItemView.apply {
-            itemText.apply {
-                doAfterTextChanged(::updateFAB)
-                setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE) addNewItem()
-                    true
+        binding.newItemView.itemText.apply {
+            doAfterTextChanged { viewModel.enterItemEnabled.value = !text.isNullOrBlank() }
+            setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) addNewItem()
+                true
+            }
+            viewModel.enterItemEnabled.value = !text.isNullOrBlank()
+        }
+        viewModel.enterItemEnabled.observe(viewLifecycleOwner) {
+            binding.newItemView.addButton.apply {
+                if (it) {
+                    addMode()
+                    setOnClickListener { addNewItem() }
+                } else {
+                    shopMode()
+                    setOnClickListener { enterShoppingMode() }
                 }
             }
-            updateFAB(itemText.text)
         }
 
         sheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.root)
@@ -127,26 +132,17 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
                 if (newState == BottomSheetBehavior.STATE_HIDDEN) collapseSheetCallback?.remove()
             }
         })
-        sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        viewModel.bottomSheetState.observe(viewLifecycleOwner) {
+            sheetBehavior.state = it
+            if (it == BottomSheetBehavior.STATE_COLLAPSED && collapseSheetCallback == null)
+                collapseSheetCallback = requireActivity().onBackPressedDispatcher.addCallback {
+                    viewModel.bottomSheetState.value = BottomSheetBehavior.STATE_HIDDEN
+                    collapseSheetCallback = null
+                    remove()
+                }
+        }
 
         return binding.root
-    }
-
-    private fun updateFAB(text: Editable?) {
-        if (text.isNullOrBlank() && viewModel.fabMode.value != ListViewModel.FABMode.SHOP) {
-            viewModel.fabMode.value = ListViewModel.FABMode.SHOP
-            binding.newItemView.addButton.apply {
-                animateShopIcon()
-                setOnClickListener { enterShoppingMode() }
-            }
-        }
-        else if (viewModel.fabMode.value != ListViewModel.FABMode.ADD_ITEM) {
-            viewModel.fabMode.value = ListViewModel.FABMode.ADD_ITEM
-            binding.newItemView.addButton.apply {
-                animateAddIcon()
-                setOnClickListener { addNewItem() }
-            }
-        }
     }
 
     private fun addNewItem() {
@@ -158,12 +154,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     }
 
     private fun enterShoppingMode() {
-        sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        collapseSheetCallback = requireActivity().onBackPressedDispatcher.addCallback {
-            sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            collapseSheetCallback = null
-            remove()
-        }
+        viewModel.bottomSheetState.value = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     override fun onSelectionStart() { viewModel.selectionModeEnabled.value = true }
