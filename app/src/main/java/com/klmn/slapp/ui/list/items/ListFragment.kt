@@ -11,7 +11,7 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,7 +24,6 @@ import com.klmn.slapp.common.MultiSelectListAdapter
 import com.klmn.slapp.common.scrollToBottom
 import com.klmn.slapp.databinding.FragmentListItemsBinding
 import com.klmn.slapp.domain.SlappItem
-import com.klmn.slapp.ui.list.ListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -35,7 +34,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     private var _binding: FragmentListItemsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ListViewModel by activityViewModels()
+    private val viewModel: ListItemsViewModel by viewModels()
     private val args: ListFragmentArgs by navArgs()
 
     private var selectionToolbar: ActionMode? = null
@@ -57,7 +56,9 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).setDuration(500L)
 
         binding.titleBox.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_listInfoFragment)
+            findNavController().navigate(
+                ListFragmentDirections.actionListFragmentToListInfoFragment(args.listId)
+            )
         }
 
         binding.toolbar.apply {
@@ -129,7 +130,10 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN) collapseSheetCallback?.remove()
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    collapseSheetCallback?.remove()
+                    viewModel.bottomSheetState.value = BottomSheetBehavior.STATE_HIDDEN
+                }
             }
         })
         viewModel.bottomSheetState.observe(viewLifecycleOwner) {

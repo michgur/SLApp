@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui.list.users
+package com.klmn.slapp.ui.list.info.addUsers
 
 import android.view.LayoutInflater
 import android.view.View

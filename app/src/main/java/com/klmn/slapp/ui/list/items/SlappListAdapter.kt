@@ -11,12 +11,11 @@ import com.klmn.slapp.common.formatTimeStamp
 import com.klmn.slapp.databinding.ViewItemBinding
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappItemDiff
-import com.klmn.slapp.ui.list.ListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 class SlappListAdapter(
-    private val viewModel: ListViewModel
+    private val viewModel: ListItemsViewModel
 ) : MultiSelectListAdapter<SlappItem, SlappListAdapter.ViewHolder>(SlappItemDiff, viewModel.selection) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent)

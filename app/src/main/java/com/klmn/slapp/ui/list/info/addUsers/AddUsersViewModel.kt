@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui.list.users
+package com.klmn.slapp.ui.list.info.addUsers
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject

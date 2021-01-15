@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui.list
+package com.klmn.slapp.ui.list.items
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class ListViewModel @ViewModelInject constructor(
+class ListItemsViewModel @ViewModelInject constructor(
     private val repository: SlappRepository,
     private val userPreferences: UserPreferences,
     private val contactProvider: ContactsRepository,
@@ -26,15 +26,14 @@ class ListViewModel @ViewModelInject constructor(
         else emptyFlow()
     }
 
-    // we need a StateFlow here since this data is used both in the ItemsTab and the UserTab
-    lateinit var users: StateFlow<List<Contact>>
+    lateinit var users: Flow<List<Contact>>
     init {
         viewModelScope.launch {
             users = listId.flatMapLatest { id ->
                 if (id.isNotEmpty()) repository.getUsers(id).map {
                     it.mapNotNull(contactProvider::getContact)
                 } else emptyFlow()
-            }.stateIn(viewModelScope)
+            }
         }
     }
 

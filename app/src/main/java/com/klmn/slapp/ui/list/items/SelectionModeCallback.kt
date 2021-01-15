@@ -8,13 +8,12 @@ import android.widget.Toast
 import com.klmn.slapp.R
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.common.MultiSelectListAdapter
-import com.klmn.slapp.ui.list.ListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 class SelectionModeCallback(
     private val context: Context,
-    private val viewModel: ListViewModel,
+    private val viewModel: ListItemsViewModel,
     private val adapter: MultiSelectListAdapter<SlappItem, *>
 ) : ActionMode.Callback {
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {

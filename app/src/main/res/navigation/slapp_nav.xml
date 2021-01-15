@@ -40,14 +40,17 @@
     </fragment>
     <fragment
         android:id="@+id/listInfoFragment"
-        android:name="com.klmn.slapp.ui.list.users.ListInfoFragment">
+        android:name="com.klmn.slapp.ui.list.info.ListInfoFragment">
+        <argument
+            android:name="listId"
+            app:argType="string" />
         <action
             android:id="@+id/action_listInfoFragment_to_addUsersFragment"
             app:destination="@id/addUsersFragment" />
     </fragment>
     <fragment
         android:id="@+id/addUsersFragment"
-        android:name="com.klmn.slapp.ui.list.users.AddUsersFragment"
+        android:name="com.klmn.slapp.ui.list.info.addUsers.AddUsersFragment"
         android:label="@string/add_users_title">
         <argument
             android:name="listId"
