@@ -1,4 +1,4 @@
-package com.klmn.slapp.common
+package com.klmn.slapp.ui.components
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter

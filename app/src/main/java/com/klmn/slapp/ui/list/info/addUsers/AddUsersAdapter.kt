@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.klmn.slapp.common.BoundViewHolder
-import com.klmn.slapp.common.MultiSelectListAdapter
+import com.klmn.slapp.ui.components.MultiSelectListAdapter
 import com.klmn.slapp.databinding.ViewUserBinding
 import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.ContactDiff

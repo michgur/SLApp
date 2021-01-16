@@ -1,4 +1,4 @@
-package com.klmn.slapp.common
+package com.klmn.slapp.ui.components
 
 import android.view.GestureDetector
 import android.view.MotionEvent

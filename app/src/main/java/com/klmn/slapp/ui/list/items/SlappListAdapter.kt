@@ -1,15 +1,13 @@
 package com.klmn.slapp.ui.list.items
 
 import android.animation.ValueAnimator
-import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.animation.doOnEnd
 import androidx.recyclerview.widget.RecyclerView
-import com.klmn.slapp.R
 import com.klmn.slapp.common.BoundViewHolder
-import com.klmn.slapp.common.MultiSelectListAdapter
+import com.klmn.slapp.ui.components.MultiSelectListAdapter
 import com.klmn.slapp.common.formatTimeStamp
 import com.klmn.slapp.databinding.ViewItemBinding
 import com.klmn.slapp.domain.SlappItem

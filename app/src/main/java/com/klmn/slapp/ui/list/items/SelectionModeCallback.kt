@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.klmn.slapp.R
 import com.klmn.slapp.domain.SlappItem
-import com.klmn.slapp.common.MultiSelectListAdapter
+import com.klmn.slapp.ui.components.MultiSelectListAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi

@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui.list.items
+package com.klmn.slapp.ui.components
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
@@ -94,8 +94,8 @@ class DualFab @JvmOverloads constructor(
 
     // savedInstanceState keys
     companion object {
-        const val KEY_MODE = "dualfab.mode"
-        const val KEY_SUPER = "dualfab.super"
+        private const val KEY_MODE = "dualFab.mode"
+        private const val KEY_SUPER = "dualFab.super"
     }
 
     override fun onSaveInstanceState() = bundleOf(

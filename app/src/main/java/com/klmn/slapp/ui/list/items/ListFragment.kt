@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -18,12 +16,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.transition.MaterialSharedAxis
-import com.klmn.slapp.common.MultiSelectListAdapter
+import com.klmn.slapp.ui.components.MultiSelectListAdapter
 import com.klmn.slapp.common.scrollToBottom
 import com.klmn.slapp.databinding.FragmentListItemsBinding
 import com.klmn.slapp.domain.SlappItem
+import com.klmn.slapp.ui.components.BottomSheetUpNavBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -38,8 +36,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     private val args: ListFragmentArgs by navArgs()
 
     private var selectionToolbar: ActionMode? = null
-    private lateinit var sheetBehavior: BottomSheetBehavior<View>
-    private var collapseSheetCallback: OnBackPressedCallback? = null
+    private lateinit var sheetBehavior: BottomSheetUpNavBehavior
 
     private var scrollOnSubmitList = true
 
@@ -127,29 +124,10 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             binding.newItemView.root.isVisible = !it
         }
 
-        sheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.root)
-        // when user hides bottomSheet manually- remove the backNavigationCallback that collapses the sheet
-        sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                    collapseSheetCallback?.remove()
-                    viewModel.bottomSheetState.value = BottomSheetBehavior.STATE_HIDDEN
-                }
-            }
-        })
-        viewModel.bottomSheetState.observe(viewLifecycleOwner) {
-            sheetBehavior.state = it
-            if (it == BottomSheetBehavior.STATE_COLLAPSED && collapseSheetCallback == null)
-                collapseSheetCallback = requireActivity().onBackPressedDispatcher.addCallback {
-                    viewModel.bottomSheetState.value = BottomSheetBehavior.STATE_HIDDEN
-                    collapseSheetCallback = null
-                    remove()
-                }
-        }
+        sheetBehavior = BottomSheetUpNavBehavior.from(this, binding.bottomSheet.root)
 
         binding.bottomSheet.sheetTop.setOnClickListener {
-            viewModel.bottomSheetState.value = BottomSheetBehavior.STATE_EXPANDED
+            sheetBehavior.expand()
         }
         binding.bottomSheet.itemsRecyclerView.apply {
             this.adapter = ShoppingCartAdapter().apply { addItems(viewModel.shoppingCart) }
@@ -167,9 +145,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         scrollOnSubmitList = true
     }
 
-    private fun enterShoppingMode() {
-        viewModel.bottomSheetState.value = BottomSheetBehavior.STATE_COLLAPSED
-    }
+    private fun enterShoppingMode() = sheetBehavior.show()
 
     override fun onSelectionStart() { viewModel.selectionModeEnabled.value = true }
     override fun onSelectionEnd() { viewModel.selectionModeEnabled.value = false }
