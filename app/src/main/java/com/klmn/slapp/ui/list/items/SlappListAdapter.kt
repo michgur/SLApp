@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.animation.doOnEnd
 import androidx.recyclerview.widget.RecyclerView
 import com.klmn.slapp.R
+import com.klmn.slapp.common.BoundViewHolder
 import com.klmn.slapp.common.MultiSelectListAdapter
 import com.klmn.slapp.common.formatTimeStamp
 import com.klmn.slapp.databinding.ViewItemBinding
@@ -59,11 +60,8 @@ class SlappListAdapter(
         if (viewModel.shoppingModeEnabled.value != true) super.onItemLongClick(position)
     }
 
-    inner class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.view_item, parent, false)
-    ) {
-        private val binding = ViewItemBinding.bind(itemView)
-
+    inner class ViewHolder(parent: ViewGroup) :
+        BoundViewHolder<ViewItemBinding>(parent, ViewItemBinding::inflate) {
         fun bind(item: SlappItem, selected: Boolean) = binding.apply {
             root.apply {
                 isActivated = selected

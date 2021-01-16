@@ -22,7 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.klmn.slapp.ui.list.items.ListFAB
+    <com.klmn.slapp.ui.list.items.DualFab
         android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +30,10 @@
         android:src="@drawable/ic_add"
         android:tint="@color/secondaryTextColor"
         android:translationZ="6dp"
+        app:altBackgroundTint="@color/primaryTextColor"
+        app:altDefault="true"
+        app:altIcon="@drawable/ic_shopping_cart"
+        app:backgroundTint="@color/secondaryColor"
         app:borderWidth="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

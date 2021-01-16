@@ -1,4 +1,4 @@
-package com.klmn.slapp.ui.create
+package com.klmn.slapp.ui.home.create
 
 import android.graphics.Color.TRANSPARENT
 import android.os.Bundle

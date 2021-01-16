@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/createListFragment"
-        android:name="com.klmn.slapp.ui.create.CreateListFragment"
+        android:name="com.klmn.slapp.ui.home.create.CreateListFragment"
         android:label="CreateListFragment">
         <action
             android:id="@+id/action_createListFragment_to_listFragment"

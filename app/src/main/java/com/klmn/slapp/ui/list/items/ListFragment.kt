@@ -88,10 +88,9 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             selectionToolbar?.title = it
         }
 
-        // todo: shopping mode
-        //      -on item click -> hide item & put it in cart sheet
-        //      checkout & cancel buttons
-        //      -navigate up -> hide sheet
+        // todo: clean this class
+        //      separate different components to different classes
+        //      consider using an MVI approach and doing more of the logic in the viewModel
         binding.itemsRecyclerView.apply {
             lifecycleScope.launchWhenStarted {
                 viewModel.items.collect {
@@ -113,23 +112,15 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         }
 
         binding.newItemView.itemText.apply {
-            doAfterTextChanged { viewModel.enterItemEnabled.value = !text.isNullOrBlank() }
+            doAfterTextChanged { binding.newItemView.addButton.mode(text.isNullOrBlank()) }
             setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) addNewItem()
                 true
             }
-            viewModel.enterItemEnabled.value = !text.isNullOrBlank()
         }
-        viewModel.enterItemEnabled.observe(viewLifecycleOwner) {
-            binding.newItemView.addButton.apply {
-                if (it) {
-                    addMode()
-                    setOnClickListener { addNewItem() }
-                } else {
-                    shopMode()
-                    setOnClickListener { enterShoppingMode() }
-                }
-            }
+        binding.newItemView.addButton.apply {
+            setOnClickListener { addNewItem() }
+            setAltOnClickListener { enterShoppingMode() }
         }
 
         viewModel.shoppingModeEnabled.observe(viewLifecycleOwner) {
