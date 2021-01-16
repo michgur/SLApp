@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.ui.components.MultiSelectListAdapter
 import com.klmn.slapp.common.scrollToBottom
@@ -85,9 +86,8 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             selectionToolbar?.title = it
         }
 
-        // todo: clean this class
-        //      separate different components to different classes
-        //      consider using an MVI approach and doing more of the logic in the viewModel
+        // todo: consider using an MVI approach and doing more of the logic in the viewModel
+        //      finish implementing the bottom sheet
         binding.itemsRecyclerView.apply {
             lifecycleScope.launchWhenStarted {
                 viewModel.items.collect {
@@ -120,11 +120,13 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             setAltOnClickListener { enterShoppingMode() }
         }
 
-        viewModel.shoppingModeEnabled.observe(viewLifecycleOwner) {
-            binding.newItemView.root.isVisible = !it
-        }
-
         sheetBehavior = BottomSheetUpNavBehavior.from(this, binding.bottomSheet.root)
+        sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                viewModel.shoppingModeEnabled.value = newState != BottomSheetBehavior.STATE_HIDDEN
+            }
+        })
 
         binding.bottomSheet.sheetTop.setOnClickListener {
             sheetBehavior.expand()

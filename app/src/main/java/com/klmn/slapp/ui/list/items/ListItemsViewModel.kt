@@ -3,14 +3,16 @@ package com.klmn.slapp.ui.list.items
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.data.contacts.ContactsRepository
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -48,11 +50,7 @@ class ListItemsViewModel @ViewModelInject constructor(
 
     val selection = mutableSetOf<SlappItem>()
 
-    val enterItemEnabled = MutableLiveData(false)
-
-    val bottomSheetState = MutableLiveData(STATE_HIDDEN)
-
-    val shoppingModeEnabled = bottomSheetState.map { it != STATE_HIDDEN }
+    val shoppingModeEnabled = MutableLiveData(false)
 
     val shoppingCart = mutableListOf<SlappItem>()
 

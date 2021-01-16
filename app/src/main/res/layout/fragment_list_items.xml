@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:layout_gravity="bottom"
-        app:layout_behavior=".ui.list.items.EnterItemBehavior" />
+        app:layout_behavior=".ui.components.HideUnderBottomSheetBehavior" />
 
     <include
         android:id="@+id/bottom_sheet"

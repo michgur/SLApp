@@ -7,7 +7,7 @@
     android:clipChildren="false"
     app:behavior_hideable="true"
     app:behavior_peekHeight="56dp"
-    app:layout_behavior=".ui.list.items.BottomSheetUpNavBehavior">
+    app:layout_behavior=".ui.components.BottomSheetUpNavBehavior">
 
     <LinearLayout
         android:id="@+id/sheet_top"
@@ -85,24 +85,24 @@
         android:id="@+id/btn_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/action_shopping_done"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp"
         android:background="?attr/selectableItemBackground"
+        android:text="@string/action_shopping_done"
         android:textColor="@color/secondaryTextColor"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/items_recycler_view" />
 
     <Button
         android:id="@+id/btn_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/action_shopping_cancel"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp"
         android:background="?attr/selectableItemBackground"
+        android:text="@string/action_shopping_cancel"
         android:textColor="@color/secondaryTextColor"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_done"
         app:layout_constraintTop_toBottomOf="@id/items_recycler_view" />
 
