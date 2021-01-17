@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
     android:background="@color/clickable_item"
     android:clickable="true"
-    android:focusable="true"
-    android:layout_width="match_parent"
-    android:layout_height="72dp">
+    android:focusable="true">
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="88dp"
-        android:background="@color/primaryDarkColor"
+        android:background="@color/dividerColor"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -36,10 +36,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/itemview_user_placeholder"
-        android:visibility="visible"
-        android:maxLines="1"
         android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/itemview_user_placeholder"
+        android:textColor="@color/secondaryTextColor"
+        android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,12 +49,12 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
+        android:ellipsize="end"
         android:gravity="start|center_vertical"
+        android:maxLines="2"
         android:text="@string/itemview_text_placeholder"
         android:textColor="@color/primaryTextColor"
         android:textSize="16sp"
-        android:maxLines="2"
-        android:ellipsize="end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/text_user" />
@@ -65,6 +66,7 @@
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"
         android:text="@string/itemview_time_placeholder"
+        android:textColor="@color/secondaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -73,9 +75,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/selection_overlay"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

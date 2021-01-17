@@ -1,12 +1,14 @@
 package com.klmn.slapp.ui.list.items
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
-import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -73,8 +75,8 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
 
         viewModel.selectionModeEnabled.observe(viewLifecycleOwner) {
             selectionToolbar =
-                if (it) requireActivity()
-                    .startActionMode(SelectionModeCallback(requireContext(), viewModel, adapter))
+                if (it) (requireActivity() as AppCompatActivity)
+                    .startSupportActionMode(SelectionModeCallback(requireContext(), viewModel, adapter))
                 else {
                     selectionToolbar?.finish()
                     null
@@ -86,7 +88,9 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         }
 
         // todo: consider using an MVI approach and doing more of the logic in the viewModel
-        //      finish implementing the bottom sheet
+        //      notifications
+        //      fix the broken app start UX
+        //      pretty much done
         binding.itemsRecyclerView.apply {
             this.adapter = adapter
             layoutManager = LinearLayoutManager(requireContext())

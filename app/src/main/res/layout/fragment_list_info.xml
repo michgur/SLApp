@@ -14,8 +14,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@color/primaryDarkColor"
             android:elevation="4dp"
+            android:theme="@style/AppActionBar"
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/app_name"
             app:titleTextAppearance="@style/AppTitle" />

@@ -38,7 +38,7 @@ class CreateListFragment : Fragment() {
             endView = binding.root
             scrimColor = TRANSPARENT
             containerColor = resources.getColor(R.color.primaryColor)
-            startContainerColor = resources.getColor(R.color.secondaryColor)
+            startContainerColor = resources.getColor(R.color.accentColor)
             endContainerColor = resources.getColor(R.color.primaryColor)
         }
         returnTransition = Slide().addTarget(binding.root)

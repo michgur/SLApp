@@ -2,16 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/primaryColor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/primaryDarkColor"
+        android:background="@color/primaryColor"
         android:elevation="4dp"
+        android:theme="@style/AppActionBar"
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/add_users_title"
         app:titleTextAppearance="@style/AppTitle" />
@@ -30,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_done"
-        android:tint="@color/secondaryTextColor"
+        android:tint="@color/iconColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

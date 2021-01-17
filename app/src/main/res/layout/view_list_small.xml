@@ -25,7 +25,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primaryDarkColor"
+            android:background="@color/primaryColor"
             android:clipToPadding="false"
             android:elevation="4dp"
             android:gravity="center_vertical|start"

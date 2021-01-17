@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/primaryDarkColor"
+    <item android:color="@color/primaryLightColor"
         android:state_pressed="true"
         android:state_activated="false"/>
-    <item android:color="@color/primaryColor"/>
+    <item android:color="@color/backgroundColor"/>
 </selector>

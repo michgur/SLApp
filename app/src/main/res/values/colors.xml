@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/primaryColor</color>
-    <color name="colorPrimaryDark">@color/primaryDarkColor</color>
-    <color name="colorAccent">@color/secondaryColor</color>
-
-    <color name="primaryColor">#fafafa</color>
-    <color name="primaryLightColor">#ffffff</color>
-    <color name="primaryDarkColor">#c7c7c7</color>
-    <color name="primaryDarkerColor">#8F8F8F</color>
-    <color name="secondaryColor">#dd2c00</color>
-    <color name="secondaryLightColor">#ff6434</color>
-    <color name="secondaryDarkColor">#a30000</color>
-    <color name="primaryTextColor">#000000</color>
-    <color name="secondaryTextColor">#ffffff</color>
-
-    <color name="secondaryBackgroundColor">#ffdfd5</color>
-    <color name="complementaryColor">#34d0ff</color>
-    <color name="selectionColor">#8834d0ff</color>
-    <color name="darkRed">#7f0000</color>
+    <color name="primaryColor">#607D8B</color>
+    <color name="primaryLightColor">#CFD8DC</color>
+    <color name="primaryDarkColor">#455A64</color>
+    <color name="accentColor">#FF5722</color>
+    <color name="primaryTextColor">#212121</color>
+    <color name="secondaryTextColor">#757575</color>
+    <color name="dividerColor">#BDBDBD</color>
+    <color name="iconColor">#ffffff</color>
+    <color name="backgroundColor">#ffffff</color>
+    <color name="selectionColor">#8822cbff</color>
+    <!-- colors for shopping bag drawable-->
+    <color name="accentDarkColor">#e64e1f</color>
+    <color name="accentBackgroundColor">#ffdfd5</color>
 </resources>

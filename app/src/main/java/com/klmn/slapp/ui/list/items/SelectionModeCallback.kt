@@ -1,10 +1,10 @@
 package com.klmn.slapp.ui.list.items
 
 import android.content.Context
-import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.view.ActionMode
 import com.klmn.slapp.R
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.ui.components.MultiSelectListAdapter

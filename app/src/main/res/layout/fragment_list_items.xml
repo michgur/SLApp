@@ -5,7 +5,7 @@
     android:id="@+id/list_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryColor"
+    android:background="@color/backgroundColor"
     android:clipChildren="false">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -17,7 +17,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@color/primaryDarkColor">
+            android:background="@color/primaryColor"
+            android:theme="@style/AppActionBar">
 
             <LinearLayout
                 android:id="@+id/title_box"
@@ -41,6 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tap_details"
+                    android:textColor="@color/iconColor"
                     android:textSize="14sp" />
 
             </LinearLayout>

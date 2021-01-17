@@ -4,15 +4,14 @@
     android:id="@+id/view_add_users"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="?attr/selectableItemBackground"
-    android:backgroundTint="@color/primaryColor">
+    android:background="?attr/selectableItemBackground">
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="72dp"
-        android:background="@color/primaryDarkColor"
+        android:background="@color/dividerColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -22,7 +21,7 @@
         android:layout_height="40dp"
         android:layout_margin="16dp"
         android:background="@drawable/shape_circle"
-        android:backgroundTint="@color/secondaryColor"
+        android:backgroundTint="@color/accentColor"
         android:contentDescription="@string/add_people"
         android:gravity="center"
         android:padding="8dp"
@@ -30,7 +29,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/secondaryTextColor" />
+        app:tint="@color/iconColor" />
 
     <TextView
         android:id="@+id/text_user"
