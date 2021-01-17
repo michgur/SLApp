@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -122,18 +123,22 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             }
         })
 
-        binding.bottomSheet.sheetTop.setOnClickListener {
-            sheetBehavior.expand()
-        }
-        binding.bottomSheet.itemsRecyclerView.apply {
-            this.adapter = ShoppingCartAdapter {
-                viewModel.cartItems.value -= it
+        binding.bottomSheet.apply {
+            sheetTop.setOnClickListener { sheetBehavior.expand() }
+            btnDone.setOnClickListener { finishShoppingMode(true) }
+            btnCancel.setOnClickListener { finishShoppingMode(false) }
+            itemsRecyclerView.apply {
+                this.adapter = ShoppingCartAdapter {
+                    viewModel.cartItems.value -= it
+                }
+                layoutManager = LinearLayoutManager(requireContext())
             }
-            layoutManager = LinearLayoutManager(requireContext())
-        }
-        lifecycleScope.launchWhenStarted {
-            viewModel.cartItems.collect {
-                (binding.bottomSheet.itemsRecyclerView.adapter as ShoppingCartAdapter).submitList(it)
+
+            lifecycleScope.launchWhenStarted {
+                viewModel.cartItems.collect {
+                    (itemsRecyclerView.adapter as ShoppingCartAdapter).submitList(it)
+                    btnDone.isVisible = it.isNotEmpty()
+                }
             }
         }
 
@@ -149,6 +154,11 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     }
 
     private fun enterShoppingMode() = sheetBehavior.show()
+
+    private fun finishShoppingMode(success: Boolean) {
+        viewModel.finishShopping(success)
+        sheetBehavior.hide()
+    }
 
     override fun onSelectionStart() { viewModel.selectionModeEnabled.value = true }
     override fun onSelectionEnd() { viewModel.selectionModeEnabled.value = false }

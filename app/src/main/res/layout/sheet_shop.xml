@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:clipChildren="false"
+    android:elevation="10dp"
     app:behavior_hideable="true"
     app:behavior_peekHeight="56dp"
     app:layout_behavior=".ui.components.BottomSheetUpNavBehavior">
@@ -72,38 +73,41 @@
         android:layout_height="wrap_content"
         android:background="@color/primaryColor"
         app:layout_constraintTop_toBottomOf="@+id/sheet_top"
+        app:layout_constraintBottom_toTopOf="@id/sheet_bottom"
         tools:listitem="@layout/view_item_small" />
 
     <View
+        android:id="@+id/sheet_bottom"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/primaryTextColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/items_recycler_view" />
+        app:layout_constraintTop_toTopOf="@id/btn_cancel"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
         android:id="@+id/btn_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:background="?attr/selectableItemBackground"
+        android:padding="8dp"
         android:text="@string/action_shopping_done"
         android:textColor="@color/secondaryTextColor"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/items_recycler_view" />
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btn_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:background="?attr/selectableItemBackground"
+        android:padding="8dp"
         android:text="@string/action_shopping_cancel"
         android:textColor="@color/secondaryTextColor"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_done"
-        app:layout_constraintTop_toBottomOf="@id/items_recycler_view" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

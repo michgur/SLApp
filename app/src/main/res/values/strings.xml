@@ -37,4 +37,5 @@
     <string name="shopping_cart_desc">tap on items to add them to cart</string>
     <string name="action_shopping_done">Done</string>
     <string name="action_shopping_cancel">Cancel</string>
+    <string name="action_add_to_cart">Add To Cart</string>
 </resources>

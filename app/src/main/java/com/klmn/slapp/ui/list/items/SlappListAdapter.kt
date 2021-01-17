@@ -33,16 +33,18 @@ class SlappListAdapter(
     }
 
     override fun onItemClick(position: Int) {
-        if (viewModel.shoppingModeEnabled.value != true) super.onItemClick(position)
+        if (viewModel.selectionModeEnabled.value == true ||
+            viewModel.shoppingModeEnabled.value != true) super.onItemClick(position)
         else {
             val view = recyclerView.findViewHolderForAdapterPosition(position)!!.itemView
+            val item = getItem(position)
             ValueAnimator.ofFloat(1f, 0f).apply{
                 addUpdateListener {
                     view.scaleX = it.animatedValue as Float
                     view.scaleY = view.scaleX
                 }
                 doOnEnd {
-                    onItemRemoved(getItem(position))
+                    onItemRemoved(item)
                 }
                 duration = 500L
             }.start()
@@ -60,10 +62,6 @@ class SlappListAdapter(
             if (item.user != prev) notifyItemChanged(i)
             prev = item.user
         }
-    }
-
-    override fun onItemLongClick(position: Int) {
-        if (viewModel.shoppingModeEnabled.value != true) super.onItemLongClick(position)
     }
 
     inner class ViewHolder(parent: ViewGroup) :

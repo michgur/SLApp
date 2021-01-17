@@ -62,4 +62,9 @@ class ListItemsViewModel @ViewModelInject constructor(
     fun deleteItem(item: SlappItem) = viewModelScope.launch {
         repository.deleteItem(listId.value, item)
     }
+
+    fun finishShopping(success: Boolean) {
+        if (success) cartItems.value.forEach(::deleteItem)
+        cartItems.value = listOf()
+    }
 }

@@ -21,8 +21,9 @@ class HideUnderBottomSheetBehavior(context: Context, attrs: AttributeSet) :
         child: View,
         dependency: View
     ) = with(child) {
-        val fraction = (dependency.height - dependency.top).toFloat() /
+        val fraction = (parent.bottom - dependency.top).toFloat() /
                 BottomSheetBehavior.from(dependency).peekHeight
+
         alpha = 1f - fraction
         scaleX = 1f - (fraction / 5f)
         scaleY = scaleX

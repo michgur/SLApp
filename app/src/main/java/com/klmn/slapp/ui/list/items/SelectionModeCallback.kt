@@ -37,6 +37,10 @@ class SelectionModeCallback(
                 clear()
             }
             R.id.action_select_all -> adapter.selectAll()
+            R.id.action_add_to_cart -> {
+                viewModel.cartItems.value += viewModel.selection
+                viewModel.selection.clear()
+            }
         }
         return true
     }
