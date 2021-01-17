@@ -1,10 +1,9 @@
 package com.klmn.slapp.ui.list.items
 
 import android.animation.ValueAnimator
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.animation.doOnEnd
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.klmn.slapp.common.BoundViewHolder
 import com.klmn.slapp.ui.components.MultiSelectListAdapter
@@ -54,6 +53,15 @@ class SlappListAdapter(
         }
     }
 
+    override fun onCurrentListChanged(
+        previousList: MutableList<SlappItem>,
+        currentList: MutableList<SlappItem>
+    ) {
+        super.onCurrentListChanged(previousList, currentList)
+        for ((i, item) in currentList.withIndex())
+            if (i == 0 || item.user != currentList[i - 1].user) notifyItemChanged(i)
+    }
+
     override fun onItemLongClick(position: Int) {
         if (viewModel.shoppingModeEnabled.value != true) super.onItemLongClick(position)
     }
@@ -69,15 +77,12 @@ class SlappListAdapter(
 
             textName.text = item.name
             textTime.text = formatTimeStamp(item.timestamp)
-            textUser.text = viewModel.users.value?.find {
-                it.phoneNumber == item.user
-            }?.displayName ?: item.user
+            textUser.text = item.user.displayName ?: item.user.phoneNumber
 
-            if (adapterPosition > 0)  {
-                if (item.user == getItem(adapterPosition - 1).user)
-                    textUser.visibility = GONE  // hide the user label if the above item is by the same user
-                else divider.visibility = VISIBLE // otherwise show the divider
-            }
+            val first = adapterPosition == 0
+            val differentUser = first || item.user != getItem(adapterPosition - 1).user
+            textUser.isVisible = differentUser
+            divider.isVisible = differentUser && !first
         }
     }
 }
