@@ -26,15 +26,15 @@ class ListItemsViewModel @ViewModelInject constructor(
 
     val cartItems = MutableStateFlow(listOf<SlappItem>())
 
-    val listItems = items.combine(cartItems) { i, cart ->
-        i.filterNot { it in cart }
+    val listItems = items.combine(cartItems) { items, cart ->
+        items.filterNot { it in cart }
     }
 
     lateinit var users: LiveData<List<Contact>>
     init {
         viewModelScope.launch {
-            users = listId.flatMapLatest { id ->
-                if (id.isNotEmpty()) repository.getUsers(id)
+            users = listId.flatMapLatest {
+                if (it.isNotEmpty()) repository.getUsers(it)
                 else emptyFlow()
             }.asLiveData()
         }

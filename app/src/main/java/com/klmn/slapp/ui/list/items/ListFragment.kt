@@ -126,7 +126,9 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             sheetBehavior.expand()
         }
         binding.bottomSheet.itemsRecyclerView.apply {
-            this.adapter = ShoppingCartAdapter()
+            this.adapter = ShoppingCartAdapter {
+                viewModel.cartItems.value -= it
+            }
             layoutManager = LinearLayoutManager(requireContext())
         }
         lifecycleScope.launchWhenStarted {
