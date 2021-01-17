@@ -8,6 +8,7 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.data.datastore.UserPreferences
+import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
@@ -29,7 +30,7 @@ class HomeViewModel @ViewModelInject constructor(
         callback(repository.addList(
             SlappList(
                 name = name,
-                user = userPreferences.phoneNumber.value ?: ""
+                user = Contact(userPreferences.phoneNumber.value ?: "", "You")
             )
         ))
     }

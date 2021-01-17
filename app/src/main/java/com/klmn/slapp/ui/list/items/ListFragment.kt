@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,11 +17,11 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.transition.MaterialSharedAxis
-import com.klmn.slapp.ui.components.MultiSelectListAdapter
 import com.klmn.slapp.common.scrollToBottom
 import com.klmn.slapp.databinding.FragmentListItemsBinding
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.ui.components.BottomSheetUpNavBehavior
+import com.klmn.slapp.ui.components.MultiSelectListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -89,23 +88,24 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         // todo: consider using an MVI approach and doing more of the logic in the viewModel
         //      finish implementing the bottom sheet
         binding.itemsRecyclerView.apply {
-            lifecycleScope.launchWhenStarted {
-                viewModel.items.collect {
-                    val list = mutableListOf<SlappItem>().apply {
-                        addAll(it)
-                        removeAll(viewModel.shoppingCart)
-                    }
-                    adapter.submitList(list) {
-                        if (scrollOnSubmitList) {
-                            scrollOnSubmitList = false
-                            scrollToBottom()
-                        }
+            this.adapter = adapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.items.collect {
+                // obviously does not belong here and should be managed by the viewModel
+                val list = mutableListOf<SlappItem>().apply {
+                    addAll(it)
+                    removeAll(viewModel.shoppingCart)
+                }
+                adapter.submitList(list) {
+                    if (scrollOnSubmitList) {
+                        scrollOnSubmitList = false
+                        binding.itemsRecyclerView.scrollToBottom()
                     }
                 }
             }
-
-            this.adapter = adapter
-            layoutManager = LinearLayoutManager(requireContext())
         }
 
         binding.newItemView.itemText.apply {

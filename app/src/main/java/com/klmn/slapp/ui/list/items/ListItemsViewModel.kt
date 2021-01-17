@@ -4,7 +4,6 @@ import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.klmn.slapp.data.SlappRepository
-import com.klmn.slapp.data.contacts.ContactsRepository
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappItem
@@ -12,14 +11,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class ListItemsViewModel @ViewModelInject constructor(
     private val repository: SlappRepository,
     private val userPreferences: UserPreferences,
-    private val contactProvider: ContactsRepository,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val listId = MutableStateFlow("")
@@ -33,9 +30,8 @@ class ListItemsViewModel @ViewModelInject constructor(
     init {
         viewModelScope.launch {
             users = listId.flatMapLatest { id ->
-                if (id.isNotEmpty()) repository.getUsers(id).map {
-                    it.mapNotNull(contactProvider::getContact)
-                } else emptyFlow()
+                if (id.isNotEmpty()) repository.getUsers(id)
+                else emptyFlow()
             }.asLiveData()
         }
     }
@@ -55,7 +51,10 @@ class ListItemsViewModel @ViewModelInject constructor(
     val shoppingCart = mutableListOf<SlappItem>()
 
     fun addItem(name: String) = viewModelScope.launch {
-        repository.addItem(listId.value, SlappItem(name, userPreferences.phoneNumber.value ?: ""))
+        repository.addItem(
+            listId.value,
+            SlappItem(name, Contact(userPreferences.phoneNumber.value ?: "", "You"))
+        )
     }
 
     fun deleteItem(item: SlappItem) = viewModelScope.launch {
