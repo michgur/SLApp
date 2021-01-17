@@ -66,8 +66,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         viewModel.listName.observe(viewLifecycleOwner, binding.listName::setText)
 
         val adapter = SlappListAdapter(viewModel) {
-            viewModel.shoppingCart.add(it)
-            (binding.bottomSheet.itemsRecyclerView.adapter as ShoppingCartAdapter).addItem(it)
+            viewModel.cartItems.value += it
         }
         adapter.addSelectionListener(this)
 
@@ -93,13 +92,8 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.items.collect {
-                // obviously does not belong here and should be managed by the viewModel
-                val list = mutableListOf<SlappItem>().apply {
-                    addAll(it)
-                    removeAll(viewModel.shoppingCart)
-                }
-                adapter.submitList(list) {
+            viewModel.listItems.collect {
+                adapter.submitList(it) {
                     if (scrollOnSubmitList) {
                         scrollOnSubmitList = false
                         binding.itemsRecyclerView.scrollToBottom()
@@ -132,8 +126,13 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             sheetBehavior.expand()
         }
         binding.bottomSheet.itemsRecyclerView.apply {
-            this.adapter = ShoppingCartAdapter().apply { addItems(viewModel.shoppingCart) }
+            this.adapter = ShoppingCartAdapter()
             layoutManager = LinearLayoutManager(requireContext())
+        }
+        lifecycleScope.launchWhenStarted {
+            viewModel.cartItems.collect {
+                (binding.bottomSheet.itemsRecyclerView.adapter as ShoppingCartAdapter).submitList(it)
+            }
         }
 
         return binding.root

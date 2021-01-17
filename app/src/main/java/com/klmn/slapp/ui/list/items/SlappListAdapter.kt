@@ -9,6 +9,7 @@ import com.klmn.slapp.common.BoundViewHolder
 import com.klmn.slapp.ui.components.MultiSelectListAdapter
 import com.klmn.slapp.common.formatTimeStamp
 import com.klmn.slapp.databinding.ViewItemBinding
+import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappItemDiff
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,11 +43,6 @@ class SlappListAdapter(
                 }
                 doOnEnd {
                     onItemRemoved(getItem(position))
-                    // that's garbage
-                    submitList(mutableListOf<SlappItem>().apply{
-                        addAll(currentList)
-                        removeAt(position)
-                    })
                 }
                 duration = 500L
             }.start()
@@ -58,8 +54,12 @@ class SlappListAdapter(
         currentList: MutableList<SlappItem>
     ) {
         super.onCurrentListChanged(previousList, currentList)
-        for ((i, item) in currentList.withIndex())
-            if (i == 0 || item.user != currentList[i - 1].user) notifyItemChanged(i)
+
+        var prev: Contact? = null
+        for ((i, item) in currentList.withIndex()) {
+            if (item.user != prev) notifyItemChanged(i)
+            prev = item.user
+        }
     }
 
     override fun onItemLongClick(position: Int) {

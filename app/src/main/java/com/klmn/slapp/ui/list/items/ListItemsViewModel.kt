@@ -8,9 +8,7 @@ import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -21,9 +19,15 @@ class ListItemsViewModel @ViewModelInject constructor(
 ) : ViewModel() {
     val listId = MutableStateFlow("")
 
-    val items = listId.flatMapLatest {
+    private val items = listId.flatMapLatest {
         if (it.isNotEmpty()) repository.getItems(it)
         else emptyFlow()
+    }
+
+    val cartItems = MutableStateFlow(listOf<SlappItem>())
+
+    val listItems = items.combine(cartItems) { i, cart ->
+        i.filterNot { it in cart }
     }
 
     lateinit var users: LiveData<List<Contact>>
@@ -47,8 +51,6 @@ class ListItemsViewModel @ViewModelInject constructor(
     val selection = mutableSetOf<SlappItem>()
 
     val shoppingModeEnabled = MutableLiveData(false)
-
-    val shoppingCart = mutableListOf<SlappItem>()
 
     fun addItem(name: String) = viewModelScope.launch {
         repository.addItem(
