@@ -24,9 +24,8 @@ class SlappListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent)
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(getItem(position), isSelected(position))
-    }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -58,17 +57,16 @@ class SlappListAdapter(
     ) {
         super.onCurrentListChanged(previousList, currentList)
 
-        // will update items that should show dividers, but not the items that should'nt
         var prev: Contact? = null
         for ((i, item) in currentList.withIndex()) {
-            if (item.user != prev) notifyItemChanged(i)
+            (recyclerView.findViewHolderForAdapterPosition(i) as? ViewHolder)?.update(prev)
             prev = item.user
         }
     }
 
     inner class ViewHolder(parent: ViewGroup) :
         BoundViewHolder<ViewItemBinding>(parent, ViewItemBinding::inflate) {
-        fun bind(item: SlappItem, selected: Boolean) = binding.apply {
+        fun bind(item: SlappItem, selected: Boolean) = binding.run {
             root.apply {
                 isActivated = selected
                 scaleX = 1f
@@ -79,10 +77,13 @@ class SlappListAdapter(
             textTime.text = formatTimeStamp(item.timestamp)
             textUser.text = item.user.displayName ?: item.user.phoneNumber
 
-            val first = adapterPosition == 0
-            val differentUser = first || item.user != getItem(adapterPosition - 1).user
-            textUser.isVisible = differentUser
-            divider.isVisible = differentUser && !first
+            if (adapterPosition > 0) update(getItem(adapterPosition - 1).user)
+        }
+
+        fun update(prevUser: Contact?) {
+            val differentUser = getItem(adapterPosition).user != prevUser
+            binding.textUser.isVisible = differentUser
+            binding.divider.isVisible = differentUser && adapterPosition > 0
         }
     }
 }
