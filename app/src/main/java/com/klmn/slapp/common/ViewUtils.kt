@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
-// assumes layoutManager is a LinearLayoutManager
+/* the only way to scroll to bottom that works properly.
+* this assumes layoutManager is an instance of LinearLayoutManager */
 fun RecyclerView.scrollToBottom() {
-    (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
+    (layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(
         adapter?.itemCount?.minus(1) ?: 0, 0)
 }
 

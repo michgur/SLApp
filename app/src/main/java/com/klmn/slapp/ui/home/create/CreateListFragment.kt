@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -37,30 +38,36 @@ class CreateListFragment : Fragment() {
             startView = requireActivity().findViewById(R.id.dual_fab)
             endView = binding.root
             scrimColor = TRANSPARENT
-            containerColor = resources.getColor(R.color.primaryColor)
-            startContainerColor = resources.getColor(R.color.accentColor)
-            endContainerColor = resources.getColor(R.color.primaryColor)
+
+            val theme = requireContext().theme
+            containerColor = ResourcesCompat.getColor(resources, R.color.primaryColor, theme)
+            startContainerColor = ResourcesCompat.getColor(resources, R.color.accentColor, theme)
+            endContainerColor = ResourcesCompat.getColor(resources, R.color.primaryColor, theme)
         }
         returnTransition = Slide().addTarget(binding.root)
 
-        binding.fieldListName.editText?.doAfterTextChanged {
-            binding.btnCreateList.isEnabled = !it.isNullOrBlank()
-        }
+        binding.apply {
+            fieldListName.editText?.doAfterTextChanged {
+                btnCreateList.isEnabled = !it.isNullOrBlank()
+            }
 
-        binding.btnCreateList.setOnClickListener {
-            binding.fieldListName.editText?.let {
-                val name = it.text.toString()
-                viewModel.createList(name) {
-                    (requireActivity().application as SLApp).mainThread.execute {
-                        findNavController().navigate(
-                            CreateListFragmentDirections
-                                .actionCreateListFragmentToListFragment(it, name)
-                        )
-                    }
+            btnCreateList.setOnClickListener {
+                fieldListName.editText?.let {
+                    createListAndNav(it.text.toString())
                 }
             }
         }
-
         return binding.root
+    }
+
+    private fun createListAndNav(name: String) {
+        viewModel.createList(name) {
+            (requireActivity().application as SLApp).mainThread.execute {
+                findNavController().navigate(
+                    CreateListFragmentDirections
+                        .actionCreateListFragmentToListFragment(it, name)
+                )
+            }
+        }
     }
 }

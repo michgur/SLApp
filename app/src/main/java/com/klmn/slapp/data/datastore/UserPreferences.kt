@@ -5,12 +5,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.preferencesKey
 import androidx.datastore.preferences.createDataStore
 import androidx.lifecycle.asLiveData
-import com.klmn.slapp.common.DATASTORE_NAME
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/* caches in a DataStore user details & preferences */
 @Singleton
 class UserPreferences @Inject constructor(
     @ApplicationContext private val context: Context
@@ -30,6 +30,8 @@ class UserPreferences @Inject constructor(
         dataStore.edit { it[KEY_CONTACT_PERMISSION] = value }
 
     companion object {
+        private const val DATASTORE_NAME = "slapp_ds"
+
         private val KEY_PHONE_NUMBER = preferencesKey<String>("key_phone_number")
         private val KEY_CONTACT_PERMISSION = preferencesKey<Boolean>("key_contact_permission")
     }

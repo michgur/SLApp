@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
+/* a ListAdapter that supports & manages item multi-selection */
 abstract class MultiSelectListAdapter<T, VH : RecyclerView.ViewHolder>(
     diffCallback: DiffUtil.ItemCallback<T>,
     /* When initializing adapter after configuration change, pass the previous selection.
@@ -41,7 +42,7 @@ abstract class MultiSelectListAdapter<T, VH : RecyclerView.ViewHolder>(
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) =
         recyclerView.addOnItemTouchListener(
-            ItemClickDetector(recyclerView).also { it.setListener(this) }
+            ItemClickDetector(recyclerView).also { it.addListener(this) }
         )
 
     protected fun isSelected(position: Int) = isSelected(getItem(position))
@@ -62,19 +63,23 @@ abstract class MultiSelectListAdapter<T, VH : RecyclerView.ViewHolder>(
         }
     }
 
+    /* implement this to listen to selection change events */
     interface Callback<T> {
-        fun onSelectionStart() {}
-        fun onSelectionEnd() {}
-        fun onItemStateChanged(item: T, selected: Boolean) {}
+        // the first item is selected
+        fun onSelectionStart() = Unit
+        // the last item is deselected
+        fun onSelectionEnd() = Unit
+        // an item has been de/selected
+        fun onItemStateChanged(item: T, selected: Boolean) = Unit
     }
 
+    /* override these to implement a custom touch behavior */
     override fun onItemClick(position: Int) {
         if (_selection.isNotEmpty()) {
             if (_selection.contains(getItem(position))) deselect(position)
             else select(position)
         }
     }
-
     override fun onItemLongClick(position: Int) {
         if (_selection.isEmpty()) select(position)
     }

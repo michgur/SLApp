@@ -4,6 +4,8 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 
+/* a recyclerView touchListener that detects clicks & long clicks over items
+* and notifies listeners */
 class ItemClickDetector(
     private val recyclerView: RecyclerView
 ) : RecyclerView.OnItemTouchListener, GestureDetector.SimpleOnGestureListener() {
@@ -11,18 +13,19 @@ class ItemClickDetector(
         GestureDetector(recyclerView.context, this)
     }
 
-    private var listener: Listener = object : Listener {
-        override fun onItemClick(position: Int) = Unit
-    }
+    private var listeners = mutableListOf<Listener>()
 
-    fun setListener(listener: Listener) { this.listener = listener }
+    fun addListener(listener: Listener) = listeners.add(listener)
+    fun removeListener(listener: Listener) = listeners.remove(listener)
 
     override fun onSingleTapUp(e: MotionEvent?) = true
     override fun onLongPress(e: MotionEvent) {
         recyclerView.run {
             findChildViewUnder(e.x, e.y)?.let {
                 getChildViewHolder(it).adapterPosition
-            }?.let(listener::onItemLongClick)
+            }?.let { position ->
+                listeners.forEach { it.onItemLongClick(position) }
+            }
         }
     }
 
@@ -30,13 +33,16 @@ class ItemClickDetector(
         if (gestureDetector.onTouchEvent(e))
             rv.findChildViewUnder(e.x, e.y)?.let {
                 rv.getChildViewHolder(it).adapterPosition
-            }?.let(listener::onItemClick)
+            }?.let { position ->
+                listeners.forEach { it.onItemClick(position) }
+            }
         return false
     }
 
     override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) = Unit
     override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) = Unit
 
+    /* implement this interface to act on item clicks */
     interface Listener {
         fun onItemClick(position: Int)
         fun onItemLongClick(position: Int) = Unit

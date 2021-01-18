@@ -15,7 +15,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.klmn.slapp.R
 import com.klmn.slapp.common.COUNTRY_CODES
-import com.klmn.slapp.common.FLAG_VERIFY_NUMBER
 import com.klmn.slapp.common.hideKeyboard
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.databinding.ActivityPhoneAuthBinding
@@ -35,7 +34,8 @@ class PhoneAuthActivity : AppCompatActivity() {
 
     @Inject lateinit var userPreferences: UserPreferences
 
-    // major testing for this shit
+    companion object { const val FLAG_VERIFY_NUMBER = "phoneNumberVerify" }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

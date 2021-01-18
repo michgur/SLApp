@@ -32,7 +32,8 @@ class HomeViewModel @ViewModelInject constructor(
         callback(repository.addList(
             SlappList(
                 name = name,
-                user = Contact(userPreferences.phoneNumber.value ?: "", "You")
+                user = Contact(userPreferences.phoneNumber.value
+                        ?: throw IllegalStateException("not signed in"))
             )
         ))
     }

@@ -1,11 +1,5 @@
 package com.klmn.slapp.common
 
-const val DATASTORE_NAME = "slapp_ds"
-const val DATABASE_NAME = "slapp_db"
-
-const val FLAG_VERIFY_NUMBER = "phoneNumberVerify"
-const val REQUEST_CODE_SIGNIN = 123
-
 val COUNTRY_CODES = arrayOf(
     93 to "AF",
     355 to "AL",

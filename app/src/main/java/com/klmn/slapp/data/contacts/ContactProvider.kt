@@ -7,6 +7,8 @@ import com.klmn.slapp.R
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.Contact
 
+/* this class queries the device's content resolver to get contacts.
+* requires permission READ_CONTACTS to work */
 class ContactProvider(
     private val context: Context,
     private val userPreferences: UserPreferences
@@ -16,6 +18,7 @@ class ContactProvider(
         DISPLAY_NAME_PRIMARY
     )
 
+    /* get contact name for a given phone number */
     fun getContact(phoneNumber: String): Contact? {
         if (phoneNumber == userPreferences.phoneNumber.value)
             return Contact(phoneNumber, context.getString(R.string.contact_you))
@@ -32,6 +35,7 @@ class ContactProvider(
         }.also { cursor?.close() }
     }
 
+    /* fetch all contacts matching query */
     fun fetchContacts(query: String? = null): List<Contact> {
         if (userPreferences.hasReadContactsPermission.value != true) return listOf()
         val contacts = mutableListOf<Contact>()

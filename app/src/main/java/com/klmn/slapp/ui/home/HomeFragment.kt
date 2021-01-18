@@ -20,6 +20,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentHomeBinding
 import com.klmn.slapp.ui.MainActivity
+import com.klmn.slapp.ui.components.HorizontalMarginItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -48,18 +49,27 @@ class HomeFragment : Fragment() {
             .setDuration(500L).addTarget(binding.root)
 
         adapter = ListPreviewAdapter(this)
-        adapter.setOnItemClickListener {
-            (exitTransition as Transition).targets[0] = it
-            (reenterTransition as Transition).targets[0] = it
+        adapter.setOnItemClickListener(::onPreviewClick)
 
-            viewModel.position = binding.viewPagerLists.currentItem
-            findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToListFragment(
-                    adapter.getListId(viewModel.position),
-                    adapter.getListName(viewModel.position)
-                )
-            )
+        lifecycleScope.launchWhenStarted {
+            viewModel.listsFlow.collect {
+                adapter.submitList(it) {
+                    binding.viewPagerLists.setCurrentItem(viewModel.position, false)
+                }
+            }
         }
+
+        binding.fabAdd.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_createListFragment)
+        }
+
+        binding.btnRequestPermission.apply {
+            viewModel.hidePermissionRequest.observe(viewLifecycleOwner) { isVisible = !it }
+            setOnClickListener {
+                (requireActivity() as MainActivity).requestReadContactsPermission()
+            }
+        }
+
         binding.viewPagerLists.apply {
             adapter = this@HomeFragment.adapter
             offscreenPageLimit = 1
@@ -76,40 +86,20 @@ class HomeFragment : Fragment() {
             addItemDecoration(HorizontalMarginItemDecoration(context, R.dimen.viewpager_hpadding))
         }
 
-        binding.fabAdd.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_createListFragment)
-        }
-
-        lifecycleScope.launchWhenStarted {
-            viewModel.listsFlow.collect {
-                adapter.submitList(it) {
-                    binding.viewPagerLists.setCurrentItem(viewModel.position, false)
-                }
-            }
-        }
-
-        viewModel.hidePermissionRequest.observe(viewLifecycleOwner) {
-            binding.btnRequestPermission.isVisible = !it
-        }
-        binding.btnRequestPermission.setOnClickListener {
-            (requireActivity() as MainActivity).requestReadContactsPermission()
-        }
-
         return binding.root
     }
 
-    private class HorizontalMarginItemDecoration(context: Context, @DimenRes marginInDp: Int)
-        : RecyclerView.ItemDecoration() {
-        private val margin = context.resources.getDimension(marginInDp).toInt()
-        override fun getItemOffsets(
-            outRect: Rect,
-            view: View,
-            parent: RecyclerView,
-            state: RecyclerView.State
-        ) = outRect.run {
-            right = margin
-            left = margin
-        }
+    private fun onPreviewClick(preview: View) {
+        (exitTransition as Transition).targets[0] = preview
+        (reenterTransition as Transition).targets[0] = preview
+
+        viewModel.position = binding.viewPagerLists.currentItem
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToListFragment(
+                adapter.getListId(viewModel.position),
+                adapter.getListName(viewModel.position)
+            )
+        )
     }
 
     override fun onDestroyView() {
