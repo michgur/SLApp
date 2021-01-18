@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.view.ViewGroup
 import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.klmn.slapp.common.BoundViewHolder
 import com.klmn.slapp.ui.components.MultiSelectListAdapter
@@ -57,6 +58,7 @@ class SlappListAdapter(
     ) {
         super.onCurrentListChanged(previousList, currentList)
 
+        // will update items that should show dividers, but not the items that should'nt
         var prev: Contact? = null
         for ((i, item) in currentList.withIndex()) {
             if (item.user != prev) notifyItemChanged(i)

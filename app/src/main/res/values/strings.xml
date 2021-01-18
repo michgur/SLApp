@@ -38,4 +38,8 @@
     <string name="action_shopping_done">Done</string>
     <string name="action_shopping_cancel">Cancel</string>
     <string name="action_add_to_cart">Add To Cart</string>
+    <string name="exit_dialog_title">Close the List?</string>
+    <string name="exit_dialog_message">All items in the shopping cart will be returned to the list.</string>
+    <string name="exit_dialog_pos">Exit</string>
+    <string name="exit_dialog_neg">Cancel</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.klmn.slapp.ui.list.items
 
+import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -7,12 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -20,6 +25,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.transition.MaterialSharedAxis
+import com.klmn.slapp.R
 import com.klmn.slapp.common.scrollToBottom
 import com.klmn.slapp.databinding.FragmentListItemsBinding
 import com.klmn.slapp.domain.SlappItem
@@ -39,7 +45,10 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     private val args: ListFragmentArgs by navArgs()
 
     private var selectionToolbar: ActionMode? = null
+
     private lateinit var sheetBehavior: BottomSheetUpNavBehavior
+
+    private lateinit var exitDialogCallback: OnBackPressedCallback
 
     private var scrollOnSubmitList = true
 
@@ -144,6 +153,15 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
                     btnDone.isVisible = it.isNotEmpty()
                 }
             }
+        }
+
+        exitDialogCallback = requireActivity().onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner) {
+                findNavController().navigate(R.id.action_listFragment_to_exitDialogFragment)
+            }
+        // if user still has items in the cart, show exit dialog
+        viewModel.cartItems.asLiveData().observe(viewLifecycleOwner) {
+            exitDialogCallback.isEnabled = it.isNotEmpty()
         }
 
         return binding.root

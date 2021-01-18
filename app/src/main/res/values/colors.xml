@@ -10,7 +10,8 @@
     <color name="iconColor">#ffffff</color>
     <color name="backgroundColor">#ffffff</color>
     <color name="selectionColor">#8822cbff</color>
-    <!-- colors for shopping bag drawable-->
+    <!-- colors for drawables-->
+    <color name="primaryCenterColor">#98ABB4</color>
     <color name="accentDarkColor">#e64e1f</color>
     <color name="accentBackgroundColor">#ffdfd5</color>
 </resources>

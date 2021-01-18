@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/slapp_nav"
     app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.klmn.slapp.ui.home.HomeFragment"
-        android:label="">
+        android:label=""
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_listFragment"
             app:destination="@id/listFragment" />
@@ -18,7 +20,8 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.klmn.slapp.ui.list.items.ListFragment"
-        android:label="ListFragment">
+        android:label="ListFragment"
+        tools:layout="@layout/fragment_list_items">
         <argument
             android:name="listId"
             app:argType="string" />
@@ -27,11 +30,15 @@
             app:destination="@id/listInfoFragment"
             app:enterAnim="@anim/slide_right_enter"
             app:popExitAnim="@anim/slide_right_exit" />
+        <action
+            android:id="@+id/action_listFragment_to_exitDialogFragment"
+            app:destination="@id/exitDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/createListFragment"
         android:name="com.klmn.slapp.ui.home.create.CreateListFragment"
-        android:label="CreateListFragment">
+        android:label="CreateListFragment"
+        tools:layout="@layout/fragment_create_list">
         <action
             android:id="@+id/action_createListFragment_to_listFragment"
             app:destination="@id/listFragment"
@@ -40,7 +47,8 @@
     </fragment>
     <fragment
         android:id="@+id/listInfoFragment"
-        android:name="com.klmn.slapp.ui.list.info.ListInfoFragment">
+        android:name="com.klmn.slapp.ui.list.info.ListInfoFragment"
+        tools:layout="@layout/fragment_list_info">
         <argument
             android:name="listId"
             app:argType="string" />
@@ -51,9 +59,19 @@
     <fragment
         android:id="@+id/addUsersFragment"
         android:name="com.klmn.slapp.ui.list.info.addUsers.AddUsersFragment"
-        android:label="@string/add_users_title">
+        android:label="@string/add_users_title"
+        tools:layout="@layout/fragment_add_users">
         <argument
             android:name="listId"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/exitDialogFragment"
+        android:name="com.klmn.slapp.ui.list.items.ExitDialogFragment"
+        android:label="ExitDialogFragment" >
+        <action
+            android:id="@+id/action_exitDialogFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment" />
+    </dialog>
 </navigation>
