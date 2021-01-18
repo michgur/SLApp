@@ -14,11 +14,13 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:background="@color/primaryColor"
             android:elevation="4dp"
             android:theme="@style/AppActionBar"
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/app_name"
-            app:titleTextAppearance="@style/AppTitle" />
+            app:titleTextAppearance="@style/AppTitle"
+            app:titleTextColor="@color/iconColor" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -26,6 +28,7 @@
         android:id="@+id/users_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/view_user" />
 

@@ -31,7 +31,8 @@
             android:gravity="center_vertical|start"
             android:padding="16dp"
             app:title="@string/app_name"
-            app:titleTextAppearance="@style/AppTitle" />
+            app:titleTextAppearance="@style/AppTitle"
+            app:titleTextColor="@color/iconColor" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/items_recycler_view"

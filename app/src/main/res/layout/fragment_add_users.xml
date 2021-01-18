@@ -15,7 +15,8 @@
         android:theme="@style/AppActionBar"
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/add_users_title"
-        app:titleTextAppearance="@style/AppTitle" />
+        app:titleTextAppearance="@style/AppTitle"
+        app:titleTextColor="@color/iconColor" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/users_recycler_view"
@@ -27,11 +28,11 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_done"
+        style="@style/AppFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_done"
-        android:tint="@color/iconColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

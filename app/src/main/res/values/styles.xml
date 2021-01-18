@@ -1,5 +1,6 @@
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:statusBarColor">@color/primaryDarkColor</item>
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
@@ -10,6 +11,8 @@
         <item name="actionModeStyle">@style/AppActionBar</item>
         <item name="actionBarStyle">@style/AppActionBar</item>
         <item name="actionBarTheme">@style/AppActionBar</item>
+        <item name="android:textColorHint">@color/dividerColor</item>
+        <item name="android:editTextColor">@color/iconColor</item>
     </style>
 
     <style name="AppActionBar" parent="Widget.AppCompat.ActionBar.Solid">
@@ -28,6 +31,12 @@
 
     <style name="AppCloseButton" parent="Widget.AppCompat.ActionButton.CloseMode">
         <item name="android:tint">@color/iconColor</item>
+    </style>
+
+    <style name="AppFAB" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="tint">@color/iconColor</item>
+        <item name="backgroundTint">@color/accentColor</item>
+        <item name="borderWidth">0dp</item>
     </style>
 
 </resources>
