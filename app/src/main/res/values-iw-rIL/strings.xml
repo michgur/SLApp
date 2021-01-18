@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">רקאפ</string>
+    <string name="new_item_hint">הקלד/י פריט</string>
+    <string name="toast_deleted">%1$d פריטים הוסרו</string>
+    <string name="new_list_hint">הקלד/י את שם הרשימה</string>
+    <string name="create_list_button">סיום</string>
+    <string name="add_users_title">הוספת משתתפים</string>
+    <string name="search_hint">חיפוש אנשי קשר</string>
+    <string name="enter_number_hint">מספר הטלפון שלך</string>
+    <string name="sign_in">כניסה</string>
+    <string name="error_invalid_number">מספר הטלפון שגוי</string>
+    <string name="error_verification_failed">אימות נכשל</string>
+    <string name="enter_code_hint">הקלד/י את קוד האימות</string>
+    <string name="send_code">שליחה</string>
+    <string name="resend_code">קבלת קוד חדש</string>
+    <string name="error_invalid_code">קוד אימות שגוי</string>
+    <string name="contact_you">את/ה</string>
+    <string name="shopping_cart">עגלת הקניות</string>
+    <string name="add_people">הוספת משתתפים</string>
+    <string name="tap_details">הקש/י כאן לפרטי הרשימה</string>
+    <string name="shopping_cart_desc">הקש/י על פריטים להוספתם לעגלה</string>
+    <string name="action_shopping_done">סיום</string>
+    <string name="action_shopping_cancel">ביטול</string>
+    <string name="exit_dialog_title">לסגור את הרשימה?</string>
+    <string name="exit_dialog_message">כל הפריטים בעגלת הקניות יוחזרו לרשימה.</string>
+    <string name="exit_dialog_pos">יציאה</string>
+    <string name="exit_dialog_neg">ביטול</string>
+</resources>

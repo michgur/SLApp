@@ -1,19 +1,19 @@
 <resources>
     <string name="app_name">SLApp</string>
-    <string name="shopping_bag_desc">Shopping List Item</string>
-    <string name="itemview_user_placeholder">Michael</string>
-    <string name="itemview_text_placeholder">Item name\nup to 2 lines</string>
-    <string name="itemview_time_placeholder">16:15</string>
+    <string name="shopping_bag_desc" translatable="false">Shopping List Item</string>
+    <string name="itemview_user_placeholder" translatable="false">Michael</string>
+    <string name="itemview_text_placeholder" translatable="false">Item name\nup to 2 lines</string>
+    <string name="itemview_time_placeholder" translatable="false">16:15</string>
     <string name="new_item_hint">Enter Item</string>
-    <string name="action_delete">Delete Selected Items</string>
-    <string name="action_settings">Settings</string>
-    <string name="tab_items">Items</string>
-    <string name="tab_users">Users</string>
-    <string name="action_copy">Copy Selected Items</string>
-    <string name="action_select_all">Select All Items</string>
-    <string name="action_undo">Undo</string>
+    <string name="action_delete" translatable="false">Delete Selected Items</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="tab_items" translatable="false">Items</string>
+    <string name="tab_users" translatable="false">Users</string>
+    <string name="action_copy" translatable="false">Copy Selected Items</string>
+    <string name="action_select_all" translatable="false">Select All Items</string>
+    <string name="action_undo" translatable="false">Undo</string>
     <string name="toast_deleted">%1$d Items Removed</string>
-    <string name="list_preview_transition_name">list_preview_%1$d</string>
+    <string name="list_preview_transition_name" translatable="false">list_preview_%1$d</string>
     <string name="list_transition_name">list</string>
     <string name="new_list_hint">Enter List Name</string>
     <string name="create_list_button">Create List</string>
