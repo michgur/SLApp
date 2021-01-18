@@ -49,11 +49,12 @@ class CreateListFragment : Fragment() {
 
         binding.createListBtn.setOnClickListener {
             binding.fieldListName.editText?.let {
-                viewModel.createList(it.text.toString()) {
+                val name = it.text.toString()
+                viewModel.createList(name) {
                     (requireActivity().application as SLApp).mainThread.execute {
                         findNavController().navigate(
                             CreateListFragmentDirections
-                                .actionCreateListFragmentToListFragment(it)
+                                .actionCreateListFragmentToListFragment(it, name)
                         )
                     }
                 }

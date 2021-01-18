@@ -55,7 +55,8 @@ class HomeFragment : Fragment() {
             viewModel.position = binding.listViewPager.currentItem
             findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToListFragment(
-                    adapter.getListId(viewModel.position)
+                    adapter.getListId(viewModel.position),
+                    adapter.getListName(viewModel.position)
                 )
             )
         }

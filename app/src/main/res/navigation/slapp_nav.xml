@@ -20,16 +20,17 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.klmn.slapp.ui.list.items.ListFragment"
-        android:label="ListFragment"
+        android:label="{listName}"
         tools:layout="@layout/fragment_list_items">
         <argument
             android:name="listId"
             app:argType="string" />
+        <argument
+            android:name="listName"
+            app:argType="string" />
         <action
             android:id="@+id/action_listFragment_to_listInfoFragment"
-            app:destination="@id/listInfoFragment"
-            app:enterAnim="@anim/slide_right_enter"
-            app:popExitAnim="@anim/slide_right_exit" />
+            app:destination="@id/listInfoFragment" />
         <action
             android:id="@+id/action_listFragment_to_exitDialogFragment"
             app:destination="@id/exitDialogFragment" />
@@ -48,9 +49,13 @@
     <fragment
         android:id="@+id/listInfoFragment"
         android:name="com.klmn.slapp.ui.list.info.ListInfoFragment"
+        android:label="{listName}"
         tools:layout="@layout/fragment_list_info">
         <argument
             android:name="listId"
+            app:argType="string" />
+        <argument
+            android:name="listName"
             app:argType="string" />
         <action
             android:id="@+id/action_listInfoFragment_to_addUsersFragment"

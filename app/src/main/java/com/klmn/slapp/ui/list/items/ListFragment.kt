@@ -66,7 +66,10 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
 
         binding.titleBox.setOnClickListener {
             findNavController().navigate(
-                ListFragmentDirections.actionListFragmentToListInfoFragment(args.listId)
+                ListFragmentDirections.actionListFragmentToListInfoFragment(
+                    args.listId,
+                    viewModel.listName.value ?: ""
+                )
             )
         }
 

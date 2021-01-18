@@ -42,6 +42,7 @@ class ListPreviewAdapter(private val home: Fragment) :
     }
 
     fun getListId(position: Int) = currentList[position].id
+    fun getListName(position: Int) = currentList[position].name
 
     class ViewHolder(parent: ViewGroup) : BoundViewHolder<ViewListSmallBinding>(parent, ViewListSmallBinding::inflate)
 
