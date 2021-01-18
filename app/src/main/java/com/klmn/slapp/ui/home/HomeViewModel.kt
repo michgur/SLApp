@@ -26,6 +26,8 @@ class HomeViewModel @ViewModelInject constructor(
 
     var position = 0
 
+    val hidePermissionRequest = userPreferences.hasReadContactsPermission
+
     fun createList(name: String, callback: (String) -> Unit) = viewModelScope.launch {
         callback(repository.addList(
             SlappList(

@@ -17,19 +17,20 @@ class UserPreferences @Inject constructor(
 ) {
     private val dataStore = context.createDataStore(DATASTORE_NAME)
 
-    val uid = dataStore.data.map {
-        it[KEY_UID] ?: ""
-    }.asLiveData()
-
     val phoneNumber = dataStore.data.map {
         it[KEY_PHONE_NUMBER] ?: ""
     }.asLiveData()
 
-    suspend fun saveUID(uid: String) = dataStore.edit { it[KEY_UID] = uid }
+    val hasReadContactsPermission = dataStore.data.map {
+        it[KEY_CONTACT_PERMISSION] ?: false
+    }.asLiveData()
+
     suspend fun savePhoneNumber(number: String) = dataStore.edit { it[KEY_PHONE_NUMBER] = number }
+    suspend fun saveHasReadContactsPermission(value: Boolean) =
+        dataStore.edit { it[KEY_CONTACT_PERMISSION] = value }
 
     companion object {
-        private val KEY_UID = preferencesKey<String>("key_uid")
         private val KEY_PHONE_NUMBER = preferencesKey<String>("key_phone_number")
+        private val KEY_CONTACT_PERMISSION = preferencesKey<Boolean>("key_contact_permission")
     }
 }

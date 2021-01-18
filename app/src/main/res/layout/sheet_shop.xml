@@ -87,9 +87,9 @@
 
     <Button
         android:id="@+id/btn_done"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
         android:padding="8dp"
         android:text="@string/action_shopping_done"
         android:textColor="@color/iconColor"
@@ -100,9 +100,9 @@
 
     <Button
         android:id="@+id/btn_cancel"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
         android:padding="8dp"
         android:text="@string/action_shopping_cancel"
         android:textColor="@color/iconColor"

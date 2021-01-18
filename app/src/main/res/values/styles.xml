@@ -11,7 +11,7 @@
         <item name="actionModeStyle">@style/AppActionBar</item>
         <item name="actionBarStyle">@style/AppActionBar</item>
         <item name="actionBarTheme">@style/AppActionBar</item>
-        <item name="android:textColorHint">@color/dividerColor</item>
+        <item name="android:textColorHint">@color/secondaryTextColor</item>
         <item name="android:editTextColor">@color/iconColor</item>
     </style>
 

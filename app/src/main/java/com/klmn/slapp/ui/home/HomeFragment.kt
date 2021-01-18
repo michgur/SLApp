@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.annotation.DimenRes
 import androidx.cardview.widget.CardView
 import androidx.core.view.get
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +19,7 @@ import androidx.transition.Transition
 import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentHomeBinding
+import com.klmn.slapp.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -83,6 +85,13 @@ class HomeFragment : Fragment() {
                     binding.listViewPager.setCurrentItem(viewModel.position, false)
                 }
             }
+        }
+
+        viewModel.hidePermissionRequest.observe(viewLifecycleOwner) {
+            binding.btnRequestPermission.isVisible = !it
+        }
+        binding.btnRequestPermission.setOnClickListener {
+            (requireActivity() as MainActivity).requestReadContactsPermission()
         }
 
         return binding.root

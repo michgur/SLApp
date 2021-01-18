@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "924562296577-6p2tjdq0i9ddi41dik4egp20qs30l49t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.klmn.slapp",
+            "certificate_hash": "51585c2d2e2db9ab9097c73b6c0f4999675d9e8e"
+          }
+        },
+        {
           "client_id": "924562296577-bshoodcsmj6pj4mvr83gcb91gg94a2mi.apps.googleusercontent.com",
           "client_type": 3
         }

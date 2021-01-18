@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.PhoneAuthActivity"/>
+        <activity android:name=".ui.PhoneAuthActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/shape_home_bg"
+    android:clipToPadding="false"
     android:clipChildren="false">
 
     <ImageView
@@ -16,7 +17,7 @@
         app:layout_constraintBottom_toTopOf="@+id/list_view_pager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/primaryCenterColor" />
+        app:tint="@color/iconColor" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/list_view_pager"
@@ -24,6 +25,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="56dp"
         android:layout_marginBottom="56dp"
+        android:clipToPadding="false"
         android:clipChildren="false" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -35,5 +37,19 @@
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btn_request_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="88dp"
+        android:backgroundTint="@color/primaryDarkColor"
+        android:textAppearance="@style/AppTitle"
+        android:text="@string/request_permission"
+        android:padding="16dp"
+        app:icon="@drawable/ic_person_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

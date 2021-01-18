@@ -42,4 +42,7 @@
     <string name="exit_dialog_message">All items in the shopping cart will be returned to the list.</string>
     <string name="exit_dialog_pos">Exit</string>
     <string name="exit_dialog_neg">Cancel</string>
+    <string name="permission_dialog_message">To share lists with people you know, <B>SlApp</B> needs to access your contacts.</string>
+    <string name="permission_dialog_pos">OK</string>
+    <string name="request_permission">Access Contacts</string>
 </resources>

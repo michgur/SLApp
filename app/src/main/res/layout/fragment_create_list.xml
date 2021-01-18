@@ -10,12 +10,10 @@
         android:id="@+id/imageView3"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="56dp"
         android:contentDescription="@string/shopping_bag_desc"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_launcher_foreground" />
@@ -25,12 +23,28 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:hint="@string/new_list_hint"
+        app:boxBackgroundColor="@color/backgroundColor"
+        app:boxCornerRadiusBottomEnd="32dp"
+        app:boxCornerRadiusBottomStart="32dp"
+        app:boxCornerRadiusTopEnd="32dp"
+        app:boxCornerRadiusTopStart="32dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
+        app:counterOverflowTextColor="@color/iconColor"
+        app:counterTextColor="@color/primaryDarkColor"
+        app:endIconMode="clear_text"
         app:layout_constraintTop_toBottomOf="@+id/imageView3">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:maxLength="20"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="20sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

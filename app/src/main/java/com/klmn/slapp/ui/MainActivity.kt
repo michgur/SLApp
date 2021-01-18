@@ -4,16 +4,20 @@ import android.Manifest.permission.READ_CONTACTS
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.klmn.slapp.R
 import com.klmn.slapp.common.hideKeyboard
 import com.klmn.slapp.data.datastore.UserPreferences
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -25,19 +29,60 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        userPreferences.phoneNumber.observe(this) {
-            if (it == "")
-                startActivity(Intent(this, PhoneAuthActivity::class.java))
-            // else start this activity. DON'T start before that
+        if (Firebase.auth.currentUser == null) goToAuthActivity()
+        else userPreferences.phoneNumber.observe(this) {
+            if (it.isNullOrBlank()) {
+                Firebase.auth.signOut()
+                goToAuthActivity()
+            }
         }
+
+        lifecycleScope.launch {
+            userPreferences.saveHasReadContactsPermission(
+                ContextCompat.checkSelfPermission(
+                    this@MainActivity,
+                    READ_CONTACTS
+                ) == PERMISSION_GRANTED
+            )
+        }
+
+        setContentView(R.layout.activity_main)
 
         navController = findNavController(R.id.fragment_container_view)
         navController.addOnDestinationChangedListener { _, _, _ -> hideKeyboard() }
+    }
 
-        if (ContextCompat.checkSelfPermission(this, READ_CONTACTS) != PERMISSION_GRANTED)
-            ActivityCompat.requestPermissions(this, arrayOf(READ_CONTACTS), 1)
+    fun requestReadContactsPermission() = ActivityCompat.requestPermissions(
+        this,
+        arrayOf(READ_CONTACTS),
+        PERMISSION_REQUEST_CODE
+    )
+
+    companion object {
+        const val AUTH_REQUEST_CODE = 123
+        const val PERMISSION_REQUEST_CODE = 456
+    }
+    private fun goToAuthActivity() = startActivityForResult(
+        Intent(
+            this,
+            PhoneAuthActivity::class.java
+        ), AUTH_REQUEST_CODE
+    )
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode != AUTH_REQUEST_CODE)
+            super.onActivityResult(requestCode, resultCode, data)
+        else {
+            if (data?.getBooleanExtra("success", false) != true) finish()
+            else if (userPreferences.hasReadContactsPermission.value != true)
+                AlertDialog.Builder(this)
+                    .setMessage(R.string.permission_dialog_message)
+                    .setPositiveButton(R.string.permission_dialog_pos) { dialog, _ ->
+                        requestReadContactsPermission()
+                        dialog.dismiss()
+                    }.show()
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -45,27 +90,15 @@ class MainActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode != 1)
+        if (requestCode != PERMISSION_REQUEST_CODE)
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        Toast.makeText(
-            this,
-            "permission granted: ${grantResults[0] == PERMISSION_GRANTED}",
-            Toast.LENGTH_SHORT
-        ).show()
+        lifecycleScope.launch {
+            userPreferences.saveHasReadContactsPermission(
+                grantResults[0] == PERMISSION_GRANTED
+            )
+        }
     }
-
-    /*
-    * NEXT:
-    *   -implement the foundation for integrating user operations
-    *   -FIREBASE
-    *   -caching strategy- NO NEED FIRESTORE HAS A CACHE BY DEFAULT
-    *   the actual shopping option
-    *   NOTIFICATIONS when Items are added/bought
-    *   fix & test the sign-in operation (try reducing latency when starting the app)
-    *   Some last features
-    *   Move on with your life
-    * */
 
     override fun onSupportNavigateUp() =
         navController.navigateUp() || super.onSupportNavigateUp()

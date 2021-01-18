@@ -19,6 +19,7 @@ class ContactProvider(
     fun getContact(phoneNumber: String): Contact? {
         if (phoneNumber == userPreferences.phoneNumber.value)
             return Contact(phoneNumber, context.getString(R.string.contact_you))
+        else if (userPreferences.hasReadContactsPermission.value != true) return null
 
         val uri = Uri.withAppendedPath(CONTENT_FILTER_URI, Uri.encode(phoneNumber))
         val cursor = context.contentResolver.query(uri, projection, null, null, null)
@@ -32,6 +33,7 @@ class ContactProvider(
     }
 
     fun fetchContacts(query: String? = null): List<Contact> {
+        if (userPreferences.hasReadContactsPermission.value != true) return listOf()
         val contacts = mutableListOf<Contact>()
         context.contentResolver.query(
             CONTENT_URI,
