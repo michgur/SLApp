@@ -21,14 +21,14 @@
             android:theme="@style/AppActionBar">
 
             <LinearLayout
-                android:id="@+id/title_box"
+                android:id="@+id/view_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/list_name"
+                    android:id="@+id/text_list_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackgroundBorderless"
@@ -58,7 +58,7 @@
         android:layout_marginBottom="64dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/items_recycler_view"
+            android:id="@+id/recycler_view_items"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/view_item" />
@@ -66,16 +66,16 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/new_item_view"
-        layout="@layout/view_enter_item"
+        android:id="@+id/view_item_input"
+        layout="@layout/view_item_input"
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:layout_gravity="bottom"
         app:layout_behavior=".ui.components.HideUnderBottomSheetBehavior" />
 
     <include
-        android:id="@+id/bottom_sheet"
-        layout="@layout/sheet_shop" />
+        android:id="@+id/bottom_sheet_shop"
+        layout="@layout/bottom_sheet_shop" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

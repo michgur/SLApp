@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">רקאפ</string>
     <string name="new_item_hint">הקלד/י פריט</string>
     <string name="toast_deleted">%1$d פריטים הוסרו</string>
     <string name="new_list_hint">הקלד/י את שם הרשימה</string>
@@ -26,4 +25,7 @@
     <string name="exit_dialog_message">כל הפריטים בעגלת הקניות יוחזרו לרשימה.</string>
     <string name="exit_dialog_pos">יציאה</string>
     <string name="exit_dialog_neg">ביטול</string>
+    <string name="permission_dialog_message">כדי לשתף רשימות עם אנשים נוספים, <B>SlApp</B> צריכה גישה לאנשי הקשר שלך</string>
+    <string name="permission_dialog_pos">אישור</string>
+    <string name="request_permission">גישה לאנשי הקשר</string>
 </resources>

@@ -49,26 +49,26 @@ class PhoneAuthActivity : AppCompatActivity() {
 
         binding.fieldPhone.prefixText = countryCode
         binding.fieldPhone.editText?.doAfterTextChanged {
-            binding.sendCodeBtn.isEnabled = !it.isNullOrBlank()
+            binding.btnSendCode.isEnabled = !it.isNullOrBlank()
         }
-        binding.sendCodeBtn.setOnClickListener {
+        binding.btnSendCode.setOnClickListener {
             hideKeyboard()
             verifyPhoneNumber()
         }
         binding.fieldPhone.editText?.doAfterTextChanged {
-            binding.sendCodeBtn.isEnabled = true
+            binding.btnSendCode.isEnabled = true
 
-            binding.signInBtn.visibility = GONE
+            binding.btnSignIn.visibility = GONE
             binding.fieldCode.visibility = GONE
-            binding.resendCodeBtn.visibility = GONE
+            binding.btnResendCode.visibility = GONE
         }
         binding.fieldCode.editText?.doAfterTextChanged {
-            binding.signInBtn.isEnabled = !it.isNullOrBlank()
+            binding.btnSignIn.isEnabled = !it.isNullOrBlank()
         }
-        binding.resendCodeBtn.setOnClickListener {
+        binding.btnResendCode.setOnClickListener {
             verifyPhoneNumber(resendToken)
         }
-        binding.signInBtn.setOnClickListener {
+        binding.btnSignIn.setOnClickListener {
             binding.fieldCode.editText?.text?.let {
                 signInWithCredential(PhoneAuthProvider.getCredential(verificationId, it.toString()))
             }
@@ -129,10 +129,10 @@ class PhoneAuthActivity : AppCompatActivity() {
             resendToken = token
             this@PhoneAuthActivity.verificationId = verificationId
 
-            binding.signInBtn.visibility = VISIBLE
+            binding.btnSignIn.visibility = VISIBLE
             binding.fieldCode.visibility = VISIBLE
-            binding.resendCodeBtn.visibility = VISIBLE
-            binding.sendCodeBtn.isEnabled = false
+            binding.btnResendCode.visibility = VISIBLE
+            binding.btnSendCode.isEnabled = false
         }
     }
 

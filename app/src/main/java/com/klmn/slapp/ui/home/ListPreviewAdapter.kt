@@ -23,11 +23,11 @@ class ListPreviewAdapter(private val home: Fragment) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent).apply {
         binding.apply {
-            itemsRecyclerView.apply {
+            recyclerViewItems.apply {
                 adapter = MiniItemAdapter()
                 layoutManager = LinearLayoutManager(home.requireContext())
             }
-            button.setOnClickListener {
+            btnOverlay.setOnClickListener {
                 onItemClickListener?.invoke(root)
             }
         }
@@ -36,7 +36,7 @@ class ListPreviewAdapter(private val home: Fragment) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.binding.run {
         val list = currentList[position]
         toolbar.title = list.name
-        itemsRecyclerView.run {
+        recyclerViewItems.run {
             (adapter as MiniItemAdapter).submitList(list.items, ::scrollToBottom)
         }
     }
@@ -51,7 +51,7 @@ class ListPreviewAdapter(private val home: Fragment) :
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent)
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = with(holder.binding) {
-            deleteBtn.visibility = INVISIBLE
+            btnClear.visibility = INVISIBLE
             textName.text = getItem(position).name
         }
     }

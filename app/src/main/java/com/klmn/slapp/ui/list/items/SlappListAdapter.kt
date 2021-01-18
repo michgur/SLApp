@@ -4,15 +4,14 @@ import android.animation.ValueAnimator
 import android.view.ViewGroup
 import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.klmn.slapp.common.BoundViewHolder
-import com.klmn.slapp.ui.components.MultiSelectListAdapter
 import com.klmn.slapp.common.formatTimeStamp
 import com.klmn.slapp.databinding.ViewItemBinding
 import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappItemDiff
+import com.klmn.slapp.ui.components.MultiSelectListAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi

@@ -39,4 +39,9 @@
         <item name="borderWidth">0dp</item>
     </style>
 
+    <style name="SplashScreen" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">@drawable/im_splash</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+    </style>
+
 </resources>

@@ -47,6 +47,12 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        // todo:
+        //      notifications
+        //      cleanup
+        //      -splash screen
+
+        setTheme(R.style.AppTheme)
         setContentView(R.layout.activity_main)
 
         navController = findNavController(R.id.fragment_container_view)

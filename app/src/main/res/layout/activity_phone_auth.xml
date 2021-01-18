@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/shape_home_bg">
+    android:background="@drawable/color_home_background">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/shopping_bag_desc"
@@ -33,7 +33,7 @@
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:endIconMode="clear_text"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:prefixText="@string/prefix_972"
         app:prefixTextColor="@color/accentColor">
 
@@ -46,13 +46,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/send_code_btn"
+        android:id="@+id/btn_send_code"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/send_code"
         android:textAppearance="@style/AppTitle"
-        android:textColor="@color/disableable_button"
+        android:textColor="@color/color_disableable_button"
         app:layout_constraintEnd_toEndOf="@+id/field_phone"
         app:layout_constraintTop_toBottomOf="@+id/field_phone" />
 
@@ -73,7 +73,7 @@
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:endIconMode="clear_text"
-        app:layout_constraintTop_toBottomOf="@+id/send_code_btn">
+        app:layout_constraintTop_toBottomOf="@+id/btn_send_code">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -85,19 +85,19 @@
 
 
     <Button
-        android:id="@+id/sign_in_btn"
+        android:id="@+id/btn_sign_in"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sign_in"
         android:textAppearance="@style/AppTitle"
-        android:textColor="@color/disableable_button"
+        android:textColor="@color/color_disableable_button"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/field_code"
         app:layout_constraintTop_toBottomOf="@+id/field_code" />
 
     <Button
-        android:id="@+id/resend_code_btn"
+        android:id="@+id/btn_resend_code"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
         android:textAppearance="@style/AppTitle"
         android:textColor="@color/primaryTextColor"
         android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/sign_in_btn"
+        app:layout_constraintEnd_toStartOf="@+id/btn_sign_in"
         app:layout_constraintTop_toBottomOf="@+id/field_code" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

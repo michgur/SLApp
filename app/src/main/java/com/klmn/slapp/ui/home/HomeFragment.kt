@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
             (exitTransition as Transition).targets[0] = it
             (reenterTransition as Transition).targets[0] = it
 
-            viewModel.position = binding.listViewPager.currentItem
+            viewModel.position = binding.viewPagerLists.currentItem
             findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToListFragment(
                     adapter.getListId(viewModel.position),
@@ -60,7 +60,7 @@ class HomeFragment : Fragment() {
                 )
             )
         }
-        binding.listViewPager.apply {
+        binding.viewPagerLists.apply {
             adapter = this@HomeFragment.adapter
             offscreenPageLimit = 1
             (get(0) as ViewGroup).clipChildren = false
@@ -83,7 +83,7 @@ class HomeFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.listsFlow.collect {
                 adapter.submitList(it) {
-                    binding.listViewPager.setCurrentItem(viewModel.position, false)
+                    binding.viewPagerLists.setCurrentItem(viewModel.position, false)
                 }
             }
         }
@@ -106,9 +106,9 @@ class HomeFragment : Fragment() {
             view: View,
             parent: RecyclerView,
             state: RecyclerView.State
-        ) {
-            outRect.right = margin
-            outRect.left = margin
+        ) = outRect.run {
+            right = margin
+            left = margin
         }
     }
 

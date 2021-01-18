@@ -23,7 +23,7 @@ class ShoppingCartAdapter(private val onItemRemoved: (SlappItem) -> Unit) :
 
         val item = getItem(position)
         textName.text = item.name
-        deleteBtn.setOnClickListener {
+        btnClear.setOnClickListener {
             ValueAnimator.ofFloat(1f, 0f).apply{
                 addUpdateListener {
                     root.scaleX = it.animatedValue as Float

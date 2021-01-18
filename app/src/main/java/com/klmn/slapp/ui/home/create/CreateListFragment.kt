@@ -34,7 +34,7 @@ class CreateListFragment : Fragment() {
         _binding = FragmentCreateListBinding.inflate(inflater, container, false)
 
         enterTransition = MaterialContainerTransform().apply {
-            startView = requireActivity().findViewById(R.id.fab_add)
+            startView = requireActivity().findViewById(R.id.dual_fab)
             endView = binding.root
             scrimColor = TRANSPARENT
             containerColor = resources.getColor(R.color.primaryColor)
@@ -44,10 +44,10 @@ class CreateListFragment : Fragment() {
         returnTransition = Slide().addTarget(binding.root)
 
         binding.fieldListName.editText?.doAfterTextChanged {
-            binding.createListBtn.isEnabled = !it.isNullOrBlank()
+            binding.btnCreateList.isEnabled = !it.isNullOrBlank()
         }
 
-        binding.createListBtn.setOnClickListener {
+        binding.btnCreateList.setOnClickListener {
             binding.fieldListName.editText?.let {
                 val name = it.text.toString()
                 viewModel.createList(name) {

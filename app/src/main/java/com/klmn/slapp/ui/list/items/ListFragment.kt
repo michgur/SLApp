@@ -1,8 +1,5 @@
 package com.klmn.slapp.ui.list.items
 
-import android.content.DialogInterface
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +7,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.view.isVisible
@@ -64,7 +60,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).setDuration(500L)
         returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).setDuration(500L)
 
-        binding.titleBox.setOnClickListener {
+        binding.viewTitle.setOnClickListener {
             findNavController().navigate(
                 ListFragmentDirections.actionListFragmentToListInfoFragment(
                     args.listId,
@@ -78,7 +74,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             (requireActivity() as AppCompatActivity).setSupportActionBar(this)
         }
 
-        viewModel.listName.observe(viewLifecycleOwner, binding.listName::setText)
+        viewModel.listName.observe(viewLifecycleOwner, binding.textListName::setText)
 
         val adapter = SlappListAdapter(viewModel) {
             viewModel.cartItems.value += it
@@ -103,7 +99,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         //      notifications
         //      fix the broken app start UX
         //      pretty much done
-        binding.itemsRecyclerView.apply {
+        binding.recyclerViewItems.apply {
             this.adapter = adapter
             layoutManager = LinearLayoutManager(requireContext())
         }
@@ -113,25 +109,25 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
                 adapter.submitList(it) {
                     if (scrollOnSubmitList) {
                         scrollOnSubmitList = false
-                        binding.itemsRecyclerView.scrollToBottom()
+                        binding.recyclerViewItems.scrollToBottom()
                     }
                 }
             }
         }
 
-        binding.newItemView.itemText.apply {
-            doAfterTextChanged { binding.newItemView.addButton.mode(text.isNullOrBlank()) }
+        binding.viewItemInput.textItem.apply {
+            doAfterTextChanged { binding.viewItemInput.dualFab.mode(text.isNullOrBlank()) }
             setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) addNewItem()
                 true
             }
         }
-        binding.newItemView.addButton.apply {
+        binding.viewItemInput.dualFab.apply {
             setOnClickListener { addNewItem() }
             setAltOnClickListener { enterShoppingMode() }
         }
 
-        sheetBehavior = BottomSheetUpNavBehavior.from(this, binding.bottomSheet.root)
+        sheetBehavior = BottomSheetUpNavBehavior.from(this, binding.bottomSheetShop.root)
         sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -139,11 +135,11 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             }
         })
 
-        binding.bottomSheet.apply {
-            sheetTop.setOnClickListener { sheetBehavior.expand() }
+        binding.bottomSheetShop.apply {
+            viewTitle.setOnClickListener { sheetBehavior.expand() }
             btnDone.setOnClickListener { finishShoppingMode(true) }
             btnCancel.setOnClickListener { finishShoppingMode(false) }
-            itemsRecyclerView.apply {
+            recyclerViewItems.apply {
                 this.adapter = ShoppingCartAdapter {
                     viewModel.cartItems.value -= it
                 }
@@ -152,7 +148,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
 
             lifecycleScope.launchWhenStarted {
                 viewModel.cartItems.collect {
-                    (itemsRecyclerView.adapter as ShoppingCartAdapter).submitList(it)
+                    (recyclerViewItems.adapter as ShoppingCartAdapter).submitList(it)
                     btnDone.isVisible = it.isNotEmpty()
                 }
             }
@@ -171,10 +167,10 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     }
 
     private fun addNewItem() {
-        if (binding.newItemView.itemText.text.isNullOrBlank()) return
+        if (binding.viewItemInput.textItem.text.isNullOrBlank()) return
 
-        viewModel.addItem(binding.newItemView.itemText.text.toString())
-        binding.newItemView.itemText.text.clear()
+        viewModel.addItem(binding.viewItemInput.textItem.text.toString())
+        binding.viewItemInput.textItem.text.clear()
         scrollOnSubmitList = true
     }
 

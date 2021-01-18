@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/shape_home_bg"
+    android:background="@drawable/color_home_background"
     android:clipToPadding="false"
     android:clipChildren="false">
 
@@ -14,13 +14,13 @@
         android:padding="16dp"
         android:scaleType="fitStart"
         android:src="@drawable/im_title"
-        app:layout_constraintBottom_toTopOf="@+id/list_view_pager"
+        app:layout_constraintBottom_toTopOf="@+id/view_pager_lists"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/iconColor" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/list_view_pager"
+        android:id="@+id/view_pager_lists"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp"

@@ -14,7 +14,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Slide
-import androidx.transition.Transition
 import com.klmn.slapp.databinding.FragmentListInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi

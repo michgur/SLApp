@@ -33,6 +33,6 @@ class AddUsersAdapter(selection: Set<Contact>? = null) :
             textNumber.visibility = View.VISIBLE
             textNumber.text = contact.phoneNumber
         }
-        selected.isVisible = isSelected(position)
+        imageSelected.isVisible = isSelected(position)
     }
 }

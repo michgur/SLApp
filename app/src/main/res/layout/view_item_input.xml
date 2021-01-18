@@ -5,7 +5,7 @@
     android:layout_height="72dp">
 
     <AutoCompleteTextView
-        android:id="@+id/item_text"
+        android:id="@+id/text_item"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -20,12 +20,12 @@
         android:textColor="@color/primaryTextColor"
         android:textColorHint="@color/dividerColor"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/add_button"
+        app:layout_constraintEnd_toStartOf="@+id/dual_fab"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.klmn.slapp.ui.components.DualFab
-        android:id="@+id/add_button"
+        android:id="@+id/dual_fab"
         style="@style/AppFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

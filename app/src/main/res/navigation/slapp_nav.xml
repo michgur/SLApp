@@ -73,10 +73,11 @@
     <dialog
         android:id="@+id/exitDialogFragment"
         android:name="com.klmn.slapp.ui.list.items.ExitDialogFragment"
-        android:label="ExitDialogFragment" >
+        android:label="ExitDialogFragment">
         <action
             android:id="@+id/action_exitDialogFragment_to_homeFragment"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment" />
     </dialog>
+
 </navigation>
