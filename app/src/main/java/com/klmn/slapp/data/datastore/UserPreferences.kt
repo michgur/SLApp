@@ -2,7 +2,8 @@ package com.klmn.slapp.data.datastore
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.preferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.createDataStore
 import androidx.lifecycle.asLiveData
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -32,7 +33,7 @@ class UserPreferences @Inject constructor(
     companion object {
         private const val DATASTORE_NAME = "slapp_ds"
 
-        private val KEY_PHONE_NUMBER = preferencesKey<String>("key_phone_number")
-        private val KEY_CONTACT_PERMISSION = preferencesKey<Boolean>("key_contact_permission")
+        private val KEY_PHONE_NUMBER = stringPreferencesKey("key_phone_number")
+        private val KEY_CONTACT_PERMISSION = booleanPreferencesKey("key_contact_permission")
     }
 }
