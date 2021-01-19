@@ -24,7 +24,5 @@ interface FirestoreService {
 
     suspend fun addItem(listId: String, item: FirestoreEntities.Item)
 
-    suspend fun updateItem(listId: String, item: FirestoreEntities.Item)
-
     suspend fun deleteItem(listId: String, item: FirestoreEntities.Item)
 }

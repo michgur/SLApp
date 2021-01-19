@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // todo:
+        //      firestore optimization
         //      notifications
         //      cleanup
         //      -splash screen

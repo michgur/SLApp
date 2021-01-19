@@ -95,10 +95,6 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             selectionToolbar?.title = it
         }
 
-        // todo: consider using an MVI approach and doing more of the logic in the viewModel
-        //      notifications
-        //      fix the broken app start UX
-        //      pretty much done
         binding.recyclerViewItems.apply {
             this.adapter = adapter
             layoutManager = LinearLayoutManager(requireContext())

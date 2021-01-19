@@ -20,7 +20,5 @@ interface SlappRepository {
 
     suspend fun addUsers(listId: String, users: Iterable<Contact>)
 
-    suspend fun updateItem(listId: String, item: SlappItem)
-
     suspend fun deleteItem(listId: String, item: SlappItem)
 }

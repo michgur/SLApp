@@ -39,9 +39,6 @@ class SlappRepositoryImpl constructor(
         users.forEach { service.addUser(listId, it.phoneNumber) }
     }
 
-    override suspend fun updateItem(listId: String, item: SlappItem) = 
-        service.updateItem(listId, itemMapper.toEntity(item))
-
     override suspend fun deleteItem(listId: String, item: SlappItem) =
         service.deleteItem(listId, itemMapper.toEntity(item))
 }

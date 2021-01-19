@@ -120,10 +120,6 @@ class FirestoreServiceImpl : FirestoreService {
             .update("items", FieldValue.arrayUnion(item))
     }
 
-    override suspend fun updateItem(listId: String, item: FirestoreEntities.Item) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun deleteItem(listId: String, item: FirestoreEntities.Item) {
         db.collection(COLLECTION)
             .document(listId)
