@@ -11,6 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.klmn.slapp.R
@@ -29,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        validateGooglePlayServices()
 
         if (Firebase.auth.currentUser == null) goToAuthActivity()
         else userPreferences.phoneNumber.observe(this) {
@@ -76,6 +80,16 @@ class MainActivity : AppCompatActivity() {
             PhoneAuthActivity::class.java
         ), AUTH_REQUEST_CODE
     )
+
+    private fun validateGooglePlayServices() = GoogleApiAvailability.getInstance().let {
+        if (it.isGooglePlayServicesAvailable(this) != ConnectionResult.SUCCESS)
+            it.makeGooglePlayServicesAvailable(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        validateGooglePlayServices()
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode != AUTH_REQUEST_CODE)

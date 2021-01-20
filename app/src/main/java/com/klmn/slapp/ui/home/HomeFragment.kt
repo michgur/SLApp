@@ -1,12 +1,9 @@
 package com.klmn.slapp.ui.home
 
-import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.DimenRes
 import androidx.cardview.widget.CardView
 import androidx.core.view.get
 import androidx.core.view.isVisible
@@ -14,16 +11,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Transition
 import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.R
+import com.klmn.slapp.messaging.fcm.MessagingService
 import com.klmn.slapp.databinding.FragmentHomeBinding
 import com.klmn.slapp.ui.MainActivity
 import com.klmn.slapp.ui.components.HorizontalMarginItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 import kotlin.math.abs
 
 @ExperimentalCoroutinesApi
@@ -35,6 +33,8 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by activityViewModels()
 
     private lateinit var adapter: ListPreviewAdapter
+
+    @Inject lateinit var messagingService: MessagingService
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,8 +52,8 @@ class HomeFragment : Fragment() {
         adapter.setOnItemClickListener(::onPreviewClick)
 
         lifecycleScope.launchWhenStarted {
-            viewModel.listsFlow.collect {
-                adapter.submitList(it) {
+            viewModel.listsFlow.collect { lists ->
+                adapter.submitList(lists) {
                     binding.viewPagerLists.setCurrentItem(viewModel.position, false)
                 }
             }
