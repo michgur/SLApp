@@ -1,5 +1,9 @@
 package com.klmn.slapp.ui.list.items
 
+import android.animation.Animator
+import android.animation.AnimatorInflater
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +47,6 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     private var selectionToolbar: ActionMode? = null
 
     private lateinit var sheetBehavior: BottomSheetUpNavBehavior
-
     private lateinit var exitDialogCallback: OnBackPressedCallback
 
     private var scrollOnSubmitList = true
@@ -111,16 +114,18 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             }
         }
 
-        binding.viewItemInput.textItem.apply {
-            doAfterTextChanged { binding.viewItemInput.dualFab.mode(text.isNullOrBlank()) }
-            setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) addNewItem()
-                true
+        binding.viewItemInput.apply {
+            textItem.apply {
+                doAfterTextChanged { dualFab.mode(text.isNullOrBlank()) }
+                setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_DONE) addNewItem()
+                    true
+                }
             }
-        }
-        binding.viewItemInput.dualFab.apply {
-            setOnClickListener { addNewItem() }
-            setAltOnClickListener { enterShoppingMode() }
+            dualFab.apply {
+                setOnClickListener { addNewItem() }
+                setAltOnClickListener { enterShoppingMode() }
+            }
         }
 
         sheetBehavior = BottomSheetUpNavBehavior.from(this, binding.bottomSheetShop.root)
@@ -157,6 +162,22 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         // if user still has items in the cart, show exit dialog
         viewModel.cartItems.asLiveData().observe(viewLifecycleOwner) {
             exitDialogCallback.isEnabled = it.isNotEmpty()
+
+            binding.viewItemInput.apply {
+                if (it.isNotEmpty() && root.isVisible && dualFab.isAltMode())
+                    dualFab.animate()
+                        .scaleX(1.2f)
+                        .scaleY(1.2f)
+                        .rotation(-25f)
+                        .setDuration(150L).withEndAction {
+                            dualFab.animate()
+                                .scaleX(1.0f)
+                                .scaleY(1.0f)
+                                .rotation(0f)
+                                .setDuration(150L)
+                                .start()
+                        }.start()
+            }
         }
 
         return binding.root

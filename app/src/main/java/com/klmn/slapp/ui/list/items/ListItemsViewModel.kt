@@ -6,7 +6,10 @@ import androidx.lifecycle.*
 import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.Contact
+import com.klmn.slapp.domain.NotificationData
+import com.klmn.slapp.domain.PushNotification
 import com.klmn.slapp.domain.SlappItem
+import com.klmn.slapp.messaging.fcm.NotificationAPI
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -15,6 +18,7 @@ import kotlinx.coroutines.launch
 class ListItemsViewModel @ViewModelInject constructor(
     private val repository: SlappRepository,
     private val userPreferences: UserPreferences,
+    private val notificationAPI: NotificationAPI,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val listId = MutableStateFlow("")
@@ -64,7 +68,19 @@ class ListItemsViewModel @ViewModelInject constructor(
     }
 
     fun finishShopping(success: Boolean) {
-        if (success) cartItems.value.forEach(::deleteItem)
+        if (success) {
+            cartItems.value.forEach(::deleteItem)
+            viewModelScope.launch {
+                userPreferences.registrationToken.first().let { token ->
+                    println("Sending notification")
+                    PushNotification(
+                        NotificationData("hello", "i bought something"), token
+                    ).let {
+                        notificationAPI.postNotification(it)
+                    }
+                }
+            }
+        }
         cartItems.value = listOf()
     }
 }

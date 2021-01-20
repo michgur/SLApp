@@ -38,6 +38,9 @@ class DualFab @JvmOverloads constructor(
     override fun setOnClickListener(l: OnClickListener?) { defOnClickListener = l }
     fun setAltOnClickListener(l: OnClickListener) { altOnClickListener = l }
 
+    fun isAltMode() = _mode
+    fun isDefaultMode() = !_mode
+
     /* set the mode to alt(true) / default(false). returns whether the mode has changed */
     fun mode(alt: Boolean, animate: Boolean = true) = (_mode xor alt).also {
         if (alt) altMode(animate)

@@ -36,15 +36,4 @@ class MessagingService : FirebaseMessagingService() {
         super.onMessageReceived(message)
         pushNotification(message.data["title"], message.data["message"])
     }
-
-//    suspend fun sendNotification(notification: PushNotification) = withContext(Dispatchers.IO) {
-//        try {
-//            val response = notificationAPI.postNotification(notification)
-//            if (response.isSuccessful) {
-//                println(Gson().toJson(response))
-//            } else Log.e(TAG, response.errorBody().toString())
-//        } catch (e: Exception) {
-//            Log.e(TAG, e.toString())
-//        }
-//    }
 }
