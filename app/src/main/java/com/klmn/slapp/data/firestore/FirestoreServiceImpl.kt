@@ -1,7 +1,6 @@
 package com.klmn.slapp.data.firestore
 
 import android.util.Log
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -36,52 +35,12 @@ class FirestoreServiceImpl : FirestoreService {
         awaitClose { subscription.remove() }
     }
 
-    override suspend fun getList(id: String) = callbackFlow {
-        val subscription = collection.document(id)
-            .addSnapshotListener { snapshot, e ->
-                e?.let { Log.e(TAG, "${e.message}") }
-                snapshot?.let {
-                    offer(snapshot.toObject(FirestoreEntities.SList::class.java)!!)
-                }
-            }
-
-        awaitClose { subscription.remove() }
-    }
-
-    override suspend fun getListName(id: String) = callbackFlow {
-        val subscription = collection.document(id)
-            .addSnapshotListener { snapshot, e ->
-                e?.let { Log.e(TAG, "${e.message}") }
-                snapshot?.let {
-                    offer(snapshot.getString("name")!!)
-                }
-            }
-
-        awaitClose { subscription.remove() }
-    }
-
-    override suspend fun updateList(list: FirestoreEntities.SList) {
-        collection.document(list.id).set(list).await()
-    }
-
     override suspend fun deleteList(list: FirestoreEntities.SList) {
         collection.document(list.id).delete().await()
     }
 
     override suspend fun addList(list: FirestoreEntities.SList) =
         collection.add(list).await().id
-
-    override suspend fun getUsers(listId: String) = callbackFlow {
-        val subscription = collection.document(listId)
-            .addSnapshotListener { snapshot, e ->
-                e?.let { Log.e(TAG, "${e.message}") }
-                snapshot?.let {
-                    offer((snapshot.get("users") as List<*>).filterNotNull().map(Any::toString))
-                }
-            }
-
-        awaitClose { subscription.remove() }
-    }
 
     override suspend fun addUser(listId: String, user: String) {
         collection.document(listId)
@@ -90,27 +49,6 @@ class FirestoreServiceImpl : FirestoreService {
                 "tokens", FieldValue.arrayUnion("")
             )
             .await()
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    override suspend fun getItems(listId: String) = callbackFlow {
-        val subscription = collection.document(listId)
-            .addSnapshotListener { snapshot, e ->
-                e?.let { Log.e(TAG, "${e.message}") }
-                snapshot?.let {
-                    offer(
-                        (snapshot.get("items") as List<HashMap<String, *>>).map {
-                            FirestoreEntities.Item(
-                                it["name"] as String,
-                                it["user_id"] as String,
-                                it["timestamp"] as Timestamp
-                            )
-                        }
-                    )
-                }
-            }
-
-        awaitClose { subscription.remove() }
     }
 
     override suspend fun addItem(listId: String, item: FirestoreEntities.Item) {

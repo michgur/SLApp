@@ -74,7 +74,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             (requireActivity() as AppCompatActivity).setSupportActionBar(this)
         }
 
-        viewModel.listName.observe(viewLifecycleOwner, { binding.textListName.setText(it).run { println("name $it") } })
+        viewModel.listName.observe(viewLifecycleOwner, binding.textListName::setText)
 
         val adapter = SlappListAdapter(viewModel) {
             viewModel.cartItems.value += it
