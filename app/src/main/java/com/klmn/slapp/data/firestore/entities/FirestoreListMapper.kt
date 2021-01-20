@@ -16,6 +16,7 @@ class FirestoreListMapper(
         model.user.phoneNumber,
         Timestamp(model.timestamp, 0),
         model.users.map(Contact::phoneNumber),
+        model.users.map { it.registrationToken ?: "" },
         model.items.map {
             FirestoreEntities.Item(
                 it.name,
@@ -37,8 +38,12 @@ class FirestoreListMapper(
                 it.timestamp.seconds
             )
         }.toMutableList(),
-        entity.users.map(::getContact)
+        entity.users.mapIndexed { i, u ->
+            getContact(u, entity.tokens[i])
+        }
     )
 
-    private fun getContact(pn: String) = contactsRepository.getContact(pn) ?: Contact(pn)
+    private fun getContact(number: String, token: String? = null) =
+        contactsRepository.getContact(number)?.copy(registrationToken = token)
+            ?: Contact(number, "", token)
 }

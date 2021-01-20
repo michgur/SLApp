@@ -22,11 +22,17 @@ class UserPreferences @Inject constructor(
         it[KEY_PHONE_NUMBER] ?: ""
     }.asLiveData()
 
+    val registrationToken = dataStore.data.map {
+        it[KEY_REGISTRATION_TOKEN] ?: false
+    }.asLiveData()
+
     val hasReadContactsPermission = dataStore.data.map {
         it[KEY_CONTACT_PERMISSION] ?: false
     }.asLiveData()
 
     suspend fun savePhoneNumber(number: String) = dataStore.edit { it[KEY_PHONE_NUMBER] = number }
+    suspend fun saveRegistrationToken(token: String) =
+        dataStore.edit { it[KEY_REGISTRATION_TOKEN] = token }
     suspend fun saveHasReadContactsPermission(value: Boolean) =
         dataStore.edit { it[KEY_CONTACT_PERMISSION] = value }
 
@@ -34,6 +40,7 @@ class UserPreferences @Inject constructor(
         private const val DATASTORE_NAME = "slapp_ds"
 
         private val KEY_PHONE_NUMBER = stringPreferencesKey("key_phone_number")
+        private val KEY_REGISTRATION_TOKEN = stringPreferencesKey("key_registration_token")
         private val KEY_CONTACT_PERMISSION = booleanPreferencesKey("key_contact_permission")
     }
 }

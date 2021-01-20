@@ -15,12 +15,12 @@ import kotlinx.coroutines.tasks.await
 class FirestoreServiceImpl : FirestoreService {
     companion object {
         private const val COLLECTION = "lists"
-        private const val TAG = "firestore"
+        private const val TAG = "data.firestore"
     }
-    private val db = Firebase.firestore
+    private val collection = Firebase.firestore.collection(COLLECTION)
 
     override suspend fun getLists(uid: String) = callbackFlow {
-        val subscription = db.collection(COLLECTION)
+        val subscription = collection
             .whereArrayContains("users", uid)
             .addSnapshotListener { snapshot, e ->
                 e?.let { Log.e(TAG, "${e.message}") }
@@ -37,8 +37,7 @@ class FirestoreServiceImpl : FirestoreService {
     }
 
     override suspend fun getList(id: String) = callbackFlow {
-        val subscription = db.collection(COLLECTION)
-            .document(id)
+        val subscription = collection.document(id)
             .addSnapshotListener { snapshot, e ->
                 e?.let { Log.e(TAG, "${e.message}") }
                 snapshot?.let {
@@ -50,8 +49,7 @@ class FirestoreServiceImpl : FirestoreService {
     }
 
     override suspend fun getListName(id: String) = callbackFlow {
-        val subscription = db.collection(COLLECTION)
-            .document(id)
+        val subscription = collection.document(id)
             .addSnapshotListener { snapshot, e ->
                 e?.let { Log.e(TAG, "${e.message}") }
                 snapshot?.let {
@@ -63,19 +61,18 @@ class FirestoreServiceImpl : FirestoreService {
     }
 
     override suspend fun updateList(list: FirestoreEntities.SList) {
-        db.collection(COLLECTION).document(list.id).set(list)
+        collection.document(list.id).set(list).await()
     }
 
     override suspend fun deleteList(list: FirestoreEntities.SList) {
-        db.collection(COLLECTION).document(list.id).delete()
+        collection.document(list.id).delete().await()
     }
 
     override suspend fun addList(list: FirestoreEntities.SList) =
-        db.collection(COLLECTION).add(list).await().id
+        collection.add(list).await().id
 
     override suspend fun getUsers(listId: String) = callbackFlow {
-        val subscription = db.collection(COLLECTION)
-            .document(listId)
+        val subscription = collection.document(listId)
             .addSnapshotListener { snapshot, e ->
                 e?.let { Log.e(TAG, "${e.message}") }
                 snapshot?.let {
@@ -87,15 +84,14 @@ class FirestoreServiceImpl : FirestoreService {
     }
 
     override suspend fun addUser(listId: String, user: String) {
-        db.collection(COLLECTION)
-            .document(listId)
+        collection.document(listId)
             .update("users", FieldValue.arrayUnion(user))
+            .await()
     }
 
     @Suppress("UNCHECKED_CAST")
     override suspend fun getItems(listId: String) = callbackFlow {
-        val subscription = db.collection(COLLECTION)
-            .document(listId)
+        val subscription = collection.document(listId)
             .addSnapshotListener { snapshot, e ->
                 e?.let { Log.e(TAG, "${e.message}") }
                 snapshot?.let {
@@ -115,14 +111,14 @@ class FirestoreServiceImpl : FirestoreService {
     }
 
     override suspend fun addItem(listId: String, item: FirestoreEntities.Item) {
-        db.collection(COLLECTION)
-            .document(listId)
+        collection.document(listId)
             .update("items", FieldValue.arrayUnion(item))
+            .await()
     }
 
     override suspend fun deleteItem(listId: String, item: FirestoreEntities.Item) {
-        db.collection(COLLECTION)
-            .document(listId)
+        collection.document(listId)
             .update("items", FieldValue.arrayRemove(item))
+            .await()
     }
 }

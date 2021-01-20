@@ -22,7 +22,7 @@ import javax.inject.Singleton
 @ExperimentalCoroutinesApi
 @Module
 @InstallIn(SingletonComponent::class)
-object RepoModule {
+object RepositoryModule {
     @Provides @Singleton
     fun provideService() = FirestoreServiceImpl() as FirestoreService
 

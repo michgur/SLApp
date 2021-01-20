@@ -26,7 +26,7 @@
         <activity android:name=".ui.PhoneAuthActivity" android:screenOrientation="portrait"/>
 
         <service
-            android:name=".data.messaging.MessagingService"
+            android:name="com.klmn.slapp.messaging.fcm.MessagingService"
             android:exported="false"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>

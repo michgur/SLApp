@@ -16,6 +16,7 @@ object FirestoreEntities {
         val created_by: String = "",
         val timestamp: Timestamp = Timestamp.now(),
         val users: List<String> = listOf(),
+        val tokens: List<String> = listOf(),
         val items: List<Item> = listOf()
     )
 }
