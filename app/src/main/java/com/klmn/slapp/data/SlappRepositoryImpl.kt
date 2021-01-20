@@ -44,17 +44,20 @@ class SlappRepositoryImpl constructor(
 
     override suspend fun getLists(uid: String) = listsFlow.map { it.values.toList() }
 
-    override suspend fun getListName(listId: String) = listsFlow.mapNotNull { it[listId]?.name }
+    override suspend fun getListName(listId: String) =
+        listsFlow.mapNotNull { it[listId]?.name }.distinctUntilChanged()
 
     override suspend fun addItem(listId: String, item: SlappItem) =
         service.addItem(listId, itemMapper.toEntity(item))
 
-    override suspend fun getItems(listId: String) = listsFlow.mapNotNull { it[listId]?.items }
+    override suspend fun getItems(listId: String) =
+        listsFlow.mapNotNull { it[listId]?.items }.distinctUntilChanged()
 
     override suspend fun deleteItem(listId: String, item: SlappItem) =
         service.deleteItem(listId, itemMapper.toEntity(item))
 
-    override suspend fun getUsers(listId: String) = listsFlow.mapNotNull { it[listId]?.users }
+    override suspend fun getUsers(listId: String) =
+        listsFlow.mapNotNull { it[listId]?.users }.distinctUntilChanged()
 
     override suspend fun addUsers(listId: String, users: Iterable<Contact>) {
         // todo can be done without a loop
