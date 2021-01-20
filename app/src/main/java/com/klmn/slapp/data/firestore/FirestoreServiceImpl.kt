@@ -85,7 +85,10 @@ class FirestoreServiceImpl : FirestoreService {
 
     override suspend fun addUser(listId: String, user: String) {
         collection.document(listId)
-            .update("users", FieldValue.arrayUnion(user))
+            .update(
+                "users", FieldValue.arrayUnion(user),
+                "tokens", FieldValue.arrayUnion("")
+            )
             .await()
     }
 
@@ -119,6 +122,12 @@ class FirestoreServiceImpl : FirestoreService {
     override suspend fun deleteItem(listId: String, item: FirestoreEntities.Item) {
         collection.document(listId)
             .update("items", FieldValue.arrayRemove(item))
+            .await()
+    }
+
+    override suspend fun setTokens(listId: String, tokens: List<String>) {
+        collection.document(listId)
+            .update("tokens", tokens)
             .await()
     }
 }

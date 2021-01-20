@@ -1,8 +1,6 @@
 package com.klmn.slapp.di
 
 import com.klmn.slapp.messaging.fcm.NotificationAPI
-import com.klmn.slapp.messaging.firestore.FirestoreTokenService
-import com.klmn.slapp.messaging.firestore.FirestoreTokenServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,8 +22,4 @@ object MessagingModule {
 
     @Provides @Singleton
     fun provideAPI(retrofit: Retrofit) = retrofit.create(NotificationAPI::class.java)
-
-    @Provides @Singleton
-    fun provideFirestoreTokenService() =
-        FirestoreTokenServiceImpl() as FirestoreTokenService
 }

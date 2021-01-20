@@ -7,8 +7,12 @@ import com.klmn.slapp.data.firestore.entities.FirestoreEntities
 import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.domain.SlappList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 @ExperimentalCoroutinesApi
 class SlappRepositoryImpl constructor(
@@ -32,13 +36,31 @@ class SlappRepositoryImpl constructor(
         itemMapper.toModelList(items)
     }
 
+    override suspend fun deleteItem(listId: String, item: SlappItem) =
+        service.deleteItem(listId, itemMapper.toEntity(item))
+
+    // this won't work for tokens
     override suspend fun getUsers(listId: String) = service.getUsers(listId).map { users ->
         users.map { contactProvider.getContact(it) ?: Contact(it) }
     }
+
     override suspend fun addUsers(listId: String, users: Iterable<Contact>) {
         users.forEach { service.addUser(listId, it.phoneNumber) }
     }
 
-    override suspend fun deleteItem(listId: String, item: SlappItem) =
-        service.deleteItem(listId, itemMapper.toEntity(item))
+    override suspend fun addToken(uid: String, token: String, listId: String) {
+        getUsers(listId).stateIn(CoroutineScope(Dispatchers.IO)).value.map {
+            if (it.phoneNumber == uid) token
+            else it.registrationToken ?: ""
+        }.let { service.setTokens(listId, it) }
+    }
+
+    override suspend fun refreshToken(uid: String, token: String) {
+        getLists(uid).stateIn(CoroutineScope(Dispatchers.IO)).value.forEach { list ->
+            list.users.map {
+                if (it.phoneNumber == uid) token
+                else it.registrationToken ?: ""
+            }.let { service.setTokens(list.id, it) }
+        }
+    }
 }

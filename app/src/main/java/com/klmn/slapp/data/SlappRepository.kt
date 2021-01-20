@@ -6,19 +6,27 @@ import com.klmn.slapp.domain.SlappList
 import kotlinx.coroutines.flow.Flow
 
 interface SlappRepository {
+    /* list operations */
     suspend fun addList(list: SlappList): String
 
     suspend fun getLists(uid: String): Flow<List<SlappList>>
 
     suspend fun getListName(id: String): Flow<String>
 
+    /* item operations */
     suspend fun addItem(listId: String, item: SlappItem)
 
     suspend fun getItems(listId: String): Flow<List<SlappItem>>
 
+    suspend fun deleteItem(listId: String, item: SlappItem)
+
+    /* user operations */
     suspend fun getUsers(listId: String): Flow<List<Contact>>
 
     suspend fun addUsers(listId: String, users: Iterable<Contact>)
 
-    suspend fun deleteItem(listId: String, item: SlappItem)
+    /* registration token operations */
+    suspend fun addToken(uid: String, token: String, listId: String)
+
+    suspend fun refreshToken(uid: String, token: String)
 }
