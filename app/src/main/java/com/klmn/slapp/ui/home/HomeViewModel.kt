@@ -11,7 +11,6 @@ import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 

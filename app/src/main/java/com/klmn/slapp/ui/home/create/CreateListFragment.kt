@@ -35,7 +35,7 @@ class CreateListFragment : Fragment() {
         _binding = FragmentCreateListBinding.inflate(inflater, container, false)
 
         enterTransition = MaterialContainerTransform().apply {
-            startView = requireActivity().findViewById(R.id.dual_fab)
+            startView = requireActivity().findViewById(R.id.fab_add)
             endView = binding.root
             scrimColor = TRANSPARENT
 
