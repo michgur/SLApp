@@ -49,9 +49,9 @@ class MessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         Log.d(TAG, "refreshed registration token $token")
-        CoroutineScope(Dispatchers.IO).launch {
-            userPreferences.saveRegistrationToken(token)
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            userPreferences.saveRegistrationToken(token)
+//        }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {

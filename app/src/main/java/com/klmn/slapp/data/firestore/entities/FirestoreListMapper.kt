@@ -39,7 +39,7 @@ class FirestoreListMapper(
             )
         }.toMutableList(),
         entity.users.mapIndexed { i, u ->
-            getContact(u, entity.tokens[i])
+            getContact(u, entity.tokens.takeIf { it.size > i }?.get(i))
         }
     )
 

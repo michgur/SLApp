@@ -11,7 +11,7 @@ interface SlappRepository {
 
     suspend fun getLists(uid: String): Flow<List<SlappList>>
 
-    suspend fun getListName(id: String): Flow<String>
+    suspend fun getListName(listId: String): Flow<String>
 
     /* item operations */
     suspend fun addItem(listId: String, item: SlappItem)

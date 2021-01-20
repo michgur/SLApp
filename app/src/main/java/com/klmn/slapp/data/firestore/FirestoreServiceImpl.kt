@@ -15,7 +15,7 @@ import kotlinx.coroutines.tasks.await
 class FirestoreServiceImpl : FirestoreService {
     companion object {
         private const val COLLECTION = "lists"
-        private const val TAG = "data.firestore"
+        private const val TAG = "SLApp.firestore"
     }
     private val collection = Firebase.firestore.collection(COLLECTION)
 

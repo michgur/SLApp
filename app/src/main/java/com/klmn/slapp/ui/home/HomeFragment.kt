@@ -34,8 +34,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var adapter: ListPreviewAdapter
 
-    @Inject lateinit var messagingService: MessagingService
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
