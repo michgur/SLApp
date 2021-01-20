@@ -1,7 +1,6 @@
 package com.klmn.slapp.data
 
 import com.klmn.slapp.common.EntityModelMapper
-import com.klmn.slapp.data.contacts.ContactProvider
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.data.firestore.FirestoreService
 import com.klmn.slapp.data.firestore.entities.FirestoreEntities
@@ -15,12 +14,11 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class SlappRepositoryImpl constructor(
+class SlappRepositoryImpl(
     private val service: FirestoreService,
     private val listMapper: EntityModelMapper<FirestoreEntities.SList, SlappList>,
     private val itemMapper: EntityModelMapper<FirestoreEntities.Item, SlappItem>,
-    private val contactProvider: ContactProvider,
-    private val userPreferences: UserPreferences
+    userPreferences: UserPreferences
 ) : SlappRepository {
     private var listsFlow = MutableStateFlow(mapOf<String, SlappList>())
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -36,9 +34,7 @@ class SlappRepositoryImpl constructor(
         }
     }
 
-    // todo: minimize document-reads by storing all of the lists as flows and mapping them
-    //      here for list properties
-    //      ALSO check if a snapshot listener of all lists will actually read all of them everytime
+    // todo: check if a snapshot listener of all lists will actually read all of them everytime
     //          instead of just the changed one
     override suspend fun addList(list: SlappList) = service.addList(listMapper.toEntity(list))
 
@@ -59,10 +55,15 @@ class SlappRepositoryImpl constructor(
     override suspend fun getUsers(listId: String) =
         listsFlow.mapNotNull { it[listId]?.users }.distinctUntilChanged()
 
-    override suspend fun addUsers(listId: String, users: Iterable<Contact>) {
-        // todo can be done without a loop
-        users.forEach { service.addUser(listId, it.phoneNumber) }
-    }
+    override suspend fun addUsers(listId: String, users: Iterable<Contact>) =
+        service.addUsers(listId, users.map { it.phoneNumber })
+
+    override suspend fun refreshToken(uid: String, token: String) =
+        listsFlow.value.values.forEach { list ->
+            // only send update if the data
+            if (list.users.find { it.phoneNumber == uid }?.registrationToken != token)
+                setToken(uid, token, list.id, list.users)
+        }
 
     private suspend fun setToken(
         uid: String, token: String,
@@ -71,16 +72,4 @@ class SlappRepositoryImpl constructor(
         if (it.phoneNumber == uid) token
         else it.registrationToken ?: ""
     }.let { service.setTokens(listId, it) }
-
-    override suspend fun addToken(uid: String, token: String, listId: String) {
-        listsFlow.value[listId]?.users?.let {
-            setToken(uid, token, listId, it)
-        }
-    }
-
-    override suspend fun refreshToken(uid: String, token: String) {
-        listsFlow.value.values.forEach {
-            setToken(uid, token, it.id, it.users)
-        }
-    }
 }

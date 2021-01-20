@@ -165,7 +165,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     private fun addNewItem() {
         if (binding.viewItemInput.textItem.text.isNullOrBlank()) return
 
-        viewModel.addItem(binding.viewItemInput.textItem.text.toString())
+        viewModel.addItem(binding.viewItemInput.textItem.text.toString().trim())
         binding.viewItemInput.textItem.text.clear()
         scrollOnSubmitList = true
     }

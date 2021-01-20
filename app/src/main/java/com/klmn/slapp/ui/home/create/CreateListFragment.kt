@@ -53,7 +53,7 @@ class CreateListFragment : Fragment() {
 
             btnCreateList.setOnClickListener {
                 fieldListName.editText?.let {
-                    createListAndNav(it.text.toString())
+                    createListAndNav(it.text.toString().trim())
                 }
             }
         }

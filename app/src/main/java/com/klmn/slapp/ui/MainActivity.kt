@@ -1,6 +1,7 @@
 package com.klmn.slapp.ui
 
 import android.Manifest.permission.READ_CONTACTS
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
@@ -17,8 +18,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.klmn.slapp.R
 import com.klmn.slapp.common.hideKeyboard
+import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.data.datastore.UserPreferences
+import com.klmn.slapp.messaging.fcm.MessagingService
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     @Inject lateinit var userPreferences: UserPreferences
+    @Inject lateinit var repository: SlappRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +58,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // todo:
-        //      firestore optimization
-        //      notifications
+        //      -firestore optimization
+        //      -notifications
         //      cleanup
         //      -splash screen
 
@@ -62,6 +68,14 @@ class MainActivity : AppCompatActivity() {
 
         navController = findNavController(R.id.fragment_container_view)
         navController.addOnDestinationChangedListener { _, _, _ -> hideKeyboard() }
+
+        startService(Intent(this, MessagingService::class.java))
+
+        userPreferences.registrationToken.observe(this) { t ->
+            CoroutineScope(Dispatchers.IO).launch {
+                userPreferences.phoneNumber.value?.let { repository.refreshToken(t, it) }
+            }
+        }
     }
 
     fun requestReadContactsPermission() = ActivityCompat.requestPermissions(

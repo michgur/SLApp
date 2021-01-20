@@ -3,7 +3,6 @@ package com.klmn.slapp.di
 import com.klmn.slapp.common.EntityModelMapper
 import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.data.SlappRepositoryImpl
-import com.klmn.slapp.data.contacts.ContactProvider
 import com.klmn.slapp.data.contacts.ContactsRepository
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.data.firestore.FirestoreService
@@ -40,7 +39,6 @@ object RepositoryModule {
         service: FirestoreService,
         listMapper: EntityModelMapper<FirestoreEntities.SList, SlappList>,
         itemMapper: EntityModelMapper<FirestoreEntities.Item, SlappItem>,
-        contactProvider: ContactProvider,
         userPreferences: UserPreferences
-    ) = SlappRepositoryImpl(service, listMapper, itemMapper, contactProvider, userPreferences) as SlappRepository
+    ) = SlappRepositoryImpl(service, listMapper, itemMapper, userPreferences) as SlappRepository
 }

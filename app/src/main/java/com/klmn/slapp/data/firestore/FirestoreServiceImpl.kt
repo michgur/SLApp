@@ -42,11 +42,11 @@ class FirestoreServiceImpl : FirestoreService {
     override suspend fun addList(list: FirestoreEntities.SList) =
         collection.add(list).await().id
 
-    override suspend fun addUser(listId: String, user: String) {
+    override suspend fun addUsers(listId: String, users: List<String>) {
         collection.document(listId)
             .update(
-                "users", FieldValue.arrayUnion(user),
-                "tokens", FieldValue.arrayUnion("")
+                "users", FieldValue.arrayUnion(*users.toTypedArray()),
+                "tokens", FieldValue.arrayUnion(*Array(users.size) { "" })
             )
             .await()
     }

@@ -26,7 +26,5 @@ interface SlappRepository {
     suspend fun addUsers(listId: String, users: Iterable<Contact>)
 
     /* registration token operations */
-    suspend fun addToken(uid: String, token: String, listId: String)
-
     suspend fun refreshToken(uid: String, token: String)
 }

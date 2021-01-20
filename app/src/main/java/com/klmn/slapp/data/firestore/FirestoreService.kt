@@ -12,7 +12,7 @@ interface FirestoreService {
     suspend fun addList(list: FirestoreEntities.SList): String
 
     // user operations
-    suspend fun addUser(listId: String, user: String)
+    suspend fun addUsers(listId: String, users: List<String>)
 
     // item operations
     suspend fun addItem(listId: String, item: FirestoreEntities.Item)
