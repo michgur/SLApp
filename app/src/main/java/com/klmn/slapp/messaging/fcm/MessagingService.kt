@@ -6,12 +6,10 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.messaging.ktx.messaging
 import com.klmn.slapp.data.datastore.UserPreferences
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
 class MessagingService : FirebaseMessagingService() {
     companion object {
         const val TAG = "SLApp.FCM"
@@ -21,11 +19,10 @@ class MessagingService : FirebaseMessagingService() {
     private val userPreferences = UserPreferences(this)
 
     override fun onCreate() {
-        if (userPreferences.registrationToken.value.isNullOrBlank())
-            Firebase.messaging.token.addOnCompleteListener {
-                if (it.isSuccessful && it.result != null) it.result?.let(::onNewToken)
-                else Log.w(TAG, "failed to fetch registration token")
-            }
+        Firebase.messaging.token.addOnCompleteListener {
+            if (it.isSuccessful && it.result != null) it.result?.let(::onNewToken)
+            else Log.w(TAG, "failed to fetch registration token")
+        }
     }
 
     override fun onNewToken(token: String) {

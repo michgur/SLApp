@@ -26,10 +26,9 @@ class SlappRepositoryImpl(
     init {
         userPreferences.phoneNumber.observeForever { uid ->
             scope.launch {
-                val flow = service.getLists(uid).map { lists ->
+                service.getLists(uid).map { lists ->
                     lists.associate { it.id to listMapper.toModel(it) }
-                }
-                listsFlow.emitAll(flow)
+                }.let { listsFlow.emitAll(it) }
             }
         }
     }

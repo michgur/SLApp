@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.createDataStore
 import androidx.lifecycle.asLiveData
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -16,7 +17,7 @@ import javax.inject.Singleton
 /* caches in a DataStore user details & preferences */
 @Singleton
 class UserPreferences @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext context: Context
 ) {
     private val dataStore = context.createDataStore(DATASTORE_NAME)
 
@@ -26,7 +27,7 @@ class UserPreferences @Inject constructor(
 
     val registrationToken = dataStore.data.map {
         it[KEY_REGISTRATION_TOKEN]
-    }.filterNotNull().distinctUntilChanged().asLiveData()
+    }.filterNotNull().distinctUntilChanged()
 
     val hasReadContactsPermission = dataStore.data.map {
         it[KEY_CONTACT_PERMISSION] ?: false
