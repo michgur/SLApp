@@ -20,6 +20,7 @@ import com.klmn.slapp.ui.MainActivity
 import com.klmn.slapp.ui.components.HorizontalMarginItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 import kotlin.math.abs
@@ -77,6 +78,8 @@ class HomeFragment : Fragment() {
             val hPadding = resources.getDimension(R.dimen.viewpager_hpadding)
             val translationX = -(peek + hPadding)
             setPageTransformer { page, position ->
+                binding.progressBar.isVisible = false
+
                 (page as CardView).cardElevation = 4 + (12 * (1 - abs(position)))
                 page.translationX = translationX * position
                 page.scaleY = 1 - (.025f * abs(position))

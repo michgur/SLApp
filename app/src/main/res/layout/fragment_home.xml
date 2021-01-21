@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/color_home_background"
-    android:clipToPadding="false"
-    android:clipChildren="false">
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:contentDescription="@string/app_name"
@@ -25,8 +26,18 @@
         android:layout_height="match_parent"
         android:layout_marginTop="56dp"
         android:layout_marginBottom="56dp"
-        android:clipToPadding="false"
-        android:clipChildren="false" />
+        android:clipChildren="false"
+        android:clipToPadding="false" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/accentColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
@@ -44,9 +55,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="88dp"
         android:backgroundTint="@color/primaryDarkColor"
-        android:textAppearance="@style/AppTitle"
-        android:text="@string/request_permission"
         android:padding="16dp"
+        android:text="@string/request_permission"
+        android:textAppearance="@style/AppTitle"
         app:icon="@drawable/ic_person_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
