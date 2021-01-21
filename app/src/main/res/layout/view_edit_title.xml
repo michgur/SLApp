@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="fill_horizontal">
+
+    <EditText
+        android:id="@+id/field_list_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/btn_cancel"
+        android:autofillHints=""
+        android:hint="@string/new_list_hint"
+        android:inputType="text"
+        android:maxLength="20"
+        android:textColor="@color/iconColor" />
+
+    <ImageButton
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:layout_toStartOf="@id/btn_done"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/action_edit"
+        android:src="@drawable/ic_clear"
+        android:tint="@color/iconColor" />
+
+    <ImageButton
+        android:id="@+id/btn_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/action_edit"
+        android:src="@drawable/ic_done"
+        android:tint="@color/iconColor"
+        android:visibility="gone" />
+
+</RelativeLayout>

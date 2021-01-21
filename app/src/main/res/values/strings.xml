@@ -45,4 +45,5 @@
     <string name="permission_dialog_message">To share lists with people you know, <B>SlApp</B> needs to access your contacts.</string>
     <string name="permission_dialog_pos">OK</string>
     <string name="request_permission">Access Contacts</string>
+    <string name="action_edit">Edit Title</string>
 </resources>

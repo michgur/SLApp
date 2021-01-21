@@ -11,6 +11,8 @@ interface FirestoreService {
 
     suspend fun addList(list: FirestoreEntities.SList): String
 
+    suspend fun setListName(listId: String, name: String)
+
     // user operations
     suspend fun addUsers(listId: String, users: List<String>)
 

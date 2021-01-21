@@ -42,6 +42,9 @@ class SlappRepositoryImpl(
     override suspend fun getListName(listId: String) =
         listsFlow.mapNotNull { it[listId]?.name }.distinctUntilChanged()
 
+    override suspend fun setListName(listId: String, name: String) =
+        service.setListName(listId, name)
+
     override suspend fun addItem(listId: String, item: SlappItem) =
         service.addItem(listId, itemMapper.toEntity(item))
 

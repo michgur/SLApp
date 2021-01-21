@@ -42,6 +42,10 @@ class FirestoreServiceImpl : FirestoreService {
     override suspend fun addList(list: FirestoreEntities.SList) =
         collection.add(list).await().id
 
+    override suspend fun setListName(listId: String, name: String) {
+        collection.document(listId).update("name", name).await()
+    }
+
     override suspend fun addUsers(listId: String, users: List<String>) {
         collection.document(listId)
             .update(

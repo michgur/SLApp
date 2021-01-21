@@ -13,6 +13,8 @@ interface SlappRepository {
 
     suspend fun getListName(listId: String): Flow<String>
 
+    suspend fun setListName(listId: String, name: String)
+
     /* item operations */
     suspend fun addItem(listId: String, item: SlappItem)
 

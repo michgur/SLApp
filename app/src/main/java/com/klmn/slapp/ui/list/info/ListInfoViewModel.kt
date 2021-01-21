@@ -36,4 +36,8 @@ class ListInfoViewModel @ViewModelInject constructor(
         if (it.isNotEmpty()) repository.getListName(it)
         else emptyFlow()
     }.asLiveData()
+
+    fun setListName(name: String) = viewModelScope.launch {
+        repository.setListName(listId.value, name)
+    }
 }
