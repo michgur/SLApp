@@ -4,7 +4,7 @@ import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.klmn.slapp.data.SlappRepository
-import com.klmn.slapp.data.contacts.ContactsRepository
+import com.klmn.slapp.data.contacts.ContactProvider
 import com.klmn.slapp.domain.Contact
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 @ExperimentalCoroutinesApi
 class AddUsersViewModel @ViewModelInject constructor(
     private val repository: SlappRepository,
-    private val contactsRepository: ContactsRepository,
+    private val contactProvider: ContactProvider,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val selection = mutableSetOf<Contact>()
@@ -23,7 +23,7 @@ class AddUsersViewModel @ViewModelInject constructor(
     val query = MutableLiveData("")
 
     val contacts = query.asFlow().mapLatest {
-        contactsRepository.fetchContacts(it)
+        contactProvider.fetchContacts(it)
     }
 
     fun addUsers(listId: String) = viewModelScope.launch {

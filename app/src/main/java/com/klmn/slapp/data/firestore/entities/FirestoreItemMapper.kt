@@ -2,12 +2,12 @@ package com.klmn.slapp.data.firestore.entities
 
 import com.google.firebase.Timestamp
 import com.klmn.slapp.common.EntityModelMapper
-import com.klmn.slapp.data.contacts.ContactsRepository
+import com.klmn.slapp.data.contacts.ContactProvider
 import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappItem
 
 class FirestoreItemMapper(
-    private val contactsRepository: ContactsRepository
+    private val contactProvider: ContactProvider
 ) : EntityModelMapper<FirestoreEntities.Item, SlappItem> {
     override fun toEntity(model: SlappItem) = FirestoreEntities.Item(
         model.name,
@@ -17,7 +17,7 @@ class FirestoreItemMapper(
 
     override fun toModel(entity: FirestoreEntities.Item) = SlappItem(
         entity.name,
-        contactsRepository.getContact(entity.user_id) ?: Contact(entity.user_id),
+        contactProvider.getContact(entity.user_id) ?: Contact(entity.user_id),
         entity.timestamp.seconds
     )
 }
