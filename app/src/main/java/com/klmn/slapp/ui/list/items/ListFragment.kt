@@ -1,9 +1,5 @@
 package com.klmn.slapp.ui.list.items
 
-import android.animation.Animator
-import android.animation.AnimatorInflater
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -137,7 +133,12 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         })
 
         binding.bottomSheetShop.apply {
-            viewTitle.setOnClickListener { sheetBehavior.expand() }
+            viewTitle.setOnClickListener {
+                sheetBehavior.apply {
+                    if (isExpanded()) collapse()
+                    else expand()
+                }
+            }
             btnDone.setOnClickListener { finishShoppingMode(true) }
             btnCancel.setOnClickListener { finishShoppingMode(false) }
             recyclerViewItems.apply {
@@ -191,7 +192,10 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         scrollOnSubmitList = true
     }
 
-    private fun enterShoppingMode() = sheetBehavior.show()
+    private fun enterShoppingMode() {
+        if (viewModel.cartItems.value.isEmpty()) sheetBehavior.collapse()
+        else sheetBehavior.expand()
+    }
 
     private fun finishShoppingMode(success: Boolean) {
         viewModel.finishShopping(success)

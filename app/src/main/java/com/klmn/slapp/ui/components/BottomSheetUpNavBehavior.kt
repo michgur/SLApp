@@ -37,8 +37,12 @@ class BottomSheetUpNavBehavior(context: Context, attrs: AttributeSet) :
     }
 
     fun hide() { state = STATE_HIDDEN }
-    fun show() { state = STATE_COLLAPSED }
+    fun collapse() { state = STATE_COLLAPSED }
     fun expand() { state = STATE_EXPANDED }
+
+    fun isHidden() = state == STATE_HIDDEN
+    fun isCollapsed() = state == STATE_COLLAPSED
+    fun isExpanded() = state == STATE_EXPANDED
 
     private fun addCallback() {
         if (collapseCallback != null) return
