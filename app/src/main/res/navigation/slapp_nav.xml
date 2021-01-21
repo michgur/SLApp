@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.klmn.slapp.ui.list.items.ListFragment"
+        android:name="com.klmn.slapp.ui.list.items.ListItemsFragment"
         android:label="{listName}"
         tools:layout="@layout/fragment_list_items">
         <argument

@@ -33,12 +33,12 @@ import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
+class ListItemsFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
     private var _binding: FragmentListItemsBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: ListItemsViewModel by viewModels()
-    private val args: ListFragmentArgs by navArgs()
+    private val args: ListItemsFragmentArgs by navArgs()
 
     private var selectionToolbar: ActionMode? = null
 
@@ -61,7 +61,7 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
 
         binding.viewTitle.setOnClickListener {
             findNavController().navigate(
-                ListFragmentDirections.actionListFragmentToListInfoFragment(
+                ListItemsFragmentDirections.actionListFragmentToListInfoFragment(
                     args.listId,
                     viewModel.listName.value ?: ""
                 )

@@ -14,15 +14,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.transition.Transition
 import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.R
-import com.klmn.slapp.messaging.fcm.MessagingService
 import com.klmn.slapp.databinding.FragmentHomeBinding
 import com.klmn.slapp.ui.MainActivity
 import com.klmn.slapp.ui.components.HorizontalMarginItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
-import javax.inject.Inject
 import kotlin.math.abs
 
 @ExperimentalCoroutinesApi
