@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Slide
 import com.google.android.material.transition.MaterialContainerTransform
 import com.klmn.slapp.R
+import com.klmn.slapp.common.getColor
 import com.klmn.slapp.ui.components.MultiSelectListAdapter
 import com.klmn.slapp.databinding.FragmentAddUsersBinding
 import com.klmn.slapp.domain.Contact
@@ -43,7 +44,7 @@ class AddUsersFragment : Fragment(), MultiSelectListAdapter.Callback<Contact>,
             startView = requireActivity().findViewById(R.id.view_add_users)
             endView = binding.root
             scrimColor = Color.TRANSPARENT
-            setAllContainerColors(resources.getColor(R.color.primaryColor))
+            setAllContainerColors(getColor(R.color.primaryColor))
         }
         returnTransition = Slide()
 

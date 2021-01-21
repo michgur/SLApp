@@ -160,8 +160,8 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
             .addCallback(viewLifecycleOwner) {
                 findNavController().navigate(R.id.action_listFragment_to_exitDialogFragment)
             }
-        // if user still has items in the cart, show exit dialog
         viewModel.cartItems.asLiveData().observe(viewLifecycleOwner) {
+            // if user still has items in the cart, show exit dialog
             exitDialogCallback.isEnabled = it.isNotEmpty()
 
             binding.viewItemInput.apply {

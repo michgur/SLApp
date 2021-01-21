@@ -3,8 +3,12 @@ package com.klmn.slapp.common
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,3 +38,15 @@ fun Activity.hideKeyboard() {
 }
 
 fun Fragment.hideKeyboard() { requireActivity().hideKeyboard() }
+
+fun Fragment.getColor(@ColorRes id: Int) =
+    ResourcesCompat.getColor(resources, id, requireContext().theme)
+
+fun View.getColor(@ColorRes id: Int) =
+    ResourcesCompat.getColor(resources, id, context.theme)
+
+fun Fragment.getDrawable(@DrawableRes id: Int) =
+    ResourcesCompat.getDrawable(resources, id, requireContext().theme)
+
+fun View.getDrawable(@DrawableRes id: Int) =
+    ResourcesCompat.getDrawable(resources, id, context.theme)

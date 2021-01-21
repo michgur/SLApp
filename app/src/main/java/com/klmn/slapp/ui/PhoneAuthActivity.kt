@@ -7,6 +7,7 @@ import android.telephony.TelephonyManager
 import android.view.View.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.ConfigurationCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.FirebaseException
@@ -42,7 +43,7 @@ class PhoneAuthActivity : AppCompatActivity() {
         binding = ActivityPhoneAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Firebase.auth.setLanguageCode(resources.configuration.locale.language)
+        Firebase.auth.setLanguageCode(ConfigurationCompat.getLocales(resources.configuration)[0].language)
 
         val manager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
         countryCode = "+" + COUNTRY_CODES[manager.simCountryIso.toUpperCase(Locale.ROOT)].toString()
