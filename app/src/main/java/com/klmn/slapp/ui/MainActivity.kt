@@ -57,9 +57,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         navController = findNavController(R.id.fragment_container_view)
-        navController.addOnDestinationChangedListener { _, _, _ ->
-            println("hello")
-            hideKeyboard() }
+        navController.addOnDestinationChangedListener { _, _, _ -> hideKeyboard() }
     }
 
     companion object {

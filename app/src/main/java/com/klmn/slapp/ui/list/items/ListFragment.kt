@@ -71,6 +71,10 @@ class ListFragment : Fragment(), MultiSelectListAdapter.Callback<SlappItem> {
         binding.toolbar.apply {
             setupWithNavController(findNavController())
             (requireActivity() as AppCompatActivity).setSupportActionBar(this)
+            setNavigationOnClickListener {
+                if (exitDialogCallback.isEnabled) exitDialogCallback.handleOnBackPressed()
+                else findNavController().navigateUp()
+            }
         }
 
         viewModel.listName.observe(viewLifecycleOwner, binding.textListName::setText)

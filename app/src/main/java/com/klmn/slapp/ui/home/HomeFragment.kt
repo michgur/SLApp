@@ -42,9 +42,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
-            .setDuration(500L).addTarget(binding.root)
+            .setDuration(500L)
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-            .setDuration(500L).addTarget(binding.root)
+            .setDuration(500L)
 
         adapter = ListPreviewAdapter(this)
         adapter.setOnItemClickListener(::onPreviewClick)
@@ -88,8 +88,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun onPreviewClick(preview: View) {
-        (exitTransition as Transition).targets[0] = preview
-        (reenterTransition as Transition).targets[0] = preview
+        (exitTransition as Transition).targets.apply {
+            clear()
+            add(preview)
+        }
+        (reenterTransition as Transition).targets.apply {
+            clear()
+            add(preview)
+        }
 
         viewModel.position = binding.viewPagerLists.currentItem
         findNavController().navigate(

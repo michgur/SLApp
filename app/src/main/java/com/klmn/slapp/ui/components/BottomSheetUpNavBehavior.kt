@@ -27,8 +27,9 @@ class BottomSheetUpNavBehavior(context: Context, attrs: AttributeSet) :
         addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == STATE_HIDDEN) collapseCallback?.remove()
-                else if (newState == STATE_COLLAPSED) addCallback()
+                if (newState == STATE_HIDDEN)
+                    collapseCallback?.remove().also { collapseCallback = null }
+                else if (collapseCallback == null) addCallback()
             }
         })
 
