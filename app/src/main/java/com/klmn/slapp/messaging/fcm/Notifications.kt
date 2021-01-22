@@ -24,7 +24,7 @@ fun Service.pushNotification(title: String?, message: String?) {
     val notification = NotificationCompat.Builder(this, MessagingService.CHANNEL_ID)
         .setContentTitle(title)
         .setContentText(message)
-        .setSmallIcon(R.drawable.ic_launcher_foreground)
+        .setSmallIcon(R.drawable.ic_shopping_cart)
         .setAutoCancel(true)
         .setContentIntent(pendingIntent)
         .build()

@@ -45,6 +45,9 @@ class SlappRepositoryImpl(
     override suspend fun setListName(listId: String, name: String) =
         service.setListName(listId, name)
 
+    override suspend fun setListNotificationKey(listId: String, key: String) =
+        service.setListNotificationKey(listId, key)
+
     override suspend fun addItem(listId: String, item: SlappItem) =
         service.addItem(listId, itemMapper.toEntity(item))
 
@@ -59,19 +62,4 @@ class SlappRepositoryImpl(
 
     override suspend fun addUsers(listId: String, users: Iterable<Contact>) =
         service.addUsers(listId, users.map { it.phoneNumber })
-
-    override suspend fun refreshToken(uid: String, token: String) =
-        listsFlow.value.values.forEach { list ->
-            // only send update if the data
-            if (list.users.find { it.phoneNumber == uid }?.registrationToken != token)
-                setToken(uid, token, list.id, list.users)
-        }
-
-    private suspend fun setToken(
-        uid: String, token: String,
-        listId: String, users: List<Contact>
-    ) = users.map {
-        if (it.phoneNumber == uid) token
-        else it.registrationToken ?: ""
-    }.let { service.setTokens(listId, it) }
 }

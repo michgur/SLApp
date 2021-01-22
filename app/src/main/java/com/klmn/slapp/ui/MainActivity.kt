@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     *   -determining whether should authenticate & starting PhoneAuthActivity if necessary
     *   -determining whether app has READ_CONTACTS permission & send request if necessary
     *   -validating GooglePlayServices exist for firebase calls
-    *   -managing the client's registration token & sending it to repository (happens in viewModel)
+    *   -managing the client's registration token & sending it to fcm (happens in viewModel)
     * */
     private val viewModel: MainActivityViewModel by viewModels()
 

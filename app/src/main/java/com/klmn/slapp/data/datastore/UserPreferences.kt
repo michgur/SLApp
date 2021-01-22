@@ -27,7 +27,7 @@ class UserPreferences @Inject constructor(
 
     val registrationToken = dataStore.data.map {
         it[KEY_REGISTRATION_TOKEN]
-    }.filterNotNull().distinctUntilChanged()
+    }.asLiveData()
 
     val hasReadContactsPermission = dataStore.data.map {
         it[KEY_CONTACT_PERMISSION] ?: false

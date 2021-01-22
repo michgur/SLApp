@@ -13,10 +13,10 @@ class FirestoreListMapper(
     override fun toEntity(model: SlappList) = FirestoreEntities.SList(
         model.id,
         model.name,
+        model.notificationKey,
         model.user.phoneNumber,
         Timestamp(model.timestamp, 0),
         model.users.map(Contact::phoneNumber),
-        model.users.map { it.registrationToken ?: "" },
         model.items.map {
             FirestoreEntities.Item(
                 it.name,
@@ -29,6 +29,7 @@ class FirestoreListMapper(
     override fun toModel(entity: FirestoreEntities.SList) = SlappList(
         entity.id,
         entity.name,
+        entity.notification_key,
         getContact(entity.created_by),
         entity.timestamp.seconds,
         entity.items.map {
@@ -38,12 +39,8 @@ class FirestoreListMapper(
                 it.timestamp.seconds
             )
         }.toMutableList(),
-        entity.users.mapIndexed { i, u ->
-            getContact(u, entity.tokens.takeIf { it.size > i }?.get(i))
-        }
+        entity.users.map(::getContact)
     )
 
-    private fun getContact(number: String, token: String? = null) =
-        contactProvider.getContact(number)?.copy(registrationToken = token)
-            ?: Contact(number, "", token)
+    private fun getContact(number: String) = contactProvider.getContact(number) ?: Contact(number)
 }

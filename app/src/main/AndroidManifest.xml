@@ -37,10 +37,10 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher_background" />
+            android:resource="@drawable/ic_shopping_cart" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@drawable/ic_launcher_foreground" />
+            android:resource="@color/accentColor" />
 
     </application>
 

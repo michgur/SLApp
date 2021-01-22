@@ -13,6 +13,8 @@ interface FirestoreService {
 
     suspend fun setListName(listId: String, name: String)
 
+    suspend fun setListNotificationKey(listId: String, key: String)
+
     // user operations
     suspend fun addUsers(listId: String, users: List<String>)
 
@@ -20,7 +22,4 @@ interface FirestoreService {
     suspend fun addItem(listId: String, item: FirestoreEntities.Item)
 
     suspend fun deleteItem(listId: String, item: FirestoreEntities.Item)
-
-    // registration token operations
-    suspend fun setTokens(listId: String, tokens: List<String>)
 }

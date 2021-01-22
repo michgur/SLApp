@@ -92,7 +92,7 @@ class ListInfoFragment : Fragment() {
 
     private fun editTitle(menuItem: MenuItem) {
         val name = titleActionView.fieldListName.text.toString()
-        if (name.isNotBlank()) {
+        if (name.isNotBlank() && name != viewModel.listName.value) {
             viewModel.setListName(name)
             menuItem.collapseActionView()
         }

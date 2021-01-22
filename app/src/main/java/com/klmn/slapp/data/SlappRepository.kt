@@ -15,6 +15,8 @@ interface SlappRepository {
 
     suspend fun setListName(listId: String, name: String)
 
+    suspend fun setListNotificationKey(listId: String, key: String)
+
     /* item operations */
     suspend fun addItem(listId: String, item: SlappItem)
 
@@ -26,7 +28,4 @@ interface SlappRepository {
     suspend fun getUsers(listId: String): Flow<List<Contact>>
 
     suspend fun addUsers(listId: String, users: Iterable<Contact>)
-
-    /* registration token operations */
-    suspend fun refreshToken(uid: String, token: String)
 }

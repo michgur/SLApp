@@ -3,6 +3,7 @@ package com.klmn.slapp.domain
 data class SlappList(
     val id: String = "",
     val name: String = "",
+    val notificationKey: String = "",
     val user: Contact = Contact(""),
     val timestamp: Long = System.currentTimeMillis() / 1000L,
     val items: MutableList<SlappItem> = mutableListOf(),
