@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
@@ -17,7 +18,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.klmn.slapp.R
 import com.klmn.slapp.common.hideKeyboard
+import com.klmn.slapp.data.datastore.UserPreferences
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -27,9 +31,8 @@ class MainActivity : AppCompatActivity() {
     *   -determining whether should authenticate & starting PhoneAuthActivity if necessary
     *   -determining whether app has READ_CONTACTS permission & send request if necessary
     *   -validating GooglePlayServices exist for firebase calls
-    *   -managing the client's registration token & sending it to fcm (happens in viewModel)
     * */
-    private val viewModel: MainActivityViewModel by viewModels()
+    @Inject lateinit var userPreferences: UserPreferences
 
     private lateinit var navController: NavController
 
@@ -39,19 +42,21 @@ class MainActivity : AppCompatActivity() {
         validateGooglePlayServices()
 
         if (Firebase.auth.currentUser == null) goToAuthActivity()
-        viewModel.shouldAuthenticate.observe(this) {
-            if (it) {
+        userPreferences.phoneNumber.observe(this) {
+            if (it.isNullOrBlank()) {
                 Firebase.auth.signOut()
                 goToAuthActivity()
             }
         }
 
-        viewModel.saveHasContactsPermission(
-            ContextCompat.checkSelfPermission(
-                this@MainActivity,
-                READ_CONTACTS
-            ) == PERMISSION_GRANTED
-        )
+        lifecycleScope.launchWhenStarted {
+            userPreferences.saveHasReadContactsPermission(
+                ContextCompat.checkSelfPermission(
+                    this@MainActivity,
+                    READ_CONTACTS
+                ) == PERMISSION_GRANTED
+            )
+        }
 
         setTheme(R.style.AppTheme)
         setContentView(R.layout.activity_main)
@@ -96,7 +101,7 @@ class MainActivity : AppCompatActivity() {
             super.onActivityResult(requestCode, resultCode, data)
         else {
             if (data?.getBooleanExtra("success", false) != true) finish()
-            else if (viewModel.shouldRequestContactsPermission.value == true)
+            else if (userPreferences.hasReadContactsPermission.value != true)
                 AlertDialog.Builder(this)
                     .setMessage(R.string.permission_dialog_message)
                     .setPositiveButton(R.string.permission_dialog_pos) { dialog, _ ->
@@ -114,7 +119,10 @@ class MainActivity : AppCompatActivity() {
     ) {
         if (requestCode != PERMISSION_REQUEST_CODE)
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        viewModel.saveHasContactsPermission(grantResults[0] == PERMISSION_GRANTED)
+        lifecycleScope.launch {
+            userPreferences.saveHasReadContactsPermission(
+                grantResults[0] == PERMISSION_GRANTED)
+        }
     }
 
     override fun onSupportNavigateUp() =
