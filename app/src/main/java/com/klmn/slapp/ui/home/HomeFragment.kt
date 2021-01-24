@@ -15,6 +15,7 @@ import androidx.transition.Transition
 import com.google.android.material.transition.MaterialSharedAxis
 import com.klmn.slapp.R
 import com.klmn.slapp.databinding.FragmentHomeBinding
+import com.klmn.slapp.domain.SlappList
 import com.klmn.slapp.ui.MainActivity
 import com.klmn.slapp.ui.components.HorizontalMarginItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -96,7 +97,7 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    private fun onPreviewClick(preview: View) {
+    private fun onPreviewClick(list: SlappList, preview: View) {
         (exitTransition as Transition).targets.apply {
             clear()
             add(preview)
@@ -106,13 +107,12 @@ class HomeFragment : Fragment() {
             add(preview)
         }
 
-        val position = binding.viewPagerLists.currentItem
-        viewModel.viewedListId = adapter.getListId(position)
+        viewModel.viewedListId = list.id
         viewModel.smoothScroll = false
         findNavController().navigate(
             HomeFragmentDirections.actionHomeFragmentToListFragment(
                 viewModel.viewedListId,
-                adapter.getListName(position)
+                list.name
             )
         )
     }

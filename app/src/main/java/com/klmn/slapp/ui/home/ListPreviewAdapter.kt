@@ -19,8 +19,8 @@ import com.klmn.slapp.domain.SlappListDiff
 class ListPreviewAdapter(private val favorites: LiveData<Set<String>>) :
     ListAdapter<SlappList, ListPreviewAdapter.ViewHolder>(SlappListDiff) {
 
-    private var onItemClickListener: ((View) -> Unit)? = null
-    fun setOnItemClickListener(listener: (View) -> Unit) { onItemClickListener = listener }
+    private var onItemClickListener: ((SlappList, View) -> Unit)? = null
+    fun setOnItemClickListener(listener: (SlappList, View) -> Unit) { onItemClickListener = listener }
 
     private var onItemFavorite: ((SlappList) -> Unit)? = null
     fun setOnItemFavorite(listener: (SlappList) -> Unit) { onItemFavorite = listener }
@@ -32,7 +32,7 @@ class ListPreviewAdapter(private val favorites: LiveData<Set<String>>) :
                 layoutManager = LinearLayoutManager(parent.context)
             }
             btnOverlay.setOnClickListener {
-                onItemClickListener?.invoke(root)
+                onItemClickListener?.invoke(currentList[adapterPosition], root)
             }
             btnFavorite.setOnClickListener {
                 onItemFavorite?.invoke(currentList[adapterPosition])
@@ -49,9 +49,6 @@ class ListPreviewAdapter(private val favorites: LiveData<Set<String>>) :
         }
         holder.favorite = favorites.value?.contains(list.id) == true
     }
-
-    fun getListId(position: Int) = currentList[position].id
-    fun getListName(position: Int) = currentList[position].name
 
     fun getListPosition(id: String) = currentList.indexOfFirst { it.id == id }
 
