@@ -46,4 +46,5 @@
     <string name="permission_dialog_pos">OK</string>
     <string name="request_permission">Access Contacts</string>
     <string name="action_edit">Edit Title</string>
+    <string name="favorite">favorite</string>
 </resources>

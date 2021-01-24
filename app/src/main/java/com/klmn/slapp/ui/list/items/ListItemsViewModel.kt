@@ -71,8 +71,7 @@ class ListItemsViewModel @ViewModelInject constructor(
         if (success) {
             cartItems.value.forEach(::deleteItem)
             viewModelScope.launch {
-                userPreferences.registrationToken.first().let { token ->
-                    println("Sending notification")
+                userPreferences.registrationToken.value?.let { token ->
                     PushNotification(
                         NotificationData("hello", "i bought something"), token
                     ).let {

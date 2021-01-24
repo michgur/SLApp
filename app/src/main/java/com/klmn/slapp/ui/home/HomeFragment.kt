@@ -44,12 +44,18 @@ class HomeFragment : Fragment() {
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
             .setDuration(500L)
 
-        adapter = ListPreviewAdapter(this)
+        adapter = ListPreviewAdapter(viewModel.favorites)
         adapter.setOnItemClickListener(::onPreviewClick)
+        adapter.setOnItemFavorite {
+            // maintain position since lists will be reordered
+//            viewModel.position = binding.viewPagerLists.currentItem
+            viewModel.flipFavorite(it.id)
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.listsFlow.collect { lists ->
-                adapter.submitList(lists) {
+                if (lists.isEmpty()) binding.progressBar.isVisible = false
+                else adapter.submitList(lists) {
                     binding.viewPagerLists.setCurrentItem(viewModel.position, false)
                 }
             }
