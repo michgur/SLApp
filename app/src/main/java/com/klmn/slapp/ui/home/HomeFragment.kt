@@ -48,7 +48,8 @@ class HomeFragment : Fragment() {
         adapter.setOnItemClickListener(::onPreviewClick)
         adapter.setOnItemFavorite {
             // maintain position since lists will be reordered
-//            viewModel.position = binding.viewPagerLists.currentItem
+            viewModel.viewedListId = it.id
+            viewModel.smoothScroll = true
             viewModel.flipFavorite(it.id)
         }
 
@@ -56,7 +57,9 @@ class HomeFragment : Fragment() {
             viewModel.listsFlow.collect { lists ->
                 if (lists.isEmpty()) binding.progressBar.isVisible = false
                 else adapter.submitList(lists) {
-                    binding.viewPagerLists.setCurrentItem(viewModel.position, false)
+                    adapter.getListPosition(viewModel.viewedListId).takeIf { it >= 0 }?.let {
+                        binding.viewPagerLists.setCurrentItem(it, viewModel.smoothScroll)
+                    }
                 }
             }
         }
@@ -103,11 +106,13 @@ class HomeFragment : Fragment() {
             add(preview)
         }
 
-        viewModel.position = binding.viewPagerLists.currentItem
+        val position = binding.viewPagerLists.currentItem
+        viewModel.viewedListId = adapter.getListId(position)
+        viewModel.smoothScroll = false
         findNavController().navigate(
             HomeFragmentDirections.actionHomeFragmentToListFragment(
-                adapter.getListId(viewModel.position),
-                adapter.getListName(viewModel.position)
+                viewModel.viewedListId,
+                adapter.getListName(position)
             )
         )
     }

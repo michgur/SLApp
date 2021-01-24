@@ -3,7 +3,6 @@ package com.klmn.slapp.ui.home
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -53,6 +52,8 @@ class ListPreviewAdapter(private val favorites: LiveData<Set<String>>) :
 
     fun getListId(position: Int) = currentList[position].id
     fun getListName(position: Int) = currentList[position].name
+
+    fun getListPosition(id: String) = currentList.indexOfFirst { it.id == id }
 
     class ViewHolder(parent: ViewGroup) : BoundViewHolder<ViewListSmallBinding>(parent, ViewListSmallBinding::inflate) {
         var favorite = false

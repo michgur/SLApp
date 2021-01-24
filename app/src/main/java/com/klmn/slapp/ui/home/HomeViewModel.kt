@@ -34,7 +34,8 @@ class HomeViewModel @ViewModelInject constructor(
 
     val favorites = userPreferences.favorites
 
-    var position = 0
+    var viewedListId = ""
+    var smoothScroll = false
 
     val hidePermissionRequest = userPreferences.hasReadContactsPermission
 
