@@ -13,7 +13,6 @@ object FirestoreEntities {
     data class SList(
         @DocumentId val id: String = "",
         val name: String = "",
-        val notification_key: String = "",
         val created_by: String = "",
         val timestamp: Timestamp = Timestamp.now(),
         val users: List<String> = listOf(),

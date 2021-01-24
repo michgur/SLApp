@@ -46,10 +46,6 @@ class FirestoreServiceImpl : FirestoreService {
         collection.document(listId).update("name", name).await()
     }
 
-    override suspend fun setListNotificationKey(listId: String, key: String) {
-        collection.document(listId).update("notification_key", key).await()
-    }
-
     override suspend fun addUsers(listId: String, users: List<String>) {
         collection.document(listId)
             .update(

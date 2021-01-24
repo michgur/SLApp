@@ -13,7 +13,6 @@ class FirestoreListMapper(
     override fun toEntity(model: SlappList) = FirestoreEntities.SList(
         model.id,
         model.name,
-        model.notificationKey,
         model.user.phoneNumber,
         Timestamp(model.timestamp, 0),
         model.users.map(Contact::phoneNumber),
@@ -29,7 +28,6 @@ class FirestoreListMapper(
     override fun toModel(entity: FirestoreEntities.SList) = SlappList(
         entity.id,
         entity.name,
-        entity.notification_key,
         getContact(entity.created_by),
         entity.timestamp.seconds,
         entity.items.map {

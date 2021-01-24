@@ -15,8 +15,6 @@ interface SlappRepository {
 
     suspend fun setListName(listId: String, name: String)
 
-    suspend fun setListNotificationKey(listId: String, key: String)
-
     /* item operations */
     suspend fun addItem(listId: String, item: SlappItem)
 

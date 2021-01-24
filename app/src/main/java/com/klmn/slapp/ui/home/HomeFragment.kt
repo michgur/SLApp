@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
-import androidx.core.view.get
-import androidx.core.view.isVisible
+import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -58,8 +57,11 @@ class HomeFragment : Fragment() {
             viewModel.listsFlow.collect { lists ->
                 if (lists.isEmpty()) binding.progressBar.isVisible = false
                 else adapter.submitList(lists) {
-                    adapter.getListPosition(viewModel.viewedListId).takeIf { it >= 0 }?.let {
-                        binding.viewPagerLists.setCurrentItem(it, viewModel.smoothScroll)
+                    adapter.getListPosition(viewModel.viewedListId).takeIf { it >= 0 }?.let { id ->
+                        // the viewPager scroll behavior is odd, but this seems to mostly fix it
+                        binding.viewPagerLists.doOnLayout {
+                            binding.viewPagerLists.setCurrentItem(id, viewModel.smoothScroll)
+                        }
                     }
                 }
             }

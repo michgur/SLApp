@@ -45,9 +45,6 @@ class SlappRepositoryImpl(
     override suspend fun setListName(listId: String, name: String) =
         service.setListName(listId, name)
 
-    override suspend fun setListNotificationKey(listId: String, key: String) =
-        service.setListNotificationKey(listId, key)
-
     override suspend fun addItem(listId: String, item: SlappItem) =
         service.addItem(listId, itemMapper.toEntity(item))
 

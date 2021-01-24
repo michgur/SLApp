@@ -7,7 +7,6 @@ import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappList
-import com.klmn.slapp.domain.TokenRequest
 import com.klmn.slapp.messaging.fcm.NotificationAPI
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine

@@ -13,8 +13,6 @@ interface FirestoreService {
 
     suspend fun setListName(listId: String, name: String)
 
-    suspend fun setListNotificationKey(listId: String, key: String)
-
     // user operations
     suspend fun addUsers(listId: String, users: List<String>)
 
