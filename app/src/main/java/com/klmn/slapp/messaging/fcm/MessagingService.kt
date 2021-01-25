@@ -1,6 +1,7 @@
 package com.klmn.slapp.messaging.fcm
 
 import android.util.Log
+import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage

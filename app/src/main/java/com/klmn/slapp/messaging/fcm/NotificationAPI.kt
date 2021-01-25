@@ -8,9 +8,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface NotificationAPI {
-    companion object { const val CONTENT_TYPE = "application/json" }
-
-    @Headers("Authorization: key=$SERVER_KEY", "Content-Type:$CONTENT_TYPE")
+    @Headers("Authorization: key=$SERVER_KEY", "Content-Type:application/json")
     @POST("fcm/send")
     suspend fun postNotification(
         @Body notification: PushNotification

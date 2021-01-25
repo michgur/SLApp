@@ -59,8 +59,9 @@ class HomeFragment : Fragment() {
                 else adapter.submitList(lists) {
                     adapter.getListPosition(viewModel.viewedListId).takeIf { it >= 0 }?.let { id ->
                         // the viewPager scroll behavior is odd, but this seems to mostly fix it
-                        binding.viewPagerLists.doOnLayout {
-                            binding.viewPagerLists.setCurrentItem(id, viewModel.smoothScroll)
+                        binding.viewPagerLists.apply {
+                            if (viewModel.smoothScroll) doOnLayout { setCurrentItem(id, true) }
+                            else setCurrentItem(id, false)
                         }
                     }
                 }

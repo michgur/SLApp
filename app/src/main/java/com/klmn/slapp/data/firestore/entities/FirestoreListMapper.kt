@@ -22,7 +22,8 @@ class FirestoreListMapper(
                 it.user.phoneNumber,
                 Timestamp(it.timestamp, 0)
             )
-        }
+        },
+        model.isNew
     )
 
     override fun toModel(entity: FirestoreEntities.SList) = SlappList(
@@ -37,7 +38,8 @@ class FirestoreListMapper(
                 it.timestamp.seconds
             )
         }.toMutableList(),
-        entity.users.map(::getContact)
+        entity.users.map(::getContact),
+        entity.isNew
     )
 
     private fun getContact(number: String) = contactProvider.getContact(number) ?: Contact(number)

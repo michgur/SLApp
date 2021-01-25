@@ -4,7 +4,7 @@ import android.Manifest.permission.READ_CONTACTS
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
-import androidx.activity.viewModels
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -15,10 +15,14 @@ import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import com.klmn.slapp.R
 import com.klmn.slapp.common.hideKeyboard
 import com.klmn.slapp.data.datastore.UserPreferences
+import com.klmn.slapp.messaging.fcm.MessagingService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,6 +44,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         validateGooglePlayServices()
+
+        Firebase.messaging.token.addOnCompleteListener {
+            if (it.isSuccessful && it.result != null) it.result?.let {
+                lifecycleScope.launchWhenStarted {
+                    userPreferences.saveRegistrationToken(it)
+                }
+            }
+            else Log.w(MessagingService.TAG, "failed to fetch registration token")
+        }
 
         if (Firebase.auth.currentUser == null) goToAuthActivity()
         userPreferences.phoneNumber.observe(this) {

@@ -15,11 +15,12 @@ object MessagingModule {
     const val FCM_URL = "https://fcm.googleapis.com"
 
     @Provides @Singleton
-    fun provideRetrofit() = Retrofit.Builder()
+    fun provideRetrofit(): Retrofit = Retrofit.Builder()
         .baseUrl(FCM_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     @Provides @Singleton
-    fun provideAPI(retrofit: Retrofit) = retrofit.create(NotificationAPI::class.java)
+    fun provideAPI(retrofit: Retrofit): NotificationAPI =
+        retrofit.create(NotificationAPI::class.java)
 }

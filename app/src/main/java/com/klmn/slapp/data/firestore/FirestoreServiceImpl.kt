@@ -1,6 +1,7 @@
 package com.klmn.slapp.data.firestore
 
 import android.util.Log
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -24,9 +25,14 @@ class FirestoreServiceImpl : FirestoreService {
             .addSnapshotListener { snapshot, e ->
                 e?.let { Log.e(TAG, "${e.message}") }
                 snapshot?.let {
+                    val added = snapshot.documentChanges.filter {
+                        it.type == DocumentChange.Type.ADDED
+                    }.map { it.document.id }
                     offer(
                         snapshot.documents.mapNotNull {
-                            it.toObject(FirestoreEntities.SList::class.java)
+                            it.toObject(FirestoreEntities.SList::class.java)?.apply {
+                                isNew = id in added
+                            }
                         }
                     )
                 }
