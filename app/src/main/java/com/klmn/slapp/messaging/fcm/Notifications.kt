@@ -11,9 +11,14 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.google.firebase.functions.ktx.functions
+import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import com.klmn.slapp.R
 import com.klmn.slapp.domain.BuyNotification
+import com.klmn.slapp.domain.User
 import com.klmn.slapp.ui.MainActivity
+import java.lang.Exception
 import kotlin.random.Random
 
 fun MessagingService.pushNotification(data: BuyNotification) {
@@ -53,3 +58,14 @@ private fun createNotificationChannel(notificationManager: NotificationManager) 
     }
     notificationManager.createNotificationChannel(channel)
 }
+
+fun sendNotification(notification: BuyNotification) = Firebase
+    .functions("europe-west1")
+    .getHttpsCallable("sendMessage")
+    .call(Gson().toJson(notification))
+    .addOnFailureListener(Exception::printStackTrace)
+
+fun updateToken(user: User) = Firebase.functions("europe-west1")
+    .getHttpsCallable("updateToken")
+    .call(Gson().toJson(user))
+    .addOnFailureListener { it.printStackTrace() }

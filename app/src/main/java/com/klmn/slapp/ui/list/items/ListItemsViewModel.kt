@@ -3,21 +3,18 @@ package com.klmn.slapp.ui.list.items
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.google.firebase.functions.ktx.functions
-import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
 import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.BuyNotification
 import com.klmn.slapp.domain.Contact
 import com.klmn.slapp.domain.SlappItem
+import com.klmn.slapp.messaging.fcm.sendNotification
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 @ExperimentalCoroutinesApi
 class ListItemsViewModel @ViewModelInject constructor(
@@ -71,27 +68,15 @@ class ListItemsViewModel @ViewModelInject constructor(
         repository.deleteItem(listId.value, item)
     }
 
-    // todo: -move this to MessagingService
-    //      -figure out why the title & message aren't showing
-    //      -remove retrofit & list.isNew
-    //          -consider changing the 'users' collection to also have groups (minimize doc reads on every message)
-    //      -change the message payload to something useful
-    //      security rules for functions & firestore
-    //      move on to the final thing- testing- create a scenario with some fake users
-
     fun finishShopping(success: Boolean) {
         if (success) {
             BuyNotification(
                 listId.value,
                 listName.value ?: "",
-                "+972506674323", // temporary to debug notifications w/ my own phone
+                userPreferences.phoneNumber.value ?: "",
                 System.currentTimeMillis() / 1000L,
                 cartItems.value
-            ).let {
-                Firebase.functions("europe-west1").getHttpsCallable("sendMessage")
-                    .call(Gson().toJson(it))
-                    .addOnFailureListener(Exception::printStackTrace)
-            }
+            ).let { sendNotification(it) }
             cartItems.value.forEach(::deleteItem)
         }
         cartItems.value = listOf()

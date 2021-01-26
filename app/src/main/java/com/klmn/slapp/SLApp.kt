@@ -3,11 +3,9 @@ package com.klmn.slapp
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import com.google.firebase.functions.ktx.functions
-import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.User
+import com.klmn.slapp.messaging.fcm.updateToken
 import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
@@ -26,12 +24,8 @@ class SLApp : Application() {
         super.onCreate()
 
         userPreferences.registrationToken.observeForever { token ->
-            if (token == null) return@observeForever
-            userPreferences.phoneNumber.value?.let { uid ->
-                Firebase.functions("europe-west1")
-                    .getHttpsCallable("updateToken")
-                    .call(Gson().toJson(User(uid, token)))
-                    .addOnFailureListener { it.printStackTrace() }
+            if (token != null) userPreferences.phoneNumber.value?.let { uid ->
+                updateToken(User(uid, token))
             }
         }
     }
