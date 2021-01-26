@@ -75,7 +75,8 @@ class ListItemsViewModel @ViewModelInject constructor(
     init {
         // todo: move this to MessagingService
         //      figure out why the title & message aren't showing
-        //      remove retrofit
+        //      remove retrofit & list.isNew
+        //          consider changing the 'users' collection to also have groups (minimize doc reads on every message)
         //      change the message payload to something useful
         //      security rules for functions & firestore
         //      move on to the final thing- testing- create a scenario with some fake users

@@ -55,8 +55,8 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launchWhenStarted {
             viewModel.listsFlow.collect { lists ->
-                if (lists.isEmpty()) binding.progressBar.isVisible = false
-                else adapter.submitList(lists) {
+                binding.progressBar.isVisible = false
+                adapter.submitList(lists) {
                     adapter.getListPosition(viewModel.viewedListId).takeIf { it >= 0 }?.let { id ->
                         // the viewPager scroll behavior is odd, but this seems to mostly fix it
                         binding.viewPagerLists.apply {
@@ -88,8 +88,6 @@ class HomeFragment : Fragment() {
             val hPadding = resources.getDimension(R.dimen.viewpager_hpadding)
             val translationX = -(peek + hPadding)
             setPageTransformer { page, position ->
-                binding.progressBar.isVisible = false
-
                 (page as CardView).cardElevation = 4 + (12 * (1 - abs(position)))
                 page.translationX = translationX * position
                 page.scaleY = 1 - (.025f * abs(position))

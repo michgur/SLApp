@@ -1,7 +1,6 @@
 package com.klmn.slapp.data
 
 import com.klmn.slapp.common.EntityModelMapper
-import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.data.firestore.FirestoreService
 import com.klmn.slapp.data.firestore.entities.FirestoreEntities
 import com.klmn.slapp.domain.Contact
@@ -17,27 +16,28 @@ import kotlinx.coroutines.launch
 class SlappRepositoryImpl(
     private val service: FirestoreService,
     private val listMapper: EntityModelMapper<FirestoreEntities.SList, SlappList>,
-    private val itemMapper: EntityModelMapper<FirestoreEntities.Item, SlappItem>,
-    userPreferences: UserPreferences
+    private val itemMapper: EntityModelMapper<FirestoreEntities.Item, SlappItem>
 ) : SlappRepository {
-    private var listsFlow = MutableStateFlow(mapOf<String, SlappList>())
+    private var uid: String? = null
+    private var _listsFlow = MutableStateFlow<Map<String, SlappList>?>(null)
+    private var listsFlow = _listsFlow.filterNotNull()
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    init {
-        userPreferences.phoneNumber.observeForever { uid ->
-            scope.launch {
-                service.getLists(uid).map { lists ->
-                    lists.associate { it.id to listMapper.toModel(it) }
-                }.let { listsFlow.emitAll(it) }
-            }
-        }
+    private fun initLists(uid: String) = scope.launch {
+        service.getLists(uid).map { lists ->
+            lists.associate { it.id to listMapper.toModel(it) }
+        }.let { _listsFlow.emitAll(it) }
     }
 
-    // todo: check if a snapshot listener of all lists will actually read all of them everytime
-    //          instead of just the changed one
     override suspend fun addList(list: SlappList) = service.addList(listMapper.toEntity(list))
 
-    override suspend fun getLists(uid: String) = listsFlow.map { it.values.toList() }
+    override suspend fun getLists(uid: String): Flow<List<SlappList>> {
+        if (this.uid != uid) {
+            initLists(uid)
+            this.uid = uid
+        }
+        return listsFlow.map { it.values.toList() }
+    }
 
     override suspend fun getListName(listId: String) =
         listsFlow.mapNotNull { it[listId]?.name }.distinctUntilChanged()

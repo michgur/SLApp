@@ -47,7 +47,6 @@ object RepositoryModule {
     fun provideRepository(
         service: FirestoreService,
         listMapper: EntityModelMapper<FirestoreEntities.SList, SlappList>,
-        itemMapper: EntityModelMapper<FirestoreEntities.Item, SlappItem>,
-        userPreferences: UserPreferences
-    ) = SlappRepositoryImpl(service, listMapper, itemMapper, userPreferences) as SlappRepository
+        itemMapper: EntityModelMapper<FirestoreEntities.Item, SlappItem>
+    ) = SlappRepositoryImpl(service, listMapper, itemMapper) as SlappRepository
 }
