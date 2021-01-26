@@ -11,19 +11,22 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.klmn.slapp.R
+import com.klmn.slapp.domain.BuyNotification
 import com.klmn.slapp.ui.MainActivity
 import kotlin.random.Random
 
-fun Service.pushNotification(title: String?, message: String?) {
+fun Service.pushNotification(data: BuyNotification) {
     val intent = Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     val notificationId = Random.nextInt()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannel(notificationManager)
 
+    println(data)
+
     val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
     val notification = NotificationCompat.Builder(this, MessagingService.CHANNEL_ID)
-        .setContentTitle(title)
-        .setContentText(message)
+        .setContentTitle("title")
+        .setContentText("message")
         .setSmallIcon(R.drawable.ic_shopping_cart)
         .setAutoCancel(true)
         .setContentIntent(pendingIntent)

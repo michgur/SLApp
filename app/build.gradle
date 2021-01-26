@@ -85,4 +85,6 @@ dependencies {
 
     def datastore_version = "1.0.0-alpha06"
     implementation "androidx.datastore:datastore-preferences:$datastore_version"
+
+    implementation 'com.google.android.gms:play-services-basement:17.5.0'
 }

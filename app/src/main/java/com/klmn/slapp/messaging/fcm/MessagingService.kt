@@ -6,7 +6,10 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.messaging.ktx.messaging
+import com.google.gson.Gson
 import com.klmn.slapp.data.datastore.UserPreferences
+import com.klmn.slapp.domain.BuyNotification
+import com.klmn.slapp.domain.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,6 +38,6 @@ class MessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        pushNotification(message.data["title"], message.data["message"])
+        pushNotification(Gson().fromJson(message.data["data"], BuyNotification::class.java))
     }
 }

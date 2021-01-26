@@ -14,35 +14,28 @@ admin.initializeApp();
 
 exports.updateToken = functions.region("europe-west1")
     .https.onCall(async (data, context) => {
-      const uid = data.uid;
-      const token = data.token;
-
-      return admin.firestore().collection("users").doc(uid).set({token: token})
+      const json = JSON.parse(data);
+      return admin.firestore().collection("users").doc(json.uid)
+          .set({token: json.token})
           .then((response) => {
-            console.log("updated token of user " + uid);
+            console.log("updated token of user " + json.uid);
             return {success: true};
           })
           .catch((error) => {
-            console.log("failed to update token of user " + uid);
+            console.log("failed to update token of user " + json.uid);
             return {success: false};
           });
     });
 
 exports.sendMessage = functions.region("europe-west1")
     .https.onCall(async (data, context) => {
-      const listId = data.listId;
-      const uid = data.uid;
-      const messageData = data.message;
-      //  const data = {
-      //    title: req.query.title,
-      //    message: req.query.message
-      //  };
+      const json = JSON.parse(data);
 
       const list = await admin.firestore().collection("lists")
-          .doc(listId).get();
+          .doc(json.listId).get();
 
       const users = list.data().users;
-      const index = users.indexOf(uid);
+      const index = users.indexOf(json.uid);
       if (index > -1) users.splice(index, 1);
 
       const tokens = users
@@ -54,10 +47,9 @@ exports.sendMessage = functions.region("europe-west1")
 
       return Promise.all(tokens).then((tokens) => {
         const message = {
-          data: messageData,
+          data: data,
           tokens: tokens.filter((t) => typeof t === "string"),
         };
-        console.log(message.tokens);
         admin.messaging().sendMulticast(message)
             .then((response) => {
               console.log(response.successCount +
