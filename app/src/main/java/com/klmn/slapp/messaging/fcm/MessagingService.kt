@@ -7,6 +7,8 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.messaging.ktx.messaging
 import com.google.gson.Gson
+import com.klmn.slapp.data.contacts.ContactProvider
+import com.klmn.slapp.data.contacts.ContactProviderImpl
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.BuyNotification
 import com.klmn.slapp.domain.User
@@ -20,7 +22,8 @@ class MessagingService : FirebaseMessagingService() {
         const val CHANNEL_ID = "channel_slapp"
     }
 
-    private val userPreferences = UserPreferences(this)
+    val userPreferences = UserPreferences(this)
+    val contactProvider = ContactProviderImpl(this, userPreferences)
 
     override fun onCreate() {
         Firebase.messaging.token.addOnCompleteListener {

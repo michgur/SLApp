@@ -47,4 +47,7 @@
     <string name="request_permission">Access Contacts</string>
     <string name="action_edit">Edit Title</string>
     <string name="favorite">favorite</string>
+    <string name="notification_title">%1$s has bought items from %2$s</string>
+    <string name="notification_text">tap to view items</string>
+    <string name="view_items_subtitle">%1$s at %2$s</string>
 </resources>

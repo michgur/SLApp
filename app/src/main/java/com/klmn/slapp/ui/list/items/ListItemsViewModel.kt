@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 @ExperimentalCoroutinesApi
 class ListItemsViewModel @ViewModelInject constructor(
@@ -82,17 +83,16 @@ class ListItemsViewModel @ViewModelInject constructor(
         if (success) {
             BuyNotification(
                 listId.value,
-                userPreferences.phoneNumber.value!!,
-                System.currentTimeMillis() * 1000L,
+                listName.value ?: "",
+                "+972506674323", // temporary to debug notifications w/ my own phone
+                System.currentTimeMillis() / 1000L,
                 cartItems.value
             ).let {
                 Firebase.functions("europe-west1").getHttpsCallable("sendMessage")
                     .call(Gson().toJson(it))
-                    .addOnCompleteListener { task ->
-                        println("success: ${task.isSuccessful}")
-                        if (!task.isSuccessful) task.exception?.printStackTrace()
-                    }
+                    .addOnFailureListener(Exception::printStackTrace)
             }
+            cartItems.value.forEach(::deleteItem)
         }
         cartItems.value = listOf()
     }

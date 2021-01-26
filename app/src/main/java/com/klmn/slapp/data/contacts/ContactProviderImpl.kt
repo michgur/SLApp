@@ -29,7 +29,10 @@ class ContactProviderImpl(
             moveToFirst()
             Contact(
                 phoneNumber,
-                getString(getColumnIndex(DISPLAY_NAME_PRIMARY))
+                getColumnIndex(DISPLAY_NAME_PRIMARY).let {
+                    if (count < it) null
+                    else getString(it)
+                }
             )
         }.also { cursor?.close() }
     }

@@ -47,7 +47,7 @@ exports.sendMessage = functions.region("europe-west1")
 
       return Promise.all(tokens).then((tokens) => {
         const message = {
-          data: data,
+          data: {data: data},
           tokens: tokens.filter((t) => typeof t === "string"),
         };
         admin.messaging().sendMulticast(message)

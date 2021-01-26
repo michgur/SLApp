@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavArgument
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -22,6 +24,9 @@ import com.google.firebase.messaging.ktx.messaging
 import com.klmn.slapp.R
 import com.klmn.slapp.common.hideKeyboard
 import com.klmn.slapp.data.datastore.UserPreferences
+import com.klmn.slapp.domain.BuyNotification
+import com.klmn.slapp.domain.Contact
+import com.klmn.slapp.domain.SlappItem
 import com.klmn.slapp.messaging.fcm.MessagingService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -35,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     *   -determining whether should authenticate & starting PhoneAuthActivity if necessary
     *   -determining whether app has READ_CONTACTS permission & send request if necessary
     *   -validating GooglePlayServices exist for firebase calls
+    *   -determining whether should start at viewItemsFragment (notification) or homeFragment
     * */
     @Inject lateinit var userPreferences: UserPreferences
 
@@ -76,6 +82,21 @@ class MainActivity : AppCompatActivity() {
 
         navController = findNavController(R.id.fragment_container_view)
         navController.addOnDestinationChangedListener { _, _, _ -> hideKeyboard() }
+
+        intent.getParcelableExtra<BuyNotification>("notification")?.let { notification ->
+            navController.navInflater.inflate(R.navigation.slapp_nav).let { graph ->
+                graph.startDestination = R.id.viewItemsFragment
+                graph.addArgument(
+                    "notification",
+                    NavArgument.Builder()
+                        .setType(NavType.ParcelableType(BuyNotification::class.java))
+                        .setDefaultValue(notification)
+                        .setIsNullable(false)
+                        .build()
+                )
+                navController.graph = graph
+            }
+        }
     }
 
     companion object {

@@ -79,5 +79,19 @@
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/viewItemsFragment"
+        android:name="com.klmn.slapp.ui.viewitems.ViewItemsFragment"
+        android:label=""
+        tools:layout="@layout/fragment_list_items">
+        <argument
+            android:name="notification"
+            app:argType="com.klmn.slapp.domain.BuyNotification" />
+        <action
+            android:id="@+id/action_viewItemsFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/viewItemsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>
