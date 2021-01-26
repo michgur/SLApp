@@ -25,14 +25,9 @@ class FirestoreServiceImpl : FirestoreService {
             .addSnapshotListener { snapshot, e ->
                 e?.let { Log.e(TAG, "${e.message}") }
                 snapshot?.let {
-                    val added = snapshot.documentChanges.filter {
-                        it.type == DocumentChange.Type.ADDED
-                    }.map { it.document.id }
                     offer(
                         snapshot.documents.mapNotNull {
-                            it.toObject(FirestoreEntities.SList::class.java)?.apply {
-                                isNew = id in added
-                            }
+                            it.toObject(FirestoreEntities.SList::class.java)
                         }
                     )
                 }

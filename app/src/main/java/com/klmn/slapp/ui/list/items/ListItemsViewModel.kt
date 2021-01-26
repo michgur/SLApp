@@ -1,29 +1,25 @@
 package com.klmn.slapp.ui.list.items
 
-import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
-import com.google.gson.Gson
 import com.klmn.slapp.data.SlappRepository
 import com.klmn.slapp.data.datastore.UserPreferences
 import com.klmn.slapp.domain.Contact
-import com.klmn.slapp.domain.NotificationData
-import com.klmn.slapp.domain.PushNotification
 import com.klmn.slapp.domain.SlappItem
-import com.klmn.slapp.messaging.fcm.NotificationAPI
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class ListItemsViewModel @ViewModelInject constructor(
     private val repository: SlappRepository,
     private val userPreferences: UserPreferences,
-    private val notificationAPI: NotificationAPI,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val listId = MutableStateFlow("")
