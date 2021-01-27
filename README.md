@@ -21,4 +21,4 @@
 - Built w/ Gradle
 ---
 
-<img src="mockup pics/Built_with_Firebase_Logo_Light.png" width="15%"> <img src="mockup pics/android_studio_icon.png" width="10%">
+<img src="mockup pics/Built_with_Firebase_Logo_Light.png" width="15%"> <img src="mockup pics/android_studio_icon.png" width="8%">
