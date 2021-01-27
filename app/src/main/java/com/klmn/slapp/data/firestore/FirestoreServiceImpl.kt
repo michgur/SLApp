@@ -49,10 +49,7 @@ class FirestoreServiceImpl : FirestoreService {
 
     override suspend fun addUsers(listId: String, users: List<String>) {
         collection.document(listId)
-            .update(
-                "users", FieldValue.arrayUnion(*users.toTypedArray()),
-                "tokens", FieldValue.arrayUnion(*Array(users.size) { "" })
-            )
+            .update("users", FieldValue.arrayUnion(*users.toTypedArray()),)
             .await()
     }
 

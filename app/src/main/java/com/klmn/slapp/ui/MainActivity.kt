@@ -51,15 +51,6 @@ class MainActivity : AppCompatActivity() {
 
         validateGooglePlayServices()
 
-        Firebase.messaging.token.addOnCompleteListener {
-            if (it.isSuccessful && it.result != null) it.result?.let {
-                lifecycleScope.launchWhenStarted {
-                    userPreferences.saveRegistrationToken(it)
-                }
-            }
-            else Log.w(MessagingService.TAG, "failed to fetch registration token")
-        }
-
         if (Firebase.auth.currentUser == null) goToAuthActivity()
         userPreferences.phoneNumber.observe(this) {
             if (it.isNullOrBlank()) {

@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/SplashScreen">
 
-        <activity android:name=".ui.MainActivity"
+        <activity
+            android:name=".ui.MainActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +24,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.PhoneAuthActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.PhoneAuthActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name="com.klmn.slapp.messaging.fcm.MessagingService"

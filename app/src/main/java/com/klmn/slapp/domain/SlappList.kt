@@ -5,6 +5,6 @@ data class SlappList(
     val name: String = "",
     val user: Contact = Contact(""),
     val timestamp: Long = System.currentTimeMillis() / 1000L,
-    val items: MutableList<SlappItem> = mutableListOf(),
+    val items: List<SlappItem> = listOf(),
     val users: List<Contact> = listOf(user)
 )

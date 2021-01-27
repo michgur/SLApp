@@ -25,6 +25,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:text="@string/itemview_text_placeholder"
         android:textColor="@color/primaryTextColor"
         android:textSize="16sp"
