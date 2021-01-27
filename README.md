@@ -18,3 +18,4 @@
 - Material Design components & transitions
 - Navigation component & safe args
 - Contact management w/ Content Resolver
+- Built w/ Gradle
